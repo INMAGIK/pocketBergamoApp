@@ -26,6 +26,34 @@
             return lyr;
         };
 
+
+        var getKlassFromString = function(s){
+            var keys = s.split(".");
+            var o = window;
+            for(var i=0,m=keys.length;i<m;i++){
+                o = o[keys[i]];
+            }
+            return o;
+        }
+
+
+        var createLayerConfigFromJson = function(data){
+
+            var layerOptions = data.layerOptions || {};
+            var sourceOptions =data.sourceOptions || {};
+            var layerKlass = getKlassFromString(data.layerClass);
+            var sourceKlass = getKlassFromString(data.sourceClass);
+            layerOptions.source = new sourceKlass(sourceOptions);
+            
+            var out = {
+                name : data.name,
+                uid : data.uid || generateUid(),
+                layer : new layerKlass(layerOptions)
+            }
+            return out;
+
+        };
+
         var getLayerByName = function(mapId, name){
             var layers = layersForMaps[mapId] || [];
             var container  = _.findWhere(layers, {name:name});
@@ -140,7 +168,8 @@
             getLayersByGroup : getLayersByGroup,
             groupLayers : groupLayers,
             getGroupComplement : getGroupComplement,
-            setLayerPosition : setLayerPosition
+            setLayerPosition : setLayerPosition,
+            createLayerConfigFromJson : createLayerConfigFromJson
         };
         return svc;
     }]);

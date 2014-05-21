@@ -41,16 +41,25 @@ angular.module('starter.controllers')
             });
     };
 
-    var initMap = function(){
+    var initMap = function(data){
             //console.log("xxx1")
             mapConfigService.getMapConfig({target:'main-map'})
                 .then(function(config){
                     var map = mapsManager.createMap('main-map', config);
                     $scope.map = map;
                     map.getView().fitExtent(mapConfigService.getExtent(), map.getSize() );
-                    layersManager.addLayer('main-map', layersConfigService.fixedLayers[0]);
+                    //layersManager.addLayer('main-map', layersConfigService.fixedLayers[0]);
                     //map.addLayer(editableVectors.drawTarget);
                     //map.addInteraction(editableVectors.drawInteraction);
+
+                    //adding base layers
+                    _.each(data.baseLayers, function(item){
+                        var i = layersManager.createLayerConfigFromJson(item);
+                        layersManager.addLayer('main-map', i);
+                    });
+
+
+
                     prepareEvents();
 
                 });

@@ -9,6 +9,17 @@
         45.62936979682806,
         9.770994728516616,
         45.747846101851366], 
-    "extent_proj" : "EPSG:4326"
+    "extent_proj" : "EPSG:4326",
+    "baseLayers" : [
+        {
+            "name" : "OpenStreetMap",
+            "layerClass" : "ol.layer.Tile",
+            "sourceClass" : "ol.source.XYZ",
+            "sourceOptions" : {
+                "url" : "config/tiles/osm/{z}--{x}--{y}.png"
+            }
+        }
+
+    ]
     
 }
