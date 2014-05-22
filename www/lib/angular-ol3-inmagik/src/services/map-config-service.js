@@ -16,13 +16,18 @@
         };
 
         var getMapConfig = function(options){
+            console.error("o", options)
             var deferred = $q.defer();
             var config = {
                 target: options.target || 'map',
+                ol3Logo : false,
                 view: new ol.View2D({
                   //center: ol.proj.transform([37.41, 8.82], 'EPSG:4326', 'EPSG:3857'),
                   //zoom: 4,
                   //center : [37.41, 8.82],
+                  
+                  maxResolution : options.maxResolution || undefined,
+                  maxZoom:8,
                   extent : options.extent || extent
                 }),
                 //extent : extent,
