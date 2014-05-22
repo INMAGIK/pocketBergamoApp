@@ -3,8 +3,8 @@
 
 angular.module('starter.controllers')
 
-.controller('MapCtrl', ['$scope', 'configManager', 'mapConfigService', 'mapsManager','layersManager', 'layersConfigService', '$ionicModal',
-    function($scope, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, $ionicModal) {
+.controller('MapCtrl', ['$scope', '$timeout', 'configManager', 'mapConfigService', 'mapsManager','layersManager', 'layersConfigService', 'geolocationService', '$ionicModal',
+    function($scope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, geolocationService, $ionicModal) {
 
     console.log("xxx map ctrl is alive");
 
@@ -13,6 +13,12 @@ angular.module('starter.controllers')
     };
 
     
+    $scope.uiStatus = {
+        gps:false
+    };
+
+    
+    //modal stuff
     $ionicModal.fromTemplateUrl('templates/about.html', {
         scope: $scope,
         animation: 'slide-in-up'
@@ -41,6 +47,94 @@ angular.module('starter.controllers')
             });
     };
 
+
+    /* geoloc stuff -- move away */
+    var positionLayer = null;
+
+    var createPositionLayer = function(){
+        var vectorSource = new ol.source.Vector({
+        });
+
+        
+        var iconStyle = new ol.style.Style({
+            image : new ol.style.Circle({
+                radius: 10,
+                fill: new ol.style.Fill({color: '#666666'}),
+                stroke: new ol.style.Stroke({color: '#bada55', width: 2})
+            })
+        });
+
+        var out = new ol.layer.Vector({
+            source: vectorSource,
+            style : iconStyle,
+            visible : true
+        });
+
+        return out;
+    };
+
+    var updatePositionLayer = function(coords){
+        var coordsm = ol.proj.transform([coords.longitude, coords.latitude], 'EPSG:4326', 'EPSG:3857')
+
+        var features = positionLayer.getSource().getFeatures()
+        
+        if(features.length){
+            features[0].setGeometry(new ol.geom.Point(coordsm));
+
+        } else {
+            var positionFeature = new ol.Feature({
+                geometry: new ol.geom.Point([0, 0]),
+                name: 'Your position'
+            });
+
+            positionLayer.getSource().addFeature(positionFeature);
+        }
+        
+    }
+
+    var initGeoloc = function(){
+        
+
+        positionLayer = createPositionLayer();
+        console.log("xx", positionLayer)
+        var cfg = { name : "geolocation", layer:positionLayer };
+        layersManager.addLayer('main-map', cfg);
+
+        $scope.$on("updateGeolocation", function(evt, coords){
+            //console.log("xxx", coords)
+            updatePositionLayer(coords);
+            //console.log("xx updateGeolocation", coords)
+        })
+        
+    };
+
+
+    $scope.startGeolocation = function(){
+        positionLayer.setVisible(true)
+        geolocationService.startGeolocation();
+        $timeout(function(){
+            $scope.uiStatus.gps = true;
+        })
+    }
+
+    $scope.stopGeolocation = function(){
+        positionLayer.setVisible(false)
+        geolocationService.stopGeolocation();
+        $timeout(function(){
+            $scope.uiStatus.gps = false;
+        })
+    }
+
+    $scope.toggleGeolocation = function(){
+        if($scope.uiStatus.gps){
+            $scope.stopGeolocation()
+        } else {
+            $scope.startGeolocation();
+        }
+    }
+
+
+
     var initMap = function(data){
             //console.log("xxx1")
             mapConfigService.getMapConfig({target:'main-map'})
@@ -58,7 +152,7 @@ angular.module('starter.controllers')
                         layersManager.addLayer('main-map', i);
                     });
 
-
+                    initGeoloc();
 
                     prepareEvents();
 
@@ -82,6 +176,8 @@ angular.module('starter.controllers')
             */
             
         }
+
+        
 
 
         

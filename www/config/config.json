@@ -16,7 +16,7 @@
             "layerClass" : "ol.layer.Tile",
             "sourceClass" : "ol.source.XYZ",
             "sourceOptions" : {
-                "url" : "config/tiles/osm/{z}--{x}--{y}.png"
+                "url" : "config/tiles/mapquest_osm/{z}--{x}--{y}.jpg"
             }
         }
 
