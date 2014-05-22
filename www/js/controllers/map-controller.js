@@ -3,8 +3,8 @@
 
     angular.module('starter.controllers')
 
-    .controller('MapCtrl', ['$scope', '$timeout', 'configManager', 'mapConfigService', 'mapsManager','layersManager', 'layersConfigService', 'geolocationService', '$ionicModal',
-        function($scope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, geolocationService, $ionicModal) {
+    .controller('MapCtrl', ['$scope', '$timeout', 'configManager', 'mapConfigService', 'mapsManager','layersManager', 'layersConfigService', 'olGeolocationService', '$ionicModal',
+        function($scope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal) {
 
         console.log("xxx map ctrl is alive");
 
@@ -14,7 +14,8 @@
 
         
         $scope.uiStatus = {
-            gps:false
+            gps:false,
+            orientation : false
         };
 
         
@@ -87,7 +88,7 @@
         };
 
         var updatePositionLayer = function(coords){
-            var coordsm = ol.proj.transform([coords.longitude, coords.latitude], 'EPSG:4326', 'EPSG:3857')
+            var coordsm = ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857')
 
             var features = positionLayer.getSource().getFeatures()
             
@@ -114,30 +115,70 @@
             var cfg = { name : "geolocation", layer:positionLayer };
             layersManager.addLayer('main-map', cfg);
 
-            $scope.$on("updateGeolocation", function(evt, coords){
-                //console.log("xxx", coords)
-                updatePositionLayer(coords);
-                //console.log("xx updateGeolocation", coords)
+
+            olGeolocationService.geolocationControl.on('change', function(evt) {
+                window.console.log(olGeolocationService.geolocationControl.getPosition());
+                updatePositionLayer(olGeolocationService.geolocationControl.getPosition())
+            });
+
+
+            var orc =olGeolocationService.deviceOrientationControl;
+            orc.on("change", function(evt){
+
+                var head = orc.getHeading();
+                var v = $scope.map.getView();
+                v.setRotation(-head);
             })
+
             
         };
 
 
+        $scope.startDeviceOrientation = function(){
+            olGeolocationService.startDeviceOrientation();
+            $timeout(function(){
+                $scope.uiStatus.orientation = true;
+            });
+        }
+
+        $scope.stopDeviceOrientation = function(){
+            olGeolocationService.stopDeviceOrientation();
+            var v = $scope.map.getView();
+            v.setRotation(0);
+            $timeout(function(){
+                $scope.uiStatus.orientation = false;
+            });
+        }
+
+
+        $scope.toggleOrientation = function(){
+            if($scope.uiStatus.orientation){
+                $scope.stopDeviceOrientation()
+            } else {
+                $scope.startDeviceOrientation();
+            }
+        }
+
+
         $scope.startGeolocation = function(){
             positionLayer.setVisible(true)
-            geolocationService.startGeolocation();
+            olGeolocationService.startGeolocation();
             $timeout(function(){
                 $scope.uiStatus.gps = true;
-            })
+            });
         }
 
         $scope.stopGeolocation = function(){
             positionLayer.setVisible(false)
-            geolocationService.stopGeolocation();
+            olGeolocationService.stopGeolocation();
             $timeout(function(){
                 $scope.uiStatus.gps = false;
-            })
+            });
         }
+
+
+
+        
 
         $scope.toggleGeolocation = function(){
             if($scope.uiStatus.gps){

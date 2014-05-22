@@ -11,7 +11,6 @@
         45.747846101851366], 
     "extent_proj" : "EPSG:4326",
     "maxResolution" : 19.109257071294063, 
-    "minZoomLevel" : 12,
     "baseLayers" : [
         {
             "name" : "OpenStreetMap",
