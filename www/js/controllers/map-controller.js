@@ -6,8 +6,6 @@
     .controller('MapCtrl', ['$scope', '$timeout', 'configManager', 'mapConfigService', 'mapsManager','layersManager', 'layersConfigService', 'olGeolocationService', '$ionicModal',
         function($scope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal) {
 
-        console.log("xxx map ctrl is alive");
-
         $scope.appInfo = {
             title : 'PocketMap Bergamo',
             version : "0.1"
@@ -18,9 +16,12 @@
             gps:false,
             orientation : false,
             follow : false,
-            lastPosition : null
+            lastPosition : null,
+            lastHeading : null
         };
 
+        var firstRotation = false;
+        
         
         //modal stuff
         $ionicModal.fromTemplateUrl('templates/about.html', {
@@ -134,10 +135,22 @@
 
             var orc =olGeolocationService.deviceOrientationControl;
             orc.on("change", function(evt){
-
                 var head = orc.getHeading();
-                var v = $scope.map.getView();
-                v.setRotation(-head);
+                if(head == $scope.uiStatus.lastHeading){
+                    return
+                }
+
+                //var v = $scope.map.getView();
+                //v.setRotation(-head);
+                if(firstRotation || !$scope.uiStatus.lastHeading){
+                    animateRotate(-head);    
+                } else {
+                    var v = $scope.map.getView();
+                    v.setRotation(-head);
+                }
+                
+                firstRotation = false;
+                $scope.uiStatus.lastHeading = head;
             })
 
             
@@ -145,6 +158,8 @@
 
 
         $scope.startDeviceOrientation = function(){
+            
+            firstRotation = true;
             olGeolocationService.startDeviceOrientation();
             $timeout(function(){
                 $scope.uiStatus.orientation = true;
@@ -155,10 +170,11 @@
             }
         }
 
-        $scope.stopDeviceOrientation = function(){
+        $scope.stopDeviceOrientation = function(reset){
             olGeolocationService.stopDeviceOrientation();
-            var v = $scope.map.getView();
-            v.setRotation(0);
+            //var v = $scope.map.getView();
+            //v.setRotation(0);
+            if(reset)animateRotate(0);
             $timeout(function(){
                 $scope.uiStatus.orientation = false;
             });
@@ -167,7 +183,7 @@
 
         $scope.toggleOrientation = function(){
             if($scope.uiStatus.orientation){
-                $scope.stopDeviceOrientation()
+                $scope.stopDeviceOrientation(true)
             } else {
                 $scope.startDeviceOrientation();
             }
@@ -239,15 +255,37 @@
         }
 
 
+        var animateRotate = function(targetRotation){
+
+            var v = $scope.map.getView();
+            var currentRotation = v.getRotation();
+            var totalRotation = Math.abs(currentRotation-targetRotation);
+            var duration =  100 + totalRotation * 300;
+
+            var rotateAnimation = ol.animation.rotate({
+                duration: duration,
+                rotation: v.getRotation(),
+                easing : ol.easing.linear
+            });
+
+            $scope.map.beforeRender(rotateAnimation);
+            v.setRotation(targetRotation);
+            
+        };
+
+
         $scope.lockRotation = function(){
             $scope.map.removeInteraction(mapConfigService.interactionsByName["ol.interaction.DragRotate"]);
             $scope.map.removeInteraction(mapConfigService.interactionsByName["ol.interaction.PinchRotate"]);
-            $scope.map.getView().setRotation(0);
+            
+            //$scope.map.getView().setRotation(0);
+            animateRotate(0);
+
             $timeout(function(){
                 $scope.uiStatus.lockRotate = true;
             });
             if($scope.uiStatus.orientation){
-                $scope.stopDeviceOrientation();
+                $scope.stopDeviceOrientation(false);
             }
 
         };
