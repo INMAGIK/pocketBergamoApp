@@ -9,13 +9,16 @@
         console.log("xxx map ctrl is alive");
 
         $scope.appInfo = {
-            title : 'PocketMap Bergamo'
+            title : 'PocketMap Bergamo',
+            version : "0.1"
         };
 
         
         $scope.uiStatus = {
             gps:false,
-            orientation : false
+            orientation : false,
+            follow : false,
+            lastPosition : null
         };
 
         
@@ -87,9 +90,8 @@
             return out;
         };
 
-        var updatePositionLayer = function(coords){
-            var coordsm = ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857')
-
+        var updatePositionLayer = function(coordsm){
+            
             var features = positionLayer.getSource().getFeatures()
             
             if(features.length){
@@ -107,19 +109,27 @@
             
         }
 
+        
+
         var initGeoloc = function(){
-            
 
             positionLayer = createPositionLayer();
-            console.log("xx", positionLayer)
             var cfg = { name : "geolocation", layer:positionLayer };
             layersManager.addLayer('main-map', cfg);
 
 
             olGeolocationService.geolocationControl.on('change', function(evt) {
-                window.console.log(olGeolocationService.geolocationControl.getPosition());
-                updatePositionLayer(olGeolocationService.geolocationControl.getPosition())
+                var coords = olGeolocationService.geolocationControl.getPosition();
+                var coordsm = ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857');
+                $timeout(function(){
+                    $scope.uiStatus.lastPosition = coordsm;
+                })
             });
+
+            $scope.$watch('uiStatus.lastPosition', function(nv){
+                if(!nv) return;
+                updatePositionLayer(nv);
+            }, true);
 
 
             var orc =olGeolocationService.deviceOrientationControl;
@@ -139,6 +149,10 @@
             $timeout(function(){
                 $scope.uiStatus.orientation = true;
             });
+
+            if($scope.uiStatus.lockRotate){
+                $scope.unlockRotation();
+            }
         }
 
         $scope.stopDeviceOrientation = function(){
@@ -174,11 +188,10 @@
             $timeout(function(){
                 $scope.uiStatus.gps = false;
             });
+            if($scope.uiStatus.follow){
+                $scope.stopFollow();
+            }
         }
-
-
-
-        
 
         $scope.toggleGeolocation = function(){
             if($scope.uiStatus.gps){
@@ -188,6 +201,76 @@
             }
         }
 
+        var followHandler;
+        $scope.startFollow = function(){
+
+            followHandler = $scope.$watch(
+                'uiStatus.lastPosition',
+                function(nv){
+                    if(!nv) return;
+                    var v = $scope.map.getView();
+                    v.setCenter(nv);
+                },
+                true
+            );
+            
+            $timeout(function(){
+                $scope.uiStatus.follow = true;
+            });
+        }
+
+        $scope.stopFollow = function(){
+            
+            if(followHandler){
+                followHandler();
+            }
+
+            $timeout(function(){
+                $scope.uiStatus.follow = false;
+            });
+        }
+
+        $scope.toggleFollow = function(){
+            if($scope.uiStatus.follow){
+                $scope.stopFollow()
+            } else {
+                $scope.startFollow();
+            }
+        }
+
+
+        $scope.lockRotation = function(){
+            $scope.map.removeInteraction(mapConfigService.interactionsByName["ol.interaction.DragRotate"]);
+            $scope.map.removeInteraction(mapConfigService.interactionsByName["ol.interaction.PinchRotate"]);
+            $scope.map.getView().setRotation(0);
+            $timeout(function(){
+                $scope.uiStatus.lockRotate = true;
+            });
+            if($scope.uiStatus.orientation){
+                $scope.stopDeviceOrientation();
+            }
+
+        };
+
+        $scope.unlockRotation = function(){
+            $scope.map.addInteraction(mapConfigService.interactionsByName["ol.interaction.DragRotate"]);
+            $scope.map.addInteraction(mapConfigService.interactionsByName["ol.interaction.PinchRotate"]);
+            $timeout(function(){
+                $scope.uiStatus.lockRotate = false;
+            });
+
+        };
+
+        $scope.toggleLockRotation = function(){
+            if($scope.uiStatus.lockRotate){
+                $scope.unlockRotation()
+            } else {
+                $scope.lockRotation();
+            }
+        }
+
+
+
 
 
         var initMap = function(data){
@@ -196,6 +279,11 @@
                     .then(function(config){
                         var map = mapsManager.createMap('main-map', config);
                         $scope.map = map;
+                        var i = map.getInteractions()
+                        console.log("xx", i.getArray())
+                        _.each(i.getArray(), function(item){
+                            console.log(item.toString())
+                        })
                         var v = map.getView();
                         v.fitExtent(mapConfigService.getExtent(), map.getSize() );
 

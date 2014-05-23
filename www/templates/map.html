@@ -16,10 +16,15 @@
   <ion-content class="has-header" scroll="false">
     <div id="main-map" class="main-map"></div>
     <div class="toolbar">
-        <button class="button button-small button-positive icon ion-navigate" ng-click="toggleGeolocation()" ng-class="{'button-assertive' : uiStatus.gps == true }">
+        <button class="button button-small button-positive icon ion-android-locate" ng-click="toggleGeolocation()" ng-class="{'button-assertive' : uiStatus.gps == true }">
+        </button>
+        <button class="button button-small button-positive icon ion-navigate" ng-click="toggleFollow()" ng-class="{'button-assertive' : uiStatus.follow == true }" ng-disabled="uiStatus.gps == false">
         </button>
         <button class="button button-small button-positive icon ion-refresh" ng-click="toggleOrientation()" ng-class="{'button-assertive' : uiStatus.orientation == true }">
         </button>
+        <button class="button button-small button-positive icon ion-arrow-up-c" ng-click="toggleLockRotation()" ng-class="{'button-assertive' : uiStatus.lockRotate == true }">
+        </button>
+        
     </div>
   </ion-content>
 

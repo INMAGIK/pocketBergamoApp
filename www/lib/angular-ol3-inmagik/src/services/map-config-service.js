@@ -15,6 +15,27 @@
             return extent;
         };
 
+        var getKlassFromString = function(s){
+            var keys = s.split(".");
+            var o = window;
+            for(var i=0,m=keys.length;i<m;i++){
+                o = o[keys[i]];
+            }
+            return o;
+        }
+
+        var inames = ["ol.interaction.DragRotate","ol.interaction.DoubleClickZoom","ol.interaction.DragPan","ol.interaction.PinchRotate","ol.interaction.PinchZoom","ol.interaction.KeyboardPan","ol.interaction.KeyboardZoom","ol.interaction.MouseWheelZoom","ol.interaction.DragZoom"];
+        var interactions = [];
+        var interactionsByName = {};
+        _.each(inames, function(item){
+            var klass = getKlassFromString(item);
+            var inst = new klass({});
+            interactions.push(inst);
+            interactionsByName[item] = inst;
+
+        });
+
+
         var getMapConfig = function(options){
             console.error("o", options)
             var deferred = $q.defer();
@@ -28,8 +49,9 @@
                   
                   maxResolution : options.maxResolution || undefined,
                   maxZoom:8,
-                  extent : options.extent || extent
+                  extent : options.extent || extent,
                 }),
+                interactions : interactions
                 //extent : extent,
                 //projection : 'EPSG:3857'
             };
@@ -42,7 +64,8 @@
             getMapConfig : getMapConfig,
             //extent : extent,
             setExtent : setExtent,
-            getExtent : getExtent
+            getExtent : getExtent,
+            interactionsByName : interactionsByName
         };
         return svc;
     }]);
