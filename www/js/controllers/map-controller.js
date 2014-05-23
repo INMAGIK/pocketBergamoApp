@@ -1,7 +1,7 @@
     (function(){
     'use strict';
 
-    angular.module('starter.controllers')
+    angular.module('pocketMap.controllers')
 
     .controller('MapCtrl', ['$scope', '$timeout', 'configManager', 'mapConfigService', 'mapsManager','layersManager', 'layersConfigService', 'olGeolocationService', '$ionicModal',
         function($scope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal) {
@@ -17,7 +17,7 @@
             orientation : false,
             follow : false,
             lastPosition : null,
-            lastHeading : null
+            lastHeading : null,
         };
 
         var firstRotation = false;
@@ -42,6 +42,22 @@
         $scope.$on('$destroy', function() {
             $scope.modal.remove();
         });
+
+
+        $scope.panels = {
+            'layers' : false
+        };
+
+        $scope.togglePanel = function(panelName){
+            $timeout(function(){
+                $scope.panels[panelName] = !$scope.panels[panelName];
+                console.log("n", $scope.panels)
+            })
+        }
+
+
+
+        
 
         
         var startFromConfig = function(){
@@ -337,6 +353,13 @@
                         //adding base layers
                         _.each(data.baseLayers, function(item){
                             var i = layersManager.createLayerConfigFromJson(item);
+                            layersManager.addLayer('main-map', i);
+                        });
+
+                        //adding vectors
+                        _.each(data.vectorLayers, function(item){
+                            var i = layersManager.createLayerConfigFromJson(item);
+                            console.log("adding vector!", i)
                             layersManager.addLayer('main-map', i);
                         });
 

@@ -13,8 +13,9 @@
         <button class="button icon ion-information-circled" ng-click="openModal()"></button>
     </ion-header-bar>
   
-  <ion-content class="has-header" scroll="false">
+  <ion-content class="has-header" scroll="false" ng-cloak>
     <div id="main-map" class="main-map"></div>
+    
     <div class="toolbar">
         <button class="button button-small button-positive icon ion-android-locate" ng-click="toggleGeolocation()" ng-class="{'button-assertive' : uiStatus.gps == true }">
         </button>
@@ -24,8 +25,26 @@
         </button>
         <button class="button button-small button-positive icon ion-arrow-up-c" ng-click="toggleLockRotation()" ng-class="{'button-assertive' : uiStatus.lockRotate == true }">
         </button>
-        
     </div>
+
+    <div class="bottom-toolbar">
+        <button class="button button-small button-positive icon ion-map" ng-click="togglePanel('layers')" ng-class="{'button-assertive' : panels['layers'] == true }">
+        </button>
+      
+    </div>
+
+    <div class="layers-browser transparent-box aa" ng-if="panels.layers" >
+      <div class="padding">
+      <h4>Layers</h4>
+          <div class="layer-switcher" map-id="main-map" groups="vectors" >
+          </div>
+      </div>
+    </div>
+
+      
+    
+      
+    
   </ion-content>
 
 </ion-view>

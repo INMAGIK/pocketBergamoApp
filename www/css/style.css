@@ -10,6 +10,20 @@
     bottom:0;
 }
 
+.layers-browser{
+    position:absolute;
+    z-index:1100;
+    max-height: 300px;
+    left:10px;
+    width:240px;
+    bottom:65px;
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.4);
+    color:white;
+}
+
+
+
 .toolbar{
     position:absolute;
     z-index:1100;
@@ -19,7 +33,38 @@
     background:rgba(0,0,0,.4);
 }
 
+.bottom-toolbar{
+    position:absolute;
+    z-index:1100;
+    left:10px;
+    bottom:10px;
+    padding:10px;
+    background:rgba(0,0,0,.4);
+}
+
 
 .about-logo{
     width:120px;
+}
+
+.transparent-box *{
+ color:white;      
+}
+
+.transparent{
+ background:rgba(0,0,0,.4);
+ color:white;   
+}
+
+
+.aa.ng-enter {
+    -webkit-animation: slideInLeft .6s;
+    animation: slideInLeft .6s;
+}
+ 
+.aa.ng-leave {
+    animation: slideOutLeft .6s;
+    -webkit-animation: slideOutLeft .6s;
+    display: block !important;
+
 }

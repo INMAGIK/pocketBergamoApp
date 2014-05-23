@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('pocketMap.controllers', [])
 
 .controller('AppCtrl', function($scope) {
 

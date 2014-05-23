@@ -1,0 +1,21 @@
+
+<div class="panel panel-info">
+    
+    <div ng-repeat="layerGroup in groupedLayers">
+        <div class="list">
+        <div class="item item-button-right transparent" ng-repeat="layer in layerGroup.layers">
+            {{layer.name }}
+            <button class="button button-positive" ng-click="setVisible(layer)" ng-class="{'button-assertive' : isVisible(layer) == true}">
+                <i class="icon ion-ios7-star"></i>
+            </button>
+        </div>
+
+        
+
+    </div>
+
+      
+
+
+</div>
+    

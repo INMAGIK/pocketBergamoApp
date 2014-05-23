@@ -47,6 +47,7 @@
             
             var out = {
                 name : data.name,
+                group : data.group || '',
                 uid : data.uid || generateUid(),
                 layer : new layerKlass(layerOptions)
             }

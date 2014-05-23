@@ -21,6 +21,17 @@
             }
         }
 
+    ],
+    "vectorLayers" : [
+        {
+            "name" : "sentieri",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/sentieri.geojson"
+            }
+        }
     ]
     
 }
