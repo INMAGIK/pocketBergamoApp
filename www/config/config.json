@@ -31,6 +31,33 @@
             "sourceOptions" : {
                 "url" : "config/vectors/sentieri.geojson"
             }
+        },
+        {
+            "name" : "historic",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/historic.geojson"
+            }
+        },
+        {
+            "name" : "tourism",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/tourism.geojson"
+            }
+        },
+        {
+            "name" : "natural",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/natural.geojson"
+            }
         }
     ]
     

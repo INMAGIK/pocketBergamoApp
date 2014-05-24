@@ -107,6 +107,36 @@
             return out;
         };
 
+
+        var createPopupOverlay  = function(){
+            var element = document.getElementById('popup');
+            var popup = new ol.Overlay({
+              element: element,
+              positioning: 'top-center',
+              stopEvent: false
+            });
+            $scope.map.addOverlay(popup);
+
+            // display popup on click
+            $scope.map.on('click', function(evt) {
+              var feature = $scope.map.forEachFeatureAtPixel(evt.pixel,
+                  function(feature, layer) {
+                    return feature;
+                  });
+              if (feature) {
+
+                var geometry = feature.getGeometry();
+                var coord = geometry.getCoordinates();
+                popup.setPosition(coord);
+                
+                $(element).fadeIn()
+              } else {
+                $(element).fadeOut();
+              }
+            });
+        };
+
+
         var updatePositionLayer = function(coordsm){
             
             var features = positionLayer.getSource().getFeatures()
@@ -364,6 +394,9 @@
                         });
 
                         initGeoloc();
+
+
+                        createPopupOverlay();
 
                         prepareEvents();
 

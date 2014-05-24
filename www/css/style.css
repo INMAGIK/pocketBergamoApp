@@ -15,7 +15,7 @@
     z-index:1100;
     max-height: 300px;
     left:10px;
-    width:240px;
+    right:10px;
     bottom:65px;
     border-radius: 4px;
     background-color: rgba(0,0,0,.4);
@@ -58,13 +58,51 @@
 
 
 .aa.ng-enter {
-    -webkit-animation: slideInLeft .6s;
-    animation: slideInLeft .6s;
+    -webkit-animation: flipInX .6s;
+    animation: flipInX .6s;
 }
  
 .aa.ng-leave {
-    animation: slideOutLeft .6s;
-    -webkit-animation: slideOutLeft .6s;
-    display: block !important;
+    animation: flipOutX .6s;
+    -webkit-animation: flipOutX .6s;
+    
 
+}
+
+/* from: http://stackoverflow.com/questions/20409632/android-4-3-and-phonegap-cant-tap-link */
+.androidpaintfix {
+  -webkit-transform: translate3d(0,0,0);
+  transform: translate3d(0, 0, 0);
+}
+
+
+
+.popover {
+  position: relative;
+  width: 200px;
+    height: 100px;
+    background-color: rgba(0,0,0,.7);
+    border-radius: 4px;
+  box-shadow: 2px 2px 4px #AAA; 
+  z-index:1200;
+  top:20px;
+  
+}
+
+.popover-arrow {
+    position: absolute;
+    top: -20px;
+    left: 80px;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 20px solid rgba(0,0,0,.7);
+    width: 0;
+    height: 0;
+    /*-webkit-filter: drop-shadow(0 -2px 2px #AAA); */
+}
+
+
+
+.hide{
+    display:none;
 }
