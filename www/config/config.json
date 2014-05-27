@@ -46,17 +46,17 @@
                         }
                     }
                 }
-
             },
 
-            "popupTemplate"  : "templates/museo-feature.html",
-
-            "indexOptions" : {
+            "uiOptions" : {
+                "index" : true,
+                "popup" : true,
+                "popupTemplate"  : "templates/museo-feature.html",
+                "cardTemplate" : "templates/card-example.html",
                 "titleField" : "name",
-                "cardTemplate" : "templates/card-example.html"
+                "icon" : "img/position2.png"
             }
         }
-
         
                 
     ]

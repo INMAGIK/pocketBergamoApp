@@ -28,9 +28,11 @@
     </div>
 
     <div class="bottom-toolbar">
-        <button class="button button-small button-positive icon ion-map" ng-click="togglePanel('layers')" ng-class="{'button-assertive' : panels['layers'] == true }">
+        <button class="button button-small button-positive icon ion-map" ng-click="togglePanel('layers', true)" ng-class="{'button-assertive' : panels['layers'] == true }">
         </button>
         <button class="button button-small button-positive icon ion-navicon" ng-click="openBrowser()">
+        </button>
+        <button class="button button-small button-positive icon ion-search" ng-click="togglePanel('search', true)" ng-class="{'button-assertive' : panels['search'] == true }">
         </button>
       
     </div>
@@ -40,6 +42,44 @@
       <h4>Layers</h4>
           <div class="layer-switcher" map-id="main-map" groups="vectors" >
           </div>
+      </div>
+    </div>
+
+    <!--move to directive -->
+    <div class="search-panel transparent-box aa" ng-if="panels.search" ng-controller="SearchCtrl">
+      
+        <div class="padding transparent-box">
+        <div class="list transparent-box">
+
+          <div class="item-input transparent-box" >
+          <label class="item-input-wrapper transparent-box">
+            <input type="text" placeholder="Search text" ng-model="searchStatus.search">
+          </label>
+          <button class="button button-small button-calm" ng-click="search()" ng-disabled="searchStatus.search.length < 2 ">
+            Search
+          </button>
+          </div>
+
+          <div class="item-input transparent-box transparent-box" ng-if="searchStatus.lastSearch" style="margin:0px 10px;">
+            <b>{{  searchStatus.searchResults.length }}</b>&nbsp;results for&nbsp;<b>{{ searchStatus.lastSearch }}</b> &nbsp;
+            <button class="button button-assertive button-small" ng-click="clear()">Clear</button>
+          </div>
+
+        </div>
+        
+        <div class="search-results" style="margin-top:-10px;">
+          
+        <div class="list transparent-box" style="margin:0 10px;">
+          <div class="item item-button-right transparent" ng-repeat="result in searchStatus.searchResults">
+            <img class="icon-title" src="{{ result.icon }}" alt="">
+            {{ result.layerName }} - {{ result.title }}
+            <button class="button button-clear " ng-click="centerFeature(result.feature)">
+              <i class="icon ion-android-location"></i>
+            </button>
+          </div>
+        </div>
+        </div>
+
       </div>
     </div>
 

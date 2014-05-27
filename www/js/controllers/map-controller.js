@@ -20,6 +20,15 @@
             lastHeading : null,
         };
 
+        $scope.searchStatus = {
+            search : '',
+            lastSearch : null,
+            searchResults : [] 
+
+        };
+
+            
+
 
         var firstRotation = false;
         
@@ -72,8 +81,17 @@
             'layers' : false
         };
 
-        $scope.togglePanel = function(panelName){
+        $scope.togglePanel = function(panelName, closeAll){
+
             $timeout(function(){
+                if(closeAll){
+                    for(var p in $scope.panels){
+                        if(p==panelName){continue}
+                        if($scope.panels[p]){
+                            $scope.panels[p] = false;
+                        }
+                    }
+                }
                 $scope.panels[panelName] = !$scope.panels[panelName];
             })
         };
@@ -366,6 +384,21 @@
             
         };
 
+        var animateCenter = function(targetCenter){
+
+            var v = $scope.map.getView();
+            
+            var panAnimation = ol.animation.pan({
+                duration: 500,
+                source: v.getCenter(),
+                easing : ol.easing.linear
+            });
+
+            $scope.map.beforeRender(panAnimation);
+            v.setCenter(targetCenter);
+            
+        };
+
 
         $scope.lockRotation = function(){
             $scope.map.removeInteraction(mapConfigService.interactionsByName["ol.interaction.DragRotate"]);
@@ -437,13 +470,17 @@
 
                             layersManager.addLayer('main-map', i);
 
-                            if(item.popupTemplate){
-                                popupManager.registerLayer(i.uid, item.popupTemplate)
+                            if(item.uiOptions){
+                                if(item.uiOptions.popup){
+                                    popupManager.registerLayer(i.uid, item.uiOptions)
+                                }
+                                
+                                if(item.uiOptions.index){
+                                    indexService.registerLayer(i.name, i.layer, item.uiOptions)
+                                }
                             }
 
-                            if(item.indexOptions){
-                                indexService.registerLayer(i.name, i.layer, item.indexOptions)
-                            }
+                            
                             
 
 
@@ -488,7 +525,18 @@
                 v.setZoom(3);
                 //close browser
                 $scope.closeBrowser();
+            });
 
+
+            $scope.$on('centerSearchFeature', function(evt,data){
+                var v = $scope.map.getView();
+                var pos = data.geometry.getExtent()
+                var c = [(pos[2]+pos[0])/2.0, (pos[3] + pos[1])/2.0,  ];
+                animateCenter(c);
+                //v.setCenter(c);
+                //v.setZoom(3);
+                //close browser
+                
 
             });
 

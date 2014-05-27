@@ -35,7 +35,7 @@
                     $scope.browserStatus.layer = layerName;
                     $scope.browserStatus.feature = null;
                     $scope.features = indexService.getFeatures(layerName);
-                    $scope.browserTitle = "Browser - " + layerName;
+                    $scope.browserTitle = layerName + " (" + $scope.features.length + ")";
 
                 })
 
@@ -44,7 +44,7 @@
             $scope.toFeature = function(feature){
                 $timeout(function(){
                     $scope.browserStatus.feature = feature;
-                    $scope.browserTitle = "Browser - " + $scope.getTitle($scope.browserStatus.layer, $scope.browserStatus.feature) + " ( "+ $scope.browserStatus.layer +" )";
+                    $scope.browserTitle = $scope.getTitle($scope.browserStatus.layer, $scope.browserStatus.feature) + " ( "+ $scope.browserStatus.layer +" )";
                     $ionicScrollDelegate.scrollTop();
                 })
 
@@ -53,6 +53,10 @@
             $scope.getTitle = function(layer, feature){
                 return indexService.getFeatureTitle(layer, feature)
             };
+
+            $scope.getLayerIcon = function(layerName){
+                return indexService.getConfigForLayer(layerName, "icon");
+            };            
 
             $scope.getTemplateForLayer = function(layerName){
                 return indexService.getTemplateForLayer(layerName)

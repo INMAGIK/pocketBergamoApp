@@ -9,8 +9,8 @@
             config : {},
         };
         
-        svc.registerLayer = function(uid, templateUrl){
-            svc.config[uid] = templateUrl;
+        svc.registerLayer = function(uid, options){
+            svc.config[uid] = options.popupTemplate;
         };
 
         svc.getPopupHtml = function(uid, feature){
@@ -19,7 +19,6 @@
             
             var compileTemplate = function(htmlTemplate){
                 var s = $rootScope.$new();
-                console.error("c", feature)
                 s.feature = feature;
                 var html = $compile(htmlTemplate)(s);
                 d.resolve(html);

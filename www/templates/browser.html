@@ -8,26 +8,36 @@
     
       <div class="list slideright" ng-if="browserStatus.layer == null" style="z-index=10">
         <a href="#" class="item" ng-repeat="layer in layers" ng-click="toLayer(layer)">
-          {{layer}}
+          <img class="icon-title" src="{{ getLayerIcon(layer) }}" alt=""> {{layer}}
         </a>
       </div>
 
       <div class="list slideright" ng-if="browserStatus.layer != null && browserStatus.feature == null" style="z-index=11">
+        
         <a href="#" class="item" ng-repeat="feature in features" ng-click="toFeature(feature)">
-          {{ getTitle(browserStatus.layer, feature) }}
+          <!--<img src="{{ feature._icon }}" alt="">--> {{ feature._title }}
           
         </a>
       </div>
 
       <div class="slideright padding" ng-if="browserStatus.feature != null" style="z-index=12">
         <div class="card">
-        
-          <h3>{{ getTitle(browserStatus.layer, browserStatus.feature) }}
-              <button class="btn btn-primary btn-sm pull-right" ng-click="centerFeature(browserStatus.feature)">
-                a
+          <div class="row">
+            <div class="col col-66">
+              <h3>
+                <img class="icon-title"  src="{{ browserStatus.feature._icon }}" alt="">
+                {{ browserStatus.feature._title }}
+              </h3>    
+            </div>
+            <div class="col col-33">
+              <button class="button button-calm button-small" ng-click="centerFeature(browserStatus.feature)" style="float:right;">
+                <i class="icon ion-android-location"></i>
               </button>
-          </h3>
-          <div ng-if="getTemplateForLayer(browserStatus.layer)">
+            </div>
+          </div>
+        
+          
+          <div ng-if="getTemplateForLayer(browserStatus.layer)" class="padding">
             <div ng-include="getTemplateForLayer(browserStatus.layer)">
               
             </div>
