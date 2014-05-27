@@ -1,3 +1,5 @@
+(function(){
+    'use strict';
 
 angular.module('pocketMap', ['ionic', 'pocketMap.controllers', 'ngOL3Inmagik', 'ngAnimate'])
 
@@ -42,3 +44,6 @@ angular.module('pocketMap', ['ionic', 'pocketMap.controllers', 'ngOL3Inmagik', '
 
 });
 
+
+
+}());
