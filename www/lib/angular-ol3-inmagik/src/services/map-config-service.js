@@ -37,7 +37,7 @@
 
 
         var getMapConfig = function(options){
-            console.error("o", options)
+            
             var deferred = $q.defer();
             var config = {
                 target: options.target || 'map',

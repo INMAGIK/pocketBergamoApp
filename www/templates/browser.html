@@ -1,0 +1,54 @@
+<div class="modal" ng-controller="BrowserCtrl">
+    <ion-header-bar class="bar-positive">
+      <button class="button icon ion-arrow-left-a" ng-if="browserStatus.layer" ng-click="back()"></button>
+      <h1 class="title">{{browserTitle}}</h1>
+      <button class="button icon ion-close-round" ng-click="closeBrowser()"></button>
+    </ion-header-bar>
+    <ion-content >
+    
+      <div class="list slideright" ng-if="browserStatus.layer == null" style="z-index=10">
+        <a href="#" class="item" ng-repeat="layer in layers" ng-click="toLayer(layer)">
+          {{layer}}
+        </a>
+      </div>
+
+      <div class="list slideright" ng-if="browserStatus.layer != null && browserStatus.feature == null" style="z-index=11">
+        <a href="#" class="item" ng-repeat="feature in features" ng-click="toFeature(feature)">
+          {{ getTitle(browserStatus.layer, feature) }}
+          
+        </a>
+      </div>
+
+      <div class="slideright padding" ng-if="browserStatus.feature != null" style="z-index=12">
+        <div class="card">
+        
+          <h3>{{ getTitle(browserStatus.layer, browserStatus.feature) }}
+              <button class="btn btn-primary btn-sm pull-right">
+                a
+              </button>
+          </h3>
+          <div ng-if="getTemplateForLayer(browserStatus.layer)">
+            <div ng-include="getTemplateForLayer(browserStatus.layer)">
+              
+            </div>
+          </div>
+          </div>
+
+      </div>
+      
+
+    
+    </ion-content>
+    <!--
+    <ion-content class="slideright" >
+
+    
+    </ion-content>
+    <ion-content class="slideright" ng-if="browserStatus.feature != null">
+
+    
+    </ion-content>
+  -->
+    
+
+</div>

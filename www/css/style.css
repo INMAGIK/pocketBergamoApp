@@ -65,9 +65,26 @@
 .aa.ng-leave {
     animation: flipOutX .6s;
     -webkit-animation: flipOutX .6s;
-    
-
+ 
 }
+
+.slideright{
+    top:0px;
+    width:100%;
+    position:absolute;
+}
+
+.slideright.ng-enter {
+    -webkit-animation: slideInRight .6s;
+    animation: slideInRight .6s;
+}
+ 
+.slideright.ng-leave {
+    animation: slideOutLeft .6s;
+    -webkit-animation: slideOutLeft .6s;
+ 
+}
+
 
 /* from: http://stackoverflow.com/questions/20409632/android-4-3-and-phonegap-cant-tap-link */
 .androidpaintfix {
@@ -101,7 +118,10 @@
     /*-webkit-filter: drop-shadow(0 -2px 2px #AAA); */
 }
 
-
+.popover-content{
+    color:white;
+    padding:4px;
+}
 
 .hide{
     display:none;

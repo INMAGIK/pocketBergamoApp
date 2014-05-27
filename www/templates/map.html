@@ -30,6 +30,8 @@
     <div class="bottom-toolbar">
         <button class="button button-small button-positive icon ion-map" ng-click="togglePanel('layers')" ng-class="{'button-assertive' : panels['layers'] == true }">
         </button>
+        <button class="button button-small button-positive icon ion-navicon" ng-click="openBrowser()">
+        </button>
       
     </div>
 
@@ -43,6 +45,7 @@
 
     <div class="popover hide" id="popup">
       <div class="popover-arrow"></div>
+      <div class="popover-content"></div>
     </div>
 
       

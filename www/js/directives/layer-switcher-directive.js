@@ -48,8 +48,7 @@
                         var allowedGroups = attrs.groups.split(",");
                         scope.groupedLayers = _.reject(scope.groupedLayers, function(item){
                             return allowedGroups.indexOf(item.group) == -1;
-                        })
-                        console.log("www", scope.groupedLayers)
+                        });
                     }
                     
                     scope.groupedValues  = {};

@@ -3,14 +3,14 @@
 
     angular.module('pocketMap.controllers')
 
-    .controller('MapCtrl', ['$scope', '$timeout', 'configManager', 'mapConfigService', 'mapsManager','layersManager', 'layersConfigService', 'olGeolocationService', '$ionicModal',
-        function($scope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal) {
+    .controller('MapCtrl', ['$scope', '$timeout', 'configManager', 'mapConfigService', 'mapsManager','layersManager', 'layersConfigService', 'olGeolocationService', 
+            '$ionicModal', 'popupManager', 'indexService',
+        function($scope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal,popupManager, indexService) {
 
         $scope.appInfo = {
             title : 'PocketMap Bergamo',
             version : "0.1"
         };
-
         
         $scope.uiStatus = {
             gps:false,
@@ -19,6 +19,7 @@
             lastPosition : null,
             lastHeading : null,
         };
+
 
         var firstRotation = false;
         
@@ -38,6 +39,29 @@
         $scope.closeModal = function() {
             $scope.modal.hide();
         };
+
+
+        //browser modal
+        $ionicModal.fromTemplateUrl('templates/browser.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.browser = modal;
+
+        });
+
+        $scope.openBrowser = function() {
+            $scope.browser.show();
+        };
+        $scope.closeBrowser = function() {
+            $scope.browser.hide();
+        };
+
+
+
+
+
+
         //Cleanup the modal when we're done with it!
         $scope.$on('$destroy', function() {
             $scope.modal.remove();
@@ -51,13 +75,8 @@
         $scope.togglePanel = function(panelName){
             $timeout(function(){
                 $scope.panels[panelName] = !$scope.panels[panelName];
-                console.log("n", $scope.panels)
             })
-        }
-
-
-
-        
+        };
 
         
         var startFromConfig = function(){
@@ -113,25 +132,48 @@
             var popup = new ol.Overlay({
               element: element,
               positioning: 'top-center',
-              stopEvent: false
+              stopEvent: true
             });
             $scope.map.addOverlay(popup);
 
             // display popup on click
             $scope.map.on('click', function(evt) {
-              var feature = $scope.map.forEachFeatureAtPixel(evt.pixel,
-                  function(feature, layer) {
-                    return feature;
-                  });
-              if (feature) {
 
+              var configuredFeature = $scope.map.forEachFeatureAtPixel(evt.pixel,
+                  function(feature, layer) {
+
+                    var uid =  layer.get('uid');
+                    if(popupManager.config[uid]){
+                        return { feature : feature, layer : layer, uid : uid};
+                    }
+                    
+                  
+                  });
+              
+              if (configuredFeature) {
+                
+                var feature = configuredFeature.feature;
+                var uid = configuredFeature.uid;
+
+                var c = $(".popover-content", $(element));
+                c.empty();
+                
                 var geometry = feature.getGeometry();
                 var coord = geometry.getCoordinates();
                 popup.setPosition(coord);
-                
                 $(element).fadeIn()
+                 
+                
+                popupManager.getPopupHtml(uid, feature).then(function(html){
+                    c.html(html);
+                    
+                    
+                });
+                //popup.setPosition(evt.coordinate);
+                
               } else {
                 $(element).fadeOut();
+
               }
             });
         };
@@ -364,14 +406,10 @@
                         var map = mapsManager.createMap('main-map', config);
                         $scope.map = map;
                         var i = map.getInteractions()
-                        console.log("xx", i.getArray())
-                        _.each(i.getArray(), function(item){
-                            console.log(item.toString())
-                        })
                         var v = map.getView();
                         v.fitExtent(mapConfigService.getExtent(), map.getSize() );
 
-                        console.log("xxx-zzz", v.getResolution())
+                        //console.log("xxx-zzz", v.getResolution())
                         
                         //v.set('maxZoom', v.getZoom());
                         
@@ -389,8 +427,21 @@
                         //adding vectors
                         _.each(data.vectorLayers, function(item){
                             var i = layersManager.createLayerConfigFromJson(item);
+                            //var i = layersManager.createObjectFromJson(item);
                             console.log("adding vector!", i)
+
                             layersManager.addLayer('main-map', i);
+
+                            if(item.popupTemplate){
+                                popupManager.registerLayer(i.uid, item.popupTemplate)
+                            }
+
+                            if(item.indexOptions){
+                                indexService.registerLayer(i.name, i.layer, item.indexOptions)
+                            }
+                            
+
+
                         });
 
                         initGeoloc();

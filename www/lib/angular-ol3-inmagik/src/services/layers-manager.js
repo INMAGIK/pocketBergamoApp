@@ -44,6 +44,12 @@
             var layerKlass = getKlassFromString(data.layerClass);
             var sourceKlass = getKlassFromString(data.sourceClass);
             layerOptions.source = new sourceKlass(sourceOptions);
+
+            //this is not consistent at all..
+            if(data.style){
+                layerOptions.style = createObjectFromJson(data.style);
+
+            }
             
             var out = {
                 name : data.name,
@@ -54,6 +60,47 @@
             return out;
 
         };
+
+
+        var createObjectFromJson = function(data){
+
+            var out;
+            if(angular.isArray(data)){
+
+                out  = [];
+                for(var i=0,n=data.length;i<n;i++){
+                    out.push(createObjectFromJson(data[i]));
+                }
+                return out;
+
+            }
+            if(angular.isObject(data)){
+
+                if(data.klassName){
+                    var klass = getKlassFromString(data.klassName);
+                    var opts = data.klassArgs || {};
+                    var extOpts = createObjectFromJson(opts)
+                    return new klass(extOpts)
+                }
+
+                out  = {};
+                var keys = _.keys(data);
+                for(var i=0,n=keys.length;i<n;i++){
+                    var key = keys[i];
+                    var v = data[key];
+                    out[key] = createObjectFromJson(v);    
+                }
+                return out;
+            }
+            return data
+
+            
+
+        };
+
+
+
+
 
         var getLayerByName = function(mapId, name){
             var layers = layersForMaps[mapId] || [];
@@ -170,7 +217,8 @@
             groupLayers : groupLayers,
             getGroupComplement : getGroupComplement,
             setLayerPosition : setLayerPosition,
-            createLayerConfigFromJson : createLayerConfigFromJson
+            createLayerConfigFromJson : createLayerConfigFromJson,
+            createObjectFromJson : createObjectFromJson
         };
         return svc;
     }]);

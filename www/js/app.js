@@ -1,9 +1,4 @@
-// Ionic Starter App
 
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.controllers' is found in controllers.js
 angular.module('pocketMap', ['ionic', 'pocketMap.controllers', 'ngOL3Inmagik', 'ngAnimate'])
 
 .run(function($ionicPlatform) {
@@ -27,9 +22,23 @@ angular.module('pocketMap', ['ionic', 'pocketMap.controllers', 'ngOL3Inmagik', '
       url: "/map",
       templateUrl: "templates/map.html",
       controller: 'MapCtrl'
+    })
+    /*
+    .state('map.browser', {
+      url: "/map/browser",
+      views : {
+        'subview' : {
+          templateUrl: "templates/browser.index.html"    
+        }
+        
+      }
+      
+      
     });
+  */
     
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/map');
+
 });
 
