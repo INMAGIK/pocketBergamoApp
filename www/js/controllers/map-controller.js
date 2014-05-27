@@ -127,6 +127,11 @@
         };
 
 
+        var openPopup = function(feature){
+
+
+        };
+
         var createPopupOverlay  = function(){
             var element = document.getElementById('popup');
             var popup = new ol.Overlay({
@@ -474,8 +479,21 @@
 
             
 
+            //listener ... from browser
+            $scope.$on('centerBrowserFeature', function(evt,data){
+                var v = $scope.map.getView();
+                var pos = data.geometry.getExtent()
+                var c = [(pos[2]+pos[0])/2.0, (pos[3] + pos[1])/2.0,  ];
+                v.setCenter(c);
+                v.setZoom(3);
+                //close browser
+                $scope.closeBrowser();
 
-            
+
+            });
+
+
+            //initialization
             startFromConfig();    
             
             

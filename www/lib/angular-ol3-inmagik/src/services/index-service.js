@@ -30,7 +30,7 @@
 
         svc.getFeatures = function(layerName){
             var f = features[layerName] || [];
-            f = _.map(f, function(i){ return i.getProperties() })
+            f = _.map(f, function(i){ var out =  i.getProperties(); return out; })
             var att = config[layerName]['titleField'];
             return _.reject(f, function(item){
                 return (!!!item[att]);
