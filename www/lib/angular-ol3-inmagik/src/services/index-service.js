@@ -51,7 +51,7 @@
 
             f = _.map(f, function(i){ 
                 var out =  i.getProperties();
-
+                
                 out._title = out[att];
                 out._icon = ico;
                 out._layerName = layerName;

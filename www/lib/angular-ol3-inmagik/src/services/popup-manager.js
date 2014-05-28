@@ -12,17 +12,22 @@
         svc.registerLayer = function(cfg){
             var uid = cfg.uid, 
                 options = cfg.uiOptions;
-                
-            svc.config[uid] = options.popupTemplate;
+
+            svc.config[uid] = options
         };
 
         svc.getPopupHtml = function(uid, feature){
             var d = $q.defer()
             
-            
+            var cf = svc.config[uid];
             var compileTemplate = function(htmlTemplate){
                 var s = $rootScope.$new();
                 s.feature = feature;
+                s.layerOptions = cf;
+                s.broadcast = function(msg){
+                    $rootScope.$broadcast(msg, feature, cf);
+                }
+
                 var html = $compile(htmlTemplate)(s);
                 d.resolve(html);
             };
@@ -32,7 +37,7 @@
                 compileTemplate(htmlTemplate);
 
             } else {
-                var templateUrl = svc.config[uid];
+                var templateUrl = svc.config[uid].popupTemplate;
                 $http.get(templateUrl).then(function(data){
                     cache[uid] = data.data;
                     compileTemplate(data.data);

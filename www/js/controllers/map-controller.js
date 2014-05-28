@@ -3,9 +3,9 @@
 
     angular.module('pocketMap.controllers')
 
-    .controller('MapCtrl', ['$scope', '$timeout', 'configManager', 'mapConfigService', 'mapsManager','layersManager', 'layersConfigService', 'olGeolocationService', 
+    .controller('MapCtrl', ['$scope', '$rootScope', '$timeout', 'configManager', 'mapConfigService', 'mapsManager','layersManager', 'layersConfigService', 'olGeolocationService', 
             '$ionicModal', 'popupManager', 'indexService',
-        function($scope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal,popupManager, indexService) {
+        function($scope, $rootScope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal,popupManager, indexService) {
 
         $scope.appInfo = {
             title : 'PocketMap Bergamo',
@@ -214,13 +214,18 @@
 
         }
 
+        //#TODO: this is crazy, as the browser controler listens to the same not
+        $scope.$on('showMe', function(evt,data){
+            //$scope.openBrowser();
+
+        })
 
         var createPopupOverlay  = function(){
             var element = document.getElementById('popup');
             popupOverlay = new ol.Overlay({
               element: element,
               positioning: 'top-center',
-              stopEvent: true
+              stopEvent: false
             });
             $scope.map.addOverlay(popupOverlay);
 
@@ -228,6 +233,8 @@
             $scope.map.on('click', function(evt) {
                 handlePopup(evt.pixel);
             });
+
+            
         };
 
 
@@ -562,7 +569,13 @@
                 });
                 */
                 
-            }
+            };
+
+            $scope.openBrowserOnFeature = function(layerName, feature){
+
+                $rootScope.$broadcast("browserToFeature", layerName, feature)
+
+            };
 
             
 

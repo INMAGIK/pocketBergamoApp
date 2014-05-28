@@ -15,6 +15,7 @@
             $scope.browserTitle = "Browser";
 
             $scope.layers = [];
+            $scope.features = [];
 
             $scope.$watch(function(){
                 return indexService.getLayers({browser:true});
@@ -27,8 +28,6 @@
                 },
                 true
             );
-            
-            $scope.features = [];
 
             
             $scope.toIndex = function(){
@@ -42,19 +41,32 @@
             };
             
 
-            $scope.toLayer = function(layerName){
+            $scope.toLayer = function(layerName, options){
                 $timeout(function(){
-                    $scope.browserStatus.layer = layerName;
-                    $scope.browserStatus.feature = null;
+                    
+                    
                     $scope.features = indexService.getFeatures(layerName);
                     $scope.browserTitle = layerName + " (" + $scope.features.length + ")";
+
+                    if(options){
+                        var f = _.findWhere($scope.features , options);
+                        if(f){
+                            return $scope.toFeature(f, layerName);
+                        } 
+                    }
+
+                    $scope.browserStatus.layer = layerName;
+                    $scope.browserStatus.feature = null;
 
                 })
 
             };
 
-            $scope.toFeature = function(feature){
+            $scope.toFeature = function(feature, layerName){
                 $timeout(function(){
+                    if(layerName){
+                        $scope.browserStatus.layer = layerName;
+                    }
                     $scope.browserStatus.feature = feature;
                     $scope.browserTitle = $scope.getTitle($scope.browserStatus.layer, $scope.browserStatus.feature) + " ( "+ $scope.browserStatus.layer +" )";
                     $ionicScrollDelegate.scrollTop();
@@ -91,6 +103,17 @@
                 $rootScope.$broadcast("centerBrowserFeature", feature, $scope.browserStatus.layer);
 
             }
+
+
+            
+            $scope.$on('showMeInBrowser', function(evt,feature,options){
+                $scope.browser.show();
+                var place_id = feature.values_.place_id;
+                $scope.toLayer(options.layerName, {place_id:place_id});
+            
+            });
+
+
 
 
             
