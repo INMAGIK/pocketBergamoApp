@@ -68,7 +68,7 @@
                         $scope.browserStatus.layer = layerName;
                     }
                     $scope.browserStatus.feature = feature;
-                    $scope.browserTitle = $scope.getTitle($scope.browserStatus.layer, $scope.browserStatus.feature) + " ( "+ $scope.browserStatus.layer +" )";
+                    $scope.browserTitle = $scope.browserStatus.layer;
                     $ionicScrollDelegate.scrollTop();
                 })
 

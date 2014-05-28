@@ -180,8 +180,8 @@
 
                 var uid =  layer.get('uid');
                 var name = layer.get('name');
-                var condition = (!!layerName) || (layerName && name==layerName)
-                if(popupManager.config[uid]){
+                var condition = (!layerName || (layerName && name==layerName))
+                if(popupManager.config[uid] && condition){
                     return { feature : feature, layer : layer };
                 }
               });
