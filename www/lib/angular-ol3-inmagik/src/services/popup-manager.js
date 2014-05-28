@@ -9,7 +9,10 @@
             config : {},
         };
         
-        svc.registerLayer = function(uid, options){
+        svc.registerLayer = function(cfg){
+            var uid = cfg.uid, 
+                options = cfg.uiOptions;
+                
             svc.config[uid] = options.popupTemplate;
         };
 

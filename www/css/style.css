@@ -10,6 +10,15 @@
     bottom:0;
 }
 
+.hud{
+
+    
+    width:100%;
+    height:100%;
+    
+
+}
+
 .layers-browser{
     position:absolute;
     z-index:1100;

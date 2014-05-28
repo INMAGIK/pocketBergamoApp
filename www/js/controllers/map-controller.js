@@ -150,6 +150,25 @@
 
         };
 
+        var hudOverlay;
+
+
+        var createHudOverlay  = function(){
+
+            var element2= document.getElementById('hud');
+            hudOverlay = new ol.Overlay({
+              element: element2,
+              positioning: 'center-center',
+              stopEvent: false
+            });
+            
+            $scope.map.addOverlay(hudOverlay);
+            hudOverlay.setPosition($scope.map.getView().getCenter())
+
+
+        };
+
+
         var createPopupOverlay  = function(){
             var element = document.getElementById('popup');
             var popup = new ol.Overlay({
@@ -158,6 +177,12 @@
               stopEvent: true
             });
             $scope.map.addOverlay(popup);
+
+
+            
+
+
+
 
             // display popup on click
             $scope.map.on('click', function(evt) {
@@ -336,7 +361,8 @@
                 function(nv){
                     if(!nv) return;
                     var v = $scope.map.getView();
-                    v.setCenter(nv);
+                    animateCenter(nv)
+                    //v.setCenter(nv);
                 },
                 true
             );
@@ -464,19 +490,22 @@
 
                         //adding vectors
                         _.each(data.vectorLayers, function(item){
-                            var i = layersManager.createLayerConfigFromJson(item);
+                            var cfg = layersManager.createLayerConfigFromJson(item);
                             //var i = layersManager.createObjectFromJson(item);
-                            console.log("adding vector!", i)
+                            console.log("adding vector", cfg)
 
-                            layersManager.addLayer('main-map', i);
+                            
 
-                            if(item.uiOptions){
-                                if(item.uiOptions.popup){
-                                    popupManager.registerLayer(i.uid, item.uiOptions)
+                            if(cfg.uiOptions){
+                                if(item.uiOptions.map!=false){
+                                    layersManager.addLayer('main-map', cfg);
+                                    if(cfg.uiOptions.popup){
+                                        popupManager.registerLayer(cfg)
+                                    }
                                 }
                                 
                                 if(item.uiOptions.index){
-                                    indexService.registerLayer(i.name, i.layer, item.uiOptions)
+                                    indexService.registerLayer(cfg)
                                 }
                             }
 
@@ -490,6 +519,7 @@
 
 
                         createPopupOverlay();
+                        //createHudOverlay();
 
                         prepareEvents();
 
@@ -504,6 +534,7 @@
             var onMove = function(evt){
                 var bounds = $scope.map.getView().calculateExtent($scope.map.getSize());
                 var center = $scope.map.getView().getCenter();
+                //hudOverlay.setPosition(center)
                 //console.log(2, evt)
                 /*
                 $timeout(function(){

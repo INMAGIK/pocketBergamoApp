@@ -51,6 +51,7 @@
             "uiOptions" : {
                 "index" : true,
                 "popup" : true,
+                "browser" : true,
                 "popupTemplate"  : "templates/museo-feature.html",
                 "cardTemplate" : "templates/card-example.html",
                 "titleField" : "name",

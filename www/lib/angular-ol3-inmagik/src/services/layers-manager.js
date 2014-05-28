@@ -50,13 +50,12 @@
                 layerOptions.style = createObjectFromJson(data.style);
 
             }
+
+            var out = $.extend(true, {}, data);
+            out.group = out.group || '';
+            out.uid = data.uid || generateUid();
+            out.layer = new layerKlass(layerOptions);
             
-            var out = {
-                name : data.name,
-                group : data.group || '',
-                uid : data.uid || generateUid(),
-                layer : new layerKlass(layerOptions)
-            }
             return out;
 
         };

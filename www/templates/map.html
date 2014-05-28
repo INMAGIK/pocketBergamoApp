@@ -14,7 +14,10 @@
     </ion-header-bar>
   
   <ion-content class="has-header" scroll="false" ng-cloak>
+    
     <div id="main-map" class="main-map"></div>
+
+
     
     <div class="toolbar">
         <button class="button button-small button-positive icon ion-android-locate" ng-click="toggleGeolocation()" ng-class="{'button-assertive' : uiStatus.gps == true }">
@@ -83,10 +86,21 @@
       </div>
     </div>
 
+    
+    <!-- popover ... #TODO: move to a directive! -->
     <div class="popover hide" id="popup">
       <div class="popover-arrow"></div>
       <div class="popover-content"></div>
     </div>
+
+
+    <!-- hud -->
+    <!--
+    <div class="hud" id="hud"></div>
+    -->
+
+
+
 
       
     

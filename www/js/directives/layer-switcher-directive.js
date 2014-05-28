@@ -44,7 +44,6 @@
                 var refresh = function(){
                     scope.groupedLayers = layersManager.groupLayers(scope.mapId);
                     if(attrs.groups){
-                        console.error(1)
                         var allowedGroups = attrs.groups.split(",");
                         scope.groupedLayers = _.reject(scope.groupedLayers, function(item){
                             return allowedGroups.indexOf(item.group) == -1;

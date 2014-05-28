@@ -14,11 +14,23 @@
 
             $scope.browserTitle = "Browser";
 
+            $scope.layers = [];
 
+            $scope.$watch(function(){
+                return indexService.getLayers({browser:true});
+                }, 
+                function(nv){
+                    if(nv){
+                        $scope.layers = nv;    
+                    }
+                    
+                },
+                true
+            );
             
-            $scope.layers = indexService.getLayers();
             $scope.features = [];
 
+            
             $scope.toIndex = function(){
                 $timeout(function(){
                     $scope.browserStatus.layer = null;

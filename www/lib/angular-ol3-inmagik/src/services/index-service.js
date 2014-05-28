@@ -12,18 +12,31 @@
             
         };
 
-        svc.registerLayer = function(name, layer, options){
+        svc.registerLayer = function(cfg){
+            var name=cfg.name, 
+                layer = cfg.layer, 
+                options=cfg.uiOptions;
+            
             options = options || { titleField : 'name'};
-            layers.push(name);
+            options.layerName = name;
             config[name] = options;
+            layers.push(name);
+            
             layer.on("change", function(l){
                 var lfeatures = this.getSource().getFeatures();    
                 features[name] = lfeatures;
             });
         };
 
-        svc.getLayers = function(){
-            return layers;
+        svc.getLayers = function(filter){
+            if(!filter){
+                return layers;    
+            }
+            
+            var cgfs =  _.map(config, function(item){return item});
+            var fl = _.where(cgfs, filter);
+            return _.pluck(fl, "layerName");
+
         };
 
         svc.getConfigForLayer = function(layerName, key){
@@ -65,9 +78,13 @@
 
         
         var searchLayer = function(layerName, term){
+            var l = term.toLowerCase()
             var out = svc.getFeatures(layerName);
             return _.reject(out, function(item){
-                return (item[config[layerName]['titleField']].indexOf(term) == -1);
+                var t = item[config[layerName]['titleField']];
+                t = t || '';
+                t = t.toLowerCase();
+                return (t.indexOf(l) == -1);
             })
         
         };
