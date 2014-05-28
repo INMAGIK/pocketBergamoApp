@@ -63,6 +63,13 @@
           </button>
           </div>
 
+          <div class="item item-checkbox transparent" style="margin:0px 10px;">
+          <label class="checkbox">
+            <input type="checkbox" ng-model="searchStatus.address">
+          </label>
+          Match addresses
+        </div>
+
           <div class="item-input transparent-box transparent-box" ng-if="searchStatus.lastSearch" style="margin:0px 10px;">
             <b>{{  searchStatus.searchResults.length }}</b>&nbsp;results for&nbsp;<b>{{ searchStatus.lastSearch }}</b> &nbsp;
             <button class="button button-assertive button-small" ng-click="clear()">Clear</button>
@@ -76,6 +83,9 @@
           <div class="item item-button-right transparent" ng-repeat="result in searchStatus.searchResults">
             <img class="icon-title" src="{{ result.icon }}" alt="">
             {{ result.layerName }} - {{ result.title }}
+            <div xng-if="searchStatus.address">
+              <small>{{ result.feature.display_name }}</small>
+            </div>
             <button class="button button-clear " ng-click="centerFeature(result.feature)">
               <i class="icon ion-android-location"></i>
             </button>

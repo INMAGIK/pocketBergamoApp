@@ -54,6 +54,7 @@
 
                 out._title = out[att];
                 out._icon = ico;
+                out._layerName = layerName;
                 
                 return out; 
             });
@@ -77,24 +78,26 @@
         }
 
         
-        var searchLayer = function(layerName, term){
+        var searchLayer = function(layerName, term, field){
             var l = term.toLowerCase()
             var out = svc.getFeatures(layerName);
             return _.reject(out, function(item){
-                var t = item[config[layerName]['titleField']];
+                var fieldName = field || config[layerName]['titleField'];
+                var t = item[fieldName];
                 t = t || '';
                 t = t.toLowerCase();
+                
                 return (t.indexOf(l) == -1);
             })
         
         };
 
-        svc.searchFeatures = function(searchTerm){
+        svc.searchFeatures = function(searchTerm, field){
             var out = [];
             _.each(layers, function(layer){
                 var att = config[layer]['titleField'];
                 var ico = config[layer]['icon'];
-                var features = searchLayer(layer, searchTerm);
+                var features = searchLayer(layer, searchTerm, field);
                 var x = _.map(features, function(item){
                     return {layerName:layer, feature:item, title:item[att], icon:ico}
                 })

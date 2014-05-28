@@ -10,7 +10,11 @@
             
 
             $scope.search = function(){
-                var w = indexService.searchFeatures($scope.searchStatus.search);
+                var field;
+                if($scope.searchStatus.address){
+                    field='display_name';
+                }
+                var w = indexService.searchFeatures($scope.searchStatus.search, field);
                 $timeout(function(){
                     $scope.searchStatus.searchResults = w;
                     $scope.searchStatus.lastSearch = $scope.searchStatus.search;
@@ -29,7 +33,7 @@
 
 
             $scope.centerFeature = function(feature){
-                $rootScope.$broadcast("centerSearchFeature", feature);
+                $rootScope.$broadcast("centerSearchFeature", feature, feature._layerName);
 
             }
 

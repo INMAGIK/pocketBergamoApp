@@ -57,6 +57,76 @@
                 "titleField" : "name",
                 "icon" : "img/position2.png"
             }
+        },
+        {
+            "name" : "financial",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "layerOptions" : {
+                "xvisible" : false
+            },
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/financial.geojson"
+            },
+            
+            "style" : {
+                "klassName" : "ol.style.Style",
+                "klassArgs" : {
+                    "image" : {
+                        "klassName" : "ol.style.Icon",
+                        "klassArgs" : {
+                            "radius" : 8,
+                            "src" : "img/position2.png"
+                        }
+                    }
+                }
+            },
+
+            "uiOptions" : {
+                "index" : true,
+                "popup" : true,
+                "browser" : true,
+                "popupTemplate"  : "templates/museo-feature.html",
+                "cardTemplate" : "templates/card-example.html",
+                "titleField" : "name",
+                "icon" : "img/position2.png"
+            }
+        },
+        {
+            "name" : "healthcare",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "layerOptions" : {
+                "xvisible" : false
+            },
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/healthcare.geojson"
+            },
+            
+            "style" : {
+                "klassName" : "ol.style.Style",
+                "klassArgs" : {
+                    "image" : {
+                        "klassName" : "ol.style.Icon",
+                        "klassArgs" : {
+                            "radius" : 8,
+                            "src" : "img/position.png"
+                        }
+                    }
+                }
+            },
+
+            "uiOptions" : {
+                "index" : true,
+                "popup" : true,
+                "browser" : true,
+                "popupTemplate"  : "templates/museo-feature.html",
+                "cardTemplate" : "templates/card-example.html",
+                "titleField" : "name",
+                "icon" : "img/position.png"
+            }
         }
         
                 

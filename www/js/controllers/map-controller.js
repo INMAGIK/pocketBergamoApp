@@ -23,7 +23,8 @@
         $scope.searchStatus = {
             search : '',
             lastSearch : null,
-            searchResults : [] 
+            searchResults : [] ,
+            address : true
 
         };
 
@@ -151,6 +152,8 @@
         };
 
         var hudOverlay;
+        var popupOverlay;
+
 
 
         var createHudOverlay  = function(){
@@ -169,60 +172,61 @@
         };
 
 
+        var handlePopup = function(pixel, layerName){
+            
+            var element = document.getElementById('popup');
+            var configuredFeature = $scope.map.forEachFeatureAtPixel(pixel,
+              function(feature, layer) {
+
+                var uid =  layer.get('uid');
+                var name = layer.get('name');
+                var condition = (!!layerName) || (layerName && name==layerName)
+                if(popupManager.config[uid]){
+                    return { feature : feature, layer : layer };
+                }
+              });
+          
+          if (configuredFeature) {
+            
+            var feature = configuredFeature.feature;
+            
+
+            var uid = configuredFeature.layer.get('uid');
+
+            var c = $(".popover-content", $(element));
+            c.empty();
+            $(element).fadeIn()
+            
+            var geometry = feature.getGeometry();
+            var coord = geometry.getCoordinates();
+            popupOverlay.setPosition(coord);
+            
+            
+            popupManager.getPopupHtml(uid, feature).then(function(html){
+                c.html(html);
+            });
+            //popup.setPosition(evt.coordinate);
+            
+          } else {
+            $(element).fadeOut();
+
+          }
+
+        }
+
+
         var createPopupOverlay  = function(){
             var element = document.getElementById('popup');
-            var popup = new ol.Overlay({
+            popupOverlay = new ol.Overlay({
               element: element,
               positioning: 'top-center',
               stopEvent: true
             });
-            $scope.map.addOverlay(popup);
-
-
-            
-
-
-
+            $scope.map.addOverlay(popupOverlay);
 
             // display popup on click
             $scope.map.on('click', function(evt) {
-
-              var configuredFeature = $scope.map.forEachFeatureAtPixel(evt.pixel,
-                  function(feature, layer) {
-
-                    var uid =  layer.get('uid');
-                    if(popupManager.config[uid]){
-                        return { feature : feature, layer : layer, uid : uid};
-                    }
-                    
-                  
-                  });
-              
-              if (configuredFeature) {
-                
-                var feature = configuredFeature.feature;
-                var uid = configuredFeature.uid;
-
-                var c = $(".popover-content", $(element));
-                c.empty();
-                
-                var geometry = feature.getGeometry();
-                var coord = geometry.getCoordinates();
-                popup.setPosition(coord);
-                $(element).fadeIn()
-                 
-                
-                popupManager.getPopupHtml(uid, feature).then(function(html){
-                    c.html(html);
-                    
-                    
-                });
-                //popup.setPosition(evt.coordinate);
-                
-              } else {
-                $(element).fadeOut();
-
-              }
+                handlePopup(evt.pixel);
             });
         };
 
@@ -425,6 +429,21 @@
             
         };
 
+        var animateZoom = function(targetZoom){
+
+            var v = $scope.map.getView();
+            
+            var zoomAnimation = ol.animation.zoom({
+                duration: 500,
+                resolution: v.getResolution(),
+                easing : ol.easing.linear
+            });
+
+            $scope.map.beforeRender(zoomAnimation);
+            v.setZoom(targetZoom);
+            
+        };
+
 
         $scope.lockRotation = function(){
             $scope.map.removeInteraction(mapConfigService.interactionsByName["ol.interaction.DragRotate"]);
@@ -548,25 +567,59 @@
             
 
             //listener ... from browser
-            $scope.$on('centerBrowserFeature', function(evt,data){
+            $scope.$on('centerBrowserFeature', function(evt,data, layerName){
                 var v = $scope.map.getView();
                 var pos = data.geometry.getExtent()
                 var c = [(pos[2]+pos[0])/2.0, (pos[3] + pos[1])/2.0,  ];
-                v.setCenter(c);
-                v.setZoom(3);
+                //v.setCenter(c);
+                //v.setZoom(3);
+                animateCenter(c);
+                animateZoom(3);
                 //close browser
                 $scope.closeBrowser();
+
+                if(layerName){
+                    var l = layersManager.getLayerByName('main-map', layerName);
+                    l.setVisible(true);
+                };
+                
+                setTimeout(function(){
+                    var coords = $scope.map.getPixelFromCoordinate(c)
+                    handlePopup(coords,layerName);
+                },1000);
+
+
             });
 
 
-            $scope.$on('centerSearchFeature', function(evt,data){
+            $scope.$on('centerSearchFeature', function(evt,data, layerName){
                 var v = $scope.map.getView();
                 var pos = data.geometry.getExtent()
                 var c = [(pos[2]+pos[0])/2.0, (pos[3] + pos[1])/2.0,  ];
+
+                if(layerName){
+                    var l = layersManager.getLayerByName('main-map', layerName);
+                    if(l){
+                        l.setVisible(true);    
+                    }
+                };
+                
+                
                 animateCenter(c);
                 //v.setCenter(c);
                 //v.setZoom(3);
+                animateZoom(3);
                 //close browser
+                $scope.togglePanel('search')
+
+                setTimeout(function(){
+                    var coords = $scope.map.getPixelFromCoordinate(c)
+                    handlePopup(coords, layerName);
+                    
+                },1000);
+
+
+                
                 
 
             });

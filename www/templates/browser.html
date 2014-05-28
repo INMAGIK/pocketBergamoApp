@@ -15,7 +15,10 @@
       <div class="list slideright" ng-if="browserStatus.layer != null && browserStatus.feature == null" style="z-index=11">
         
         <a href="#" class="item" ng-repeat="feature in features" ng-click="toFeature(feature)">
-          <!--<img src="{{ feature._icon }}" alt="">--> {{ feature._title }}
+          <!--<img src="{{ feature._icon }}" alt="">--> 
+          {{ feature._title }} <br>
+          <small>{{ feature.address.road}} <span ng-if="feature.address.suburb">{{ feature.address.suburb }}, </span>
+            {{feature.address.city }} ({{feature.address.county }})</small>
           
         </a>
       </div>

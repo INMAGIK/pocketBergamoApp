@@ -88,7 +88,7 @@
 
 
             $scope.centerFeature = function(feature){
-                $rootScope.$broadcast("centerBrowserFeature", feature);
+                $rootScope.$broadcast("centerBrowserFeature", feature, $scope.browserStatus.layer);
 
             }
 
