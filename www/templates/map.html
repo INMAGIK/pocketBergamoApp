@@ -22,7 +22,7 @@
     <div class="toolbar">
         <button class="button button-small button-positive icon ion-android-locate" ng-click="toggleGeolocation()" ng-class="{'button-assertive' : uiStatus.gps == true }">
         </button>
-        <button class="button button-small button-positive icon ion-navigate" ng-click="toggleFollow()" ng-class="{'button-assertive' : uiStatus.follow == true }" ng-disabled="uiStatus.gps == false || uiStatus.locationInExtent == false">
+        <button class="button button-small button-positive icon ion-navigate" ng-click="toggleFollow()" ng-class="{'button-assertive' : uiStatus.follow == true }" ng-disabled="uiStatus.gps == false || (!uiStatus.locationInExtent)">
         </button>
         <button class="button button-small button-positive icon ion-refresh" ng-click="toggleOrientation()" ng-class="{'button-assertive' : uiStatus.orientation == true }">
         </button>
