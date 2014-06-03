@@ -9,7 +9,8 @@
         
             $scope.browserStatus = {
                 layer  : null,
-                feature : null
+                feature : null,
+                filter : ''
             };
 
             $scope.browserTitle = "Browser";
@@ -28,6 +29,12 @@
                 },
                 true
             );
+
+            $scope.clearFilter = function(){
+                $timeout(function(){
+                    $scope.browserStatus.filter=''
+                });
+            }
 
             
             $scope.toIndex = function(){
@@ -107,7 +114,7 @@
 
             
             $scope.$on('showMeInBrowser', function(evt,feature,options){
-                
+
                 $scope.browser.show();
                 var place_id = feature.values_.place_id;
                 $scope.toLayer(options.layerName, {place_id:place_id});

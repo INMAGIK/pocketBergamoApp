@@ -104,6 +104,8 @@
         
         };
 
+        svc.searchLayer = searchLayer;
+
         svc.searchFeatures = function(searchTerm, field){
             var out = [];
             _.each(layers, function(layer){

@@ -55,7 +55,7 @@
                             step : 1
                         },
                         next : {
-                            label : 'Points of interest',
+                            label : 'Points',
                             step : 3
                         }
                     }
@@ -106,7 +106,7 @@
                     if(el){
                         var e = $(el);
                         
-                        var position =e.offset();
+                        var position =e.position();
                         var w= e.width();
                         var h = e.height();
                         var p = e.css('padding');
@@ -119,7 +119,7 @@
                         $timeout(function(){
                         $scope.overlayStyle = {
                             display: 'block',
-                            top : position.top - 43 + "px",
+                            top : position.top  + "px",
                             left : position.left + "px",
                             width: w + p + "px",
                             height : h + p + "px"

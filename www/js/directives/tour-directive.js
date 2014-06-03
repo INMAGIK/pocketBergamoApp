@@ -18,7 +18,7 @@
 
                     if(nv.highlight){
                         var hi = $(nv.highlight)[0];
-                        console.error("hi", hi)
+                        
                         var el=$(hi);
                         var position = el.offset();
                         var width =el.width();
@@ -37,9 +37,12 @@
 
                         } else {
                             if(position.top + height < wh / 2){
-                                pop.css('top', position.top + 20 + "px")    
+                                
+                                pop.css('top', position.top + 20 + "px");    
+                                pop.css('bottom', "10%")
                             } 
                             if(position.top  > wh / 2){
+                                pop.css('top', "10%");
                                 pop.css('bottom', wh - (position.top ) + 20 + "px")    
                             } 
                             
