@@ -15,6 +15,16 @@
   
   <ion-content class="has-header" scroll="false" ng-cloak>
     
+    
+    <div id="loader-overlay" ng-if="uiStatus.dataLoaded==false">
+      <h1 class="amatic-bold">
+        Loading map data
+      </h1>
+      <br>
+      <img src="img/loader.gif" alt="loader">
+      
+
+    </div>
     <div id="main-map" class="main-map"></div>
 
 

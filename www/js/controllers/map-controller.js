@@ -13,6 +13,7 @@
         };
         
         $scope.uiStatus = {
+            dataLoaded : true,
             gps:false,
             orientation : false,
             follow : false,
@@ -578,6 +579,10 @@
                         createPopupOverlay();
                         //createHudOverlay();
                         prepareEvents();
+
+                        $timeout(function(){
+                            $scope.uiStatus.dataLoaded = true;
+                        })
 
                     });
 

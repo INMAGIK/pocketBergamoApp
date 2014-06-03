@@ -10,6 +10,32 @@
     bottom:0;
 }
 
+
+#loader-overlay{
+    position:absolute;
+    z-index:1200;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;   
+    background-color: rgba(0,0,0,.7);
+    text-align: center;
+    padding-top:200px;
+}
+
+#loader-overlay *{
+    color:white;
+}
+
+
+.amatic-bold{
+    font-family: AmaticSCBold;
+}
+
+.amatic-bigger{
+    font-size:28px;
+}
+
 .hud{
 
     
@@ -171,4 +197,18 @@
     height:1.4em;
     vertical-align: middle;
     margin:0 4px;
+}
+
+
+@font-face {
+  font-family: AmaticSC;
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/AmaticSC-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: AmaticSCBold;
+  font-style: normal;
+  font-weight: 800;
+  src: url(../fonts/AmaticSC-Bold.ttf) format('truetype');
 }
