@@ -18,6 +18,7 @@
             follow : false,
             lastPosition : null,
             lastHeading : null,
+            locationInExtent : null
         };
 
         $scope.searchStatus = {
@@ -37,9 +38,10 @@
                 title: title,
                 template: msg
             });
-            alertPopup.then(function(res) {
-                console.log('Thank you for not eating my delicious ice cream cone');
-            });
+            //Callback could go here ...
+            //alertPopup.then(function(res) {
+            //    
+            //});
         };
         
         
@@ -267,7 +269,8 @@
         };
 
         
-
+        
+        
         var initGeoloc = function(){
 
             positionLayer = createPositionLayer();
@@ -296,12 +299,29 @@
             );
 
 
-
-
-
             $scope.$watch('uiStatus.lastPosition', function(nv){
                 if(!nv) return;
+
+                var ex =mapConfigService.getExtent();
+                var contained = ol.extent.containsCoordinate(ex, nv);
+                if(!contained){
+                    if(contained !== $scope.uiStatus.locationInExtent){
+                        $timeout(function(){
+                            $scope.uiStatus.locationInExtent = false;
+                        });
+                        showAlert('Outside map', "Your current location seems to be outside the map.");
+                        $scope.stopFollow();
+                    }
+                } else {
+                    if(contained != $scope.uiStatus.locationInExtent){
+                        $timeout(function(){
+                            $scope.uiStatus.locationInExtent = true;
+                        });
+                    }
+                    
+                }
                 updatePositionLayer(nv);
+            
             }, true);
 
 
@@ -420,6 +440,7 @@
         }
 
         $scope.toggleFollow = function(){
+
             if($scope.uiStatus.follow){
                 $scope.stopFollow()
             } else {
