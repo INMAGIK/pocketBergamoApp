@@ -28,7 +28,7 @@
             "group" : "vectors",
             "layerClass" : "ol.layer.Vector",
             "layerOptions" : {
-                "xvisible" : false
+                "visible" : false
             },
             "sourceClass" : "ol.source.GeoJSON",
             "sourceOptions" : {
@@ -63,7 +63,7 @@
             "group" : "vectors",
             "layerClass" : "ol.layer.Vector",
             "layerOptions" : {
-                "xvisible" : false
+                "visible" : false
             },
             "sourceClass" : "ol.source.GeoJSON",
             "sourceOptions" : {
@@ -98,7 +98,7 @@
             "group" : "vectors",
             "layerClass" : "ol.layer.Vector",
             "layerOptions" : {
-                "xvisible" : false
+                "visible" : false
             },
             "sourceClass" : "ol.source.GeoJSON",
             "sourceOptions" : {
@@ -127,7 +127,274 @@
                 "titleField" : "name",
                 "icon" : "img/position.png"
             }
+        },
+
+        {
+            "name" : "education",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "layerOptions" : {
+                "visible" : false
+            },
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/education.geojson"
+            },
+            
+            "style" : {
+                "klassName" : "ol.style.Style",
+                "klassArgs" : {
+                    "image" : {
+                        "klassName" : "ol.style.Icon",
+                        "klassArgs" : {
+                            "radius" : 8,
+                            "src" : "img/position.png"
+                        }
+                    }
+                }
+            },
+
+            "uiOptions" : {
+                "index" : true,
+                "popup" : true,
+                "browser" : true,
+                "popupTemplate"  : "templates/museo-feature.html",
+                "cardTemplate" : "templates/card-example.html",
+                "titleField" : "name",
+                "icon" : "img/position.png"
+            }
+        },
+
+        {
+            "name" : "transportation",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "layerOptions" : {
+                "visible" : false
+            },
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/transportation.geojson"
+            },
+            
+            "style" : {
+                "klassName" : "ol.style.Style",
+                "klassArgs" : {
+                    "image" : {
+                        "klassName" : "ol.style.Icon",
+                        "klassArgs" : {
+                            "radius" : 8,
+                            "src" : "img/position.png"
+                        }
+                    }
+                }
+            },
+
+            "uiOptions" : {
+                "index" : true,
+                "popup" : true,
+                "browser" : true,
+                "popupTemplate"  : "templates/transportation-feature.html",
+                "cardTemplate" : "templates/transportation-card.html",
+                "titleField" : "name",
+                "icon" : "img/position.png"
+            }
+        },
+
+        {
+            "name" : "religion",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "layerOptions" : {
+                "visible" : false
+            },
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/religion.geojson"
+            },
+            
+            "style" : {
+                "klassName" : "ol.style.Style",
+                "klassArgs" : {
+                    "image" : {
+                        "klassName" : "ol.style.Icon",
+                        "klassArgs" : {
+                            "radius" : 8,
+                            "src" : "img/position.png"
+                        }
+                    }
+                }
+            },
+
+            "uiOptions" : {
+                "index" : true,
+                "popup" : true,
+                "browser" : true,
+                "popupTemplate"  : "templates/museo-feature.html",
+                "cardTemplate" : "templates/card-example.html",
+                "titleField" : "name",
+                "icon" : "img/position.png"
+            }
+        },
+
+        {
+            "name" : "leisure",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "layerOptions" : {
+                "visible" : false
+            },
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/leisure.geojson"
+            },
+            
+            "style" : {
+                "klassName" : "ol.style.Style",
+                "klassArgs" : {
+                    "image" : {
+                        "klassName" : "ol.style.Icon",
+                        "klassArgs" : {
+                            "radius" : 8,
+                            "src" : "img/position.png"
+                        }
+                    }
+                }
+            },
+
+            "uiOptions" : {
+                "index" : true,
+                "popup" : true,
+                "browser" : true,
+                "popupTemplate"  : "templates/leisure-feature.html",
+                "cardTemplate" : "templates/card-example.html",
+                "titleField" : "name",
+                "icon" : "img/position.png"
+            }
+        },
+
+        {
+            "name" : "natural",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "layerOptions" : {
+                "visible" : false
+            },
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/natural.geojson"
+            },
+            
+            "style" : {
+                "klassName" : "ol.style.Style",
+                "klassArgs" : {
+                    "image" : {
+                        "klassName" : "ol.style.Icon",
+                        "klassArgs" : {
+                            "radius" : 8,
+                            "src" : "img/position.png"
+                        }
+                    }
+                }
+            },
+
+            "uiOptions" : {
+                "index" : true,
+                "popup" : true,
+                "browser" : true,
+                "popupTemplate"  : "templates/museo-feature.html",
+                "cardTemplate" : "templates/card-example.html",
+                "titleField" : "name",
+                "icon" : "img/position.png"
+            }
+        },
+
+
+        {
+            "name" : "sport",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "layerOptions" : {
+                "visible" : false
+            },
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/sport.geojson"
+            },
+            
+            "style" : {
+                "klassName" : "ol.style.Style",
+                "klassArgs" : {
+                    "image" : {
+                        "klassName" : "ol.style.Icon",
+                        "klassArgs" : {
+                            "radius" : 8,
+                            "src" : "img/position.png"
+                        }
+                    }
+                }
+            },
+
+            "uiOptions" : {
+                "index" : true,
+                "popup" : true,
+                "browser" : true,
+                "popupTemplate"  : "templates/sport-feature.html",
+                "cardTemplate" : "templates/card-example.html",
+                "titleField" : "name",
+                "icon" : "img/position.png"
+            }
+        },
+
+        {
+            "name" : "tourism",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "layerOptions" : {
+                "visible" : false
+            },
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/tourism.geojson"
+            },
+            
+            "style" : {
+                "klassName" : "ol.style.Style",
+                "klassArgs" : {
+                    "image" : {
+                        "klassName" : "ol.style.Icon",
+                        "klassArgs" : {
+                            "radius" : 8,
+                            "src" : "img/position.png"
+                        }
+                    }
+                }
+            },
+
+            "uiOptions" : {
+                "index" : true,
+                "popup" : true,
+                "browser" : true,
+                "popupTemplate"  : "templates/museo-feature.html",
+                "cardTemplate" : "templates/card-example.html",
+                "titleField" : "name",
+                "icon" : "img/position.png"
+            }
         }
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
         
                 
     ]

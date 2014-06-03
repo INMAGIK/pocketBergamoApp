@@ -4,8 +4,8 @@
     angular.module('pocketMap.controllers')
 
     .controller('MapCtrl', ['$scope', '$rootScope', '$timeout', 'configManager', 'mapConfigService', 'mapsManager','layersManager', 'layersConfigService', 'olGeolocationService', 
-            '$ionicModal', 'popupManager', 'indexService',
-        function($scope, $rootScope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal,popupManager, indexService) {
+            '$ionicModal', 'popupManager', 'indexService', '$ionicPopup',
+        function($scope, $rootScope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal,popupManager, indexService, $ionicPopup) {
 
         $scope.appInfo = {
             title : 'PocketMap Bergamo',
@@ -27,11 +27,20 @@
             address : true
 
         };
-
-            
-
-
         var firstRotation = false;
+
+
+        //popup stuff
+        // An alert dialog
+        var showAlert = function(title, msg) {
+            var alertPopup = $ionicPopup.alert({
+                title: title,
+                template: msg
+            });
+            alertPopup.then(function(res) {
+                console.log('Thank you for not eating my delicious ice cream cone');
+            });
+        };
         
         
         //modal stuff
@@ -255,7 +264,7 @@
             
             }
             
-        }
+        };
 
         
 
@@ -266,13 +275,29 @@
             layersManager.addLayer('main-map', cfg);
 
 
-            olGeolocationService.geolocationControl.on('change', function(evt) {
-                var coords = olGeolocationService.geolocationControl.getPosition();
-                var coordsm = ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857');
-                $timeout(function(){
-                    $scope.uiStatus.lastPosition = coordsm;
-                })
-            });
+            olGeolocationService.geolocationControl.on('change', 
+                function(evt) {
+                    var coords = olGeolocationService.geolocationControl.getPosition();
+                    var coordsm = ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857');
+                    $timeout(function(){
+                        $scope.uiStatus.lastPosition = coordsm;
+                    })
+                }
+            );
+
+
+            olGeolocationService.geolocationControl.on('error', 
+                function(error) {
+                    $timeout(function(){
+                        $scope.stopGeolocation();
+                    })
+                    showAlert('GPS Error', "Geolocation is disabled! Please enable it if you want to show your position on the map");
+                }
+            );
+
+
+
+
 
             $scope.$watch('uiStatus.lastPosition', function(nv){
                 if(!nv) return;
@@ -498,12 +523,6 @@
                         var i = map.getInteractions()
                         var v = map.getView();
                         v.fitExtent(mapConfigService.getExtent(), map.getSize() );
-
-                        //console.log("xxx-zzz", v.getResolution())
-                        
-                        //v.set('maxZoom', v.getZoom());
-                        
-
                         //layersManager.addLayer('main-map', layersConfigService.fixedLayers[0]);
                         //map.addLayer(editableVectors.drawTarget);
                         //map.addInteraction(editableVectors.drawInteraction);
@@ -518,10 +537,7 @@
                         _.each(data.vectorLayers, function(item){
                             var cfg = layersManager.createLayerConfigFromJson(item);
                             //var i = layersManager.createObjectFromJson(item);
-                            console.log("adding vector", cfg)
-
-                            
-
+                            //console.log("adding vector", cfg)
                             if(cfg.uiOptions){
                                 if(item.uiOptions.map!=false){
                                     layersManager.addLayer('main-map', cfg);
@@ -535,18 +551,11 @@
                                 }
                             }
 
-                            
-                            
-
-
                         });
 
                         initGeoloc();
-
-
                         createPopupOverlay();
                         //createHudOverlay();
-
                         prepareEvents();
 
                     });

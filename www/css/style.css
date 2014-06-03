@@ -22,13 +22,22 @@
 .layers-browser{
     position:absolute;
     z-index:1100;
-    max-height: 300px;
+    max-height: 380px;
     left:10px;
     right:10px;
     bottom:65px;
     border-radius: 4px;
     background-color: rgba(0,0,0,.4);
     color:white;
+    overflow-y:auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.layers-list{
+
+    max-height: 300px;
+    overflow-y:auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .search-panel{
@@ -90,6 +99,7 @@
 .aa.ng-leave {
     animation: flipOutX .6s;
     -webkit-animation: flipOutX .6s;
+    display: block;
  
 }
 
@@ -102,12 +112,15 @@
 .slideright.ng-enter {
     -webkit-animation: slideInRight .6s;
     animation: slideInRight .6s;
+     display: block !important;
 }
  
 .slideright.ng-leave {
+    
     animation: slideOutLeft .6s;
     -webkit-animation: slideOutLeft .6s;
     display: block;
+    
  
 }
 

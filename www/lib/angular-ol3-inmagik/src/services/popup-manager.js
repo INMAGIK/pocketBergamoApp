@@ -17,15 +17,17 @@
         };
 
         svc.getPopupHtml = function(uid, feature){
+
             var d = $q.defer()
             
             var cf = svc.config[uid];
-            var compileTemplate = function(htmlTemplate){
+            var compileTemplate = function(htmlTemplate, f){
+                console.log()
                 var s = $rootScope.$new();
-                s.feature = feature;
+                s.feature = f;
                 s.layerOptions = cf;
                 s.broadcast = function(msg){
-                    $rootScope.$broadcast(msg, feature, cf);
+                    $rootScope.$broadcast(msg, f, cf);
                 }
 
                 var html = $compile(htmlTemplate)(s);
@@ -34,13 +36,13 @@
 
             if(cache[uid]){
                 var htmlTemplate = cache[uid];
-                compileTemplate(htmlTemplate);
+                compileTemplate(htmlTemplate, feature);
 
             } else {
                 var templateUrl = svc.config[uid].popupTemplate;
                 $http.get(templateUrl).then(function(data){
                     cache[uid] = data.data;
-                    compileTemplate(data.data);
+                    compileTemplate(data.data, feature);
                 });
             }
             
