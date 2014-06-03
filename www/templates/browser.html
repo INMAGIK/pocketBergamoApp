@@ -18,15 +18,23 @@
         </a>
       </div>
 
-      <div class="list slideright" ng-if="browserStatus.layer != null && browserStatus.feature == null" style="z-index=11">
-        
-        <a href="#" class="item" ng-repeat="feature in features" ng-click="toFeature(feature)">
+      <div class="slideright" ng-if="browserStatus.layer != null && browserStatus.feature == null" style="z-index=11">
+        <!--
+        <div>
+          <label class="item-input-wrapper">
+            <i class="icon ion-ios7-search placeholder-icon"></i>
+            <input type="search" placeholder="Search">
+          </label>
+        </div>
+      -->
+        <div class="list" >
+          <a href="#" class="item" ng-repeat="feature in features" ng-click="toFeature(feature)">
           <!--<img src="{{ feature._icon }}" alt="">--> 
           {{ feature._title }} <br>
           <small>{{ feature.address.road}} <span ng-if="feature.address.suburb">{{ feature.address.suburb }}, </span>
             {{feature.address.city }} ({{feature.address.county }})</small>
-          
-        </a>
+          </a>
+      </div>
       </div>
 
       <div class="slideright padding" ng-if="browserStatus.feature != null" style="z-index=12">

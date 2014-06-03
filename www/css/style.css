@@ -8,6 +8,7 @@
     left:0;
     right:0;
     bottom:0;
+    background-color: #ccc;
 }
 
 
@@ -22,6 +23,9 @@
     text-align: center;
     padding-top:200px;
 }
+
+
+
 
 #loader-overlay *{
     color:white;
@@ -150,6 +154,20 @@
  
 }
 
+.help.ng-enter {
+    -webkit-animation: fadeIn 1s;
+    animation:fadeIn 1s;
+}
+ 
+.help.ng-leave {
+    -webkit-animation: fadeOut 1s;
+    animation: fadeOut 1s;
+    
+}
+
+
+
+
 
 /* from: http://stackoverflow.com/questions/20409632/android-4-3-and-phonegap-cant-tap-link */
 .androidpaintfix {
@@ -211,4 +229,127 @@
   font-style: normal;
   font-weight: 800;
   src: url(../fonts/AmaticSC-Bold.ttf) format('truetype');
+}
+
+
+
+
+/* help stuff */
+
+.help{
+ position:absolute;
+    z-index:1200;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;   
+}
+
+.help.with-backdrop{
+    background-color: rgba(0,0,0,.75)
+
+}
+.help-popup{
+    position:relative;
+    margin-top:10%;
+    margin-left:20%;
+    width:60%;
+    min-height:50%;
+    background-color: white;
+    text-align: center;
+    border-radius: 10px;
+    color:white;
+    z-index: 10;
+    border-color:#666;
+    border-width: 5px;
+    border-style: solid;
+    box-shadow: 0px 0px 3px 3px #666 inset;
+    font-size: 16px;
+
+
+}
+
+
+.help-title{
+    color:white;
+    width:100%;
+}
+.help-content{
+    position:absolute;
+    text-align: left;
+    top:60px;
+    left:0;
+    right:0;
+    bottom:70px;
+    color:#222;
+    padding:10px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size:14px;
+    background-color: white;
+}
+
+
+.help-header{
+    position:absolute;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    top:0;
+    left:0;
+    right:0;
+    height:60px;
+    padding:10px;
+    text-align: center;
+
+}
+
+.help-footer{
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    height:70px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: #eee;
+    padding:0px;
+}
+
+.overlay-light {
+  position: absolute;
+  z-index: 1;
+  box-shadow: 0px 0px 4px 10px rgba(0,0,0,0.85) inset, 0px 0px 0px 2000px rgba(0,0,0,0.80);
+  border:solid hotpink 4px;
+}
+
+
+
+.help-close{
+    position:absolute;
+    top:3px;
+    right:3px;
+
+}
+
+.help-close button{
+    border:none;
+}
+
+.help-list{
+
+}
+.help-list li{
+    margin:4px;
+}
+
+.help-list button{
+    vertical-align: middle;
+}
+
+.swipe-icon{
+    height:48px;
+    width:48px;
+    background-color: skyblue;
+    vertical-align: middle;
+    margin-right: 8px;
 }

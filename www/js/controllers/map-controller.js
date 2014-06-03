@@ -8,8 +8,8 @@
         function($scope, $rootScope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal,popupManager, indexService, $ionicPopup) {
 
         $scope.appInfo = {
-            title : 'PocketMap Bergamo',
-            version : "0.1"
+            title : 'Bergamo Offline Map',
+            version : "1.0"
         };
         
         $scope.uiStatus = {
@@ -29,6 +29,9 @@
             address : true
 
         };
+
+        $scope.helpShown=false;
+
         var firstRotation = false;
 
 
@@ -115,6 +118,7 @@
                 .then(function(data){
                     mapConfigService.setExtent(data.extent, data.extent_proj);
                     initMap(data);
+                    initTour();
                 });
         };
 
@@ -671,6 +675,19 @@
                 
 
             });
+
+
+            $scope.showHelp = function(){
+                $scope.helpShown = true;
+            }
+
+            $scope.toggleHelp = function(){
+                $scope.helpShown = !$scope.helpShown;
+            };
+
+            var initTour = function(){
+                
+            };
 
 
             //initialization
