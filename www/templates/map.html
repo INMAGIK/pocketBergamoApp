@@ -8,10 +8,9 @@
 
     
     <ion-header-bar  class="bar-positive">
-        
-        <button class="button icon ion-help" ng-click="toggleHelp()"></button>
+        <button class="button icon ion-information-circled" ng-click="openModal()"></button>        
         <h1 class="title">{{appInfo.title}}</h1>
-        <button class="button icon ion-information-circled" ng-click="openModal()"></button>
+        <button class="button icon ion-help" ng-click="toggleHelp()"></button>
     </ion-header-bar>
   
   <ion-content class="has-header" scroll="false" ng-cloak>
@@ -29,41 +28,7 @@
     <div id="main-map" class="main-map"></div>
 
     <!-- help, move away! -->
-    <div class="help" ng-controller="HelpCtrl" ng-if="helpShown==true" ng-class="{'with-backdrop' : step.backdrop }">
-      <div class="overlay-light" ng-style="overlayStyle">
-      </div>
-      <div class="help-popup">
-        <div class="bar bar-calm help-header ">
-          <h4 class="help-title">{{ step.title }}</h4>  
-          <div class="help-close">
-            <button class="button icon ion-close-round button-small " ng-click="toggleHelp()"></button>
-          </div>
-        </div>
-        <div class="help-content">
-          <div ng-bind-html="step.text" ng-if="step.text"> </div>
-          <div ng-include="step.template" ng-if="step.template"> </div>
-        </div>
-        <div class="help-footer">
-          <div class="row">
-            <div class="col">
-              <button class="button button-energized button" ng-if="step.buttons.prev" ng-click="setStep(step.buttons.prev.step)">
-                <i class="icon ion-arrow-left-a"></i>&nbsp;
-                {{step.buttons.prev.label}}
-              </button>
-              
-            </div>
-            <div class="col">
-              <button class="button button-positive button" ng-if="step.buttons.next" ng-click="setStep(step.buttons.next.step)">
-                {{step.buttons.next.label}}&nbsp;
-                <i class="icon ion-arrow-right-a"></i>
-              </button>
-            </div>
-            
-          </div>
-          
-        </div>
-      </div>
-    </div>
+    <div tour ng-controller="HelpCtrl"></div>
   
 
     

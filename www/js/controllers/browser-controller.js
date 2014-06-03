@@ -107,6 +107,7 @@
 
             
             $scope.$on('showMeInBrowser', function(evt,feature,options){
+                
                 $scope.browser.show();
                 var place_id = feature.values_.place_id;
                 $scope.toLayer(options.layerName, {place_id:place_id});

@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('pocketMap')
-        .directive('layerSwitcher', ['$rootScope','layersManager', function($rootScope, layersManager){
+        .directive('layerSwitcher', ['$rootScope','layersManager', 'indexService', function($rootScope, layersManager, indexService){
         return {
 
             restrict : 'C',
@@ -38,6 +38,10 @@
                 scope.toggleLayersPanel = function(){
                     $rootScope.$broadcast('toggleLayersPanel');
                 }
+
+                scope.getLayerIcon = function(layerName){
+                    return indexService.getConfigForLayer(layerName, "icon");
+                };            
 
                 
 

@@ -24,7 +24,7 @@
     ],
     "vectorLayers" : [
         {
-            "name" : "historic",
+            "name" : "Drinking water",
             "group" : "vectors",
             "layerClass" : "ol.layer.Vector",
             "layerOptions" : {
@@ -32,7 +32,7 @@
             },
             "sourceClass" : "ol.source.GeoJSON",
             "sourceOptions" : {
-                "url" : "config/vectors/historic.geojson"
+                "url" : "config/vectors/water_point.geojson"
             },
             
             "style" : {
@@ -42,7 +42,7 @@
                         "klassName" : "ol.style.Icon",
                         "klassArgs" : {
                             "radius" : 8,
-                            "src" : "img/position2.png"
+                            "src" : "img/icons/water.png"
                         }
                     }
                 }
@@ -52,10 +52,10 @@
                 "index" : true,
                 "popup" : true,
                 "browser" : true,
-                "popupTemplate"  : "templates/museo-feature.html",
+                "popupTemplate"  : "templates/water-feature.html",
                 "cardTemplate" : "templates/card-example.html",
-                "titleField" : "name",
-                "icon" : "img/position2.png"
+                "titleField" : "display_name",
+                "icon" : "img/icons/water.png"
             }
         },
         {
@@ -77,7 +77,7 @@
                         "klassName" : "ol.style.Icon",
                         "klassArgs" : {
                             "radius" : 8,
-                            "src" : "img/position2.png"
+                            "src" : "img/icons/financial.png"
                         }
                     }
                 }
@@ -87,15 +87,15 @@
                 "index" : true,
                 "popup" : true,
                 "browser" : true,
-                "popupTemplate"  : "templates/museo-feature.html",
-                "cardTemplate" : "templates/card-example.html",
+                "popupTemplate"  : "templates/financial-feature.html",
+                "cardTemplate" : "templates/financial-card.html",
                 "titleField" : "name",
-                "icon" : "img/position2.png",
+                "icon" : "img/icons/financial.png",
                 "description" : "Atm points, banks and bureau de change"
             }
         },
         {
-            "name" : "healthcare",
+            "name" : "Named places and localities",
             "group" : "vectors",
             "layerClass" : "ol.layer.Vector",
             "layerOptions" : {
@@ -103,7 +103,7 @@
             },
             "sourceClass" : "ol.source.GeoJSON",
             "sourceOptions" : {
-                "url" : "config/vectors/healthcare.geojson"
+                "url" : "config/vectors/places.geojson"
             },
             
             "style" : {
@@ -131,15 +131,15 @@
         },
 
         {
-            "name" : "education",
+            "name" : "Parks",
             "group" : "vectors",
             "layerClass" : "ol.layer.Vector",
             "layerOptions" : {
-                "visible" : false
+                "visible" : true
             },
             "sourceClass" : "ol.source.GeoJSON",
             "sourceOptions" : {
-                "url" : "config/vectors/education.geojson"
+                "url" : "config/vectors/park.geojson"
             },
             
             "style" : {
@@ -149,7 +149,7 @@
                         "klassName" : "ol.style.Icon",
                         "klassArgs" : {
                             "radius" : 8,
-                            "src" : "img/position.png"
+                            "src" : "img/icons/park.png"
                         }
                     }
                 }
@@ -162,7 +162,7 @@
                 "popupTemplate"  : "templates/museo-feature.html",
                 "cardTemplate" : "templates/card-example.html",
                 "titleField" : "name",
-                "icon" : "img/position.png"
+                "icon" : "img/icons/park.png"
             }
         },
 

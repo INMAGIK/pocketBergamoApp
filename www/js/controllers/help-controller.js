@@ -29,6 +29,7 @@
                     template : "templates/help/map.html",
                     backdrop : false,
                     highlight : '#main-map',
+                    insideTarget : true,
                     buttons : {
                         prev : {
                             label : 'Welcome',
@@ -95,12 +96,8 @@
 
             $scope.currentStep = 0;
 
-            
 
-            $scope.$watch('currentStep', function(nv){
-                $scope.step = $scope.steps[nv];
-                
-
+            $scope.handleHighlight = function(){
                 if($scope.step.highlight){
                     
 
@@ -138,6 +135,16 @@
                         display: 'none'
                     }
                 }
+            };
+
+            
+
+            $scope.$watch('currentStep', function(nv){
+                $scope.step = $scope.steps[nv];
+                $scope.handleHighlight();
+                
+
+                
             });
 
             $scope.$on('showHelp', function(evt, data){
