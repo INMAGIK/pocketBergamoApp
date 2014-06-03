@@ -39,6 +39,18 @@
 
         };
 
+        svc.getLayersWithOptions = function(filter){
+            var layersNames = svc.getLayers(filter);
+            var out = _.map(layersNames, function(item){
+                return { name : item, options : config[item]}
+            })
+            return out;
+
+        };
+
+
+
+
         svc.getConfigForLayer = function(layerName, key){
             return config[layerName][key];
         }

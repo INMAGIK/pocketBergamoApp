@@ -18,7 +18,7 @@
             $scope.features = [];
 
             $scope.$watch(function(){
-                return indexService.getLayers({browser:true});
+                return indexService.getLayersWithOptions({browser:true});
                 }, 
                 function(nv){
                     if(nv){

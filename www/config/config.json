@@ -59,7 +59,7 @@
             }
         },
         {
-            "name" : "financial",
+            "name" : "Financial",
             "group" : "vectors",
             "layerClass" : "ol.layer.Vector",
             "layerOptions" : {
@@ -90,7 +90,8 @@
                 "popupTemplate"  : "templates/museo-feature.html",
                 "cardTemplate" : "templates/card-example.html",
                 "titleField" : "name",
-                "icon" : "img/position2.png"
+                "icon" : "img/position2.png",
+                "description" : "Atm points, banks and bureau de change"
             }
         },
         {
@@ -381,21 +382,6 @@
                 "icon" : "img/position.png"
             }
         }
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-        
                 
     ]
     
