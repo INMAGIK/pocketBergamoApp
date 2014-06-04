@@ -4,20 +4,17 @@
       <h1 class="title">{{browserTitle}}</h1>
       <button class="button icon ion-close-round" ng-click="closeBrowser()"></button>
     </ion-header-bar>
-    <!--
-    <div class="bar bar-subheader" ng-if="browserStatus.layer != null && browserStatus.feature == null">
-          <div>
-          <label class="item-input-wrapper">
-            <input type="search" placeholder="Filter" ng-model="browserStatus.filter">
+    
+    <div class="bar bar-subheader  bar-positive fader" ng-if="context == 'layer'">
+        <div class="button-bar">
+          
+            <button class="button button-small button-positive" ng-class="{'button-calm' : sortMode =='_title'}" ng-click="setSortMode('_title')">By name</button>
+            <button class="button button-small button-positive" ng-class="{'button-calm' : sortMode =='orderDistanceFunction'}" ng-click="setSortMode('orderDistanceFunction')" ng-disabled="uiStatus.lastPosition==null">By distance</button>
 
-            <button class="button icon ion-ios7-search placeholder-icon" ng-click="clearFilter()" >
-            
-            </button>
-          </label>
         </div>
     </div>
-    -->
-    <ion-content xng-class="{'has-subheader': browserStatus.layer != null && browserStatus.feature == null }">
+    
+    <ion-content ng-class="{'has-subheader': context == 'layer', 'has-footer': context == 'layer' }">
     
       <div class="list slideright" ng-if="browserStatus.layer == null" style="z-index=10">
         <a href="#" class="item" ng-repeat="layer in layers" ng-click="toLayer(layer.name)">
@@ -37,11 +34,14 @@
         
       -->
         <div class="list" >
-          <a href="#" class="item" ng-repeat="feature in features" ng-click="toFeature(feature)">
+          <a href="#" class="item" ng-repeat="feature in features | filter:filterFun| orderBy: sorter" ng-click="toFeature(feature)">
           <!--<img src="{{ feature._icon }}" alt="">--> 
           {{ feature._title }} <br>
           <small>{{ feature.address.road}} <span ng-if="feature.address.suburb">{{ feature.address.suburb }}, </span>
             {{feature.address.city }} ({{feature.address.county }})</small>
+            <br>
+            
+            <div distance geom="feature.geometry"></div>
           </a>
       </div>
       </div>
@@ -75,16 +75,16 @@
 
     
     </ion-content>
-    <!--
-    <ion-content class="slideright" >
-
     
-    </ion-content>
-    <ion-content class="slideright" ng-if="browserStatus.feature != null">
-
-    
-    </ion-content>
-  -->
+    <div class="bar bar-footer bar-positive item-input-inset fader" ng-if="context == 'layer'">
+      <label class="item-input-wrapper">
+        <i class="icon ion-ios7-search placeholder-icon"></i>
+          <input type="search" placeholder="Filter" ng-model="browserStatus.filter">
+        </label>
+        <button class="button button-clear" ng-click="clearFilter()">
+          Clear
+        </button>
+    </div>
     
 
 </div>

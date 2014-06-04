@@ -69,6 +69,10 @@
                     backdrop : false,
                     highlight : '.bottom-toolbar',
                     buttons : {
+                        prev : {
+                            label : 'Map controls',
+                            step : 2
+                        },
                         next : {
                             label : 'The Map',
                             step : 1
@@ -81,12 +85,7 @@
             ];
 
 
-            $scope.overlayStyle = {
-                left:0,
-                top:0
-            }
-
-
+           
             $scope.setStep = function(idx){
                 $timeout(function(){
                     $scope.currentStep = idx;
@@ -95,63 +94,12 @@
 
 
             $scope.currentStep = 0;
-
-
-            $scope.handleHighlight = function(){
-                if($scope.step.highlight){
-                    
-
-                    var h = $($scope.step.highlight);
-                    var el = h[0];
-                    if(el){
-                        var e = $(el);
-                        
-                        var position =e.position();
-                        var w= e.width();
-                        var h = e.height();
-                        var p = e.css('padding');
-
-                        console.log("pp", p)
-                        p = parseInt(p.replace('px', '')) * 2;
-
-                        console.log("e", el, position, w, h);
-
-                        $timeout(function(){
-                        $scope.overlayStyle = {
-                            display: 'block',
-                            top : position.top  + "px",
-                            left : position.left + "px",
-                            width: w + p + "px",
-                            height : h + p + "px"
-                         }
-                        console.log("xs", $scope.overlayStyle)
-
-                        })
-
-                    }
-
-                } else {
-                    $scope.overlayStyle = {
-                        display: 'none'
-                    }
-                }
-            };
-
-            
+ 
 
             $scope.$watch('currentStep', function(nv){
                 $scope.step = $scope.steps[nv];
-                $scope.handleHighlight();
-                
-
                 
             });
-
-            $scope.$on('showHelp', function(evt, data){
-              $scope.helpShown = !!data;
-              $scope.setStep(0)
-            })
-
 
 
     }]);

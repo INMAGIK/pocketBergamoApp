@@ -124,6 +124,12 @@
 .aa.ng-enter {
     -webkit-animation: flipInX .6s;
     animation: flipInX .6s;
+    display: none;
+
+}
+
+.aa.ng-enter.ng-enter-active {
+    display: block;
 }
  
 .aa.ng-leave {
@@ -142,26 +148,54 @@
 .slideright.ng-enter {
     -webkit-animation: slideInRight .6s;
     animation: slideInRight .6s;
-     display: block !important;
+     display: none;
+}
+
+.slideright.ng-enter.ng-enter-active {
+    display: block;
 }
  
 .slideright.ng-leave {
     
     animation: slideOutLeft .6s;
     -webkit-animation: slideOutLeft .6s;
-    display: block;
-    
- 
+    display: block !important;
 }
 
 .help.ng-enter {
     -webkit-animation: fadeIn 1s;
     animation:fadeIn 1s;
+    display: none;
 }
+
+.help.ng-enter.ng-enter-active {
+    display: block;
+}
+     
  
 .help.ng-leave {
     -webkit-animation: fadeOut 1s;
     animation: fadeOut 1s;
+    display: block !important;
+    
+}
+
+
+.fader.ng-enter {
+    -webkit-animation: fadeIn 1s;
+    animation:fadeIn 1s;
+    display: none;
+}
+
+.fader.ng-enter.ng-enter-active {
+    display: block !important;
+}
+     
+ 
+.fader.ng-leave {
+    -webkit-animation: fadeOut 1s;
+    animation: fadeOut 1s;
+    display: block !important;
     
 }
 
@@ -237,7 +271,8 @@
 /* help stuff */
 
 .help{
- position:absolute;
+    -webkit-transform: translate3d(0,0,0);
+    position:absolute;
     z-index:1200;
     top:0;
     left:0;
@@ -361,4 +396,9 @@
 /* var */
 .text-center{
     text-align: center;
+}
+
+
+.muted{
+    color: #333;
 }

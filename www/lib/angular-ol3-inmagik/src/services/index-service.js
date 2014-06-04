@@ -63,6 +63,7 @@
 
             f = _.map(f, function(i){ 
                 var out =  i.getProperties();
+                //out['geometry'] = i.getGeometry();
                 
                 out._title = out[att];
                 out._icon = ico;

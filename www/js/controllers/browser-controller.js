@@ -14,6 +14,7 @@
             };
 
             $scope.browserTitle = "Browser";
+            $scope.context = 'index';
 
             $scope.layers = [];
             $scope.features = [];
@@ -43,6 +44,7 @@
                     $scope.browserStatus.feature = null;
                     $scope.features = [];
                     $scope.browserTitle = "Browser";
+                    $scope.context = 'index';
 
                 })
             };
@@ -64,6 +66,7 @@
 
                     $scope.browserStatus.layer = layerName;
                     $scope.browserStatus.feature = null;
+                    $scope.context = 'layer';
 
                 })
 
@@ -77,6 +80,7 @@
                     $scope.browserStatus.feature = feature;
                     $scope.browserTitle = $scope.browserStatus.layer;
                     $ionicScrollDelegate.scrollTop();
+                    $scope.context = 'feature';
                 })
 
             };
@@ -105,11 +109,35 @@
                 }
             };
 
+            $scope.sortMode = $scope.uiStatus.lastPosition ? 'orderDistanceFunction' : '_title';
+            $scope.setSortMode = function(mode){
+                $scope.sortMode = mode;
+            }
+
+            $scope.filterFun = function(i){
+                if(!$scope.browserStatus.filter) return true;
+                var t = i._title.toLowerCase();
+                var s = $scope.browserStatus.filter.toLowerCase();
+                var out = t.indexOf(s) !== -1;
+                return out;
+
+            }
+
 
             $scope.centerFeature = function(feature){
                 $rootScope.$broadcast("centerBrowserFeature", feature, $scope.browserStatus.layer);
 
             }
+
+            $scope.$watch('sortMode', function(nv){
+                if(nv == 'orderDistanceFunction'){
+                    $scope.sorter= $scope.orderDistanceFunction;
+                } 
+                if(nv == '_title'){
+                    $scope.sorter= function(f){ return f._title; }
+                } 
+
+            }, true)
 
 
             
@@ -120,6 +148,8 @@
                 $scope.toLayer(options.layerName, {place_id:place_id});
             
             });
+
+
 
 
 

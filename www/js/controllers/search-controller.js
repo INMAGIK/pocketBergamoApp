@@ -38,6 +38,11 @@
             }
 
 
+            $scope.orderDistanceFunction = function(result) {
+                 return $rootScope.getDistanceFromLastPos(result.feature.geometry);
+            };
+
+
 
 
             

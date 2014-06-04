@@ -12,7 +12,7 @@
             version : "1.0"
         };
         
-        $scope.uiStatus = {
+        $rootScope.uiStatus = {
             dataLoaded : true,
             gps:false,
             orientation : false,
@@ -616,7 +616,25 @@
 
             };
 
-            
+
+            $rootScope.getDistanceFromLastPos = function(geom){
+                
+                if($scope.uiStatus.lastPosition){
+                    var p = geom.flatCoordinates;
+                    var s = ol.sphere.WGS84;
+                    
+                    var sp = ol.proj.transform(p, 'EPSG:3857', 'EPSG:4326');
+                    var ss = ol.proj.transform($scope.uiStatus.lastPosition, 'EPSG:3857', 'EPSG:4326');
+                    //console.log("p", $scope.uiStatus.lastPosition, p, sp, ss);
+                    return s.haversineDistance(sp, ss) / 1000;
+                } 
+                return null;
+                
+            };
+
+            $scope.orderDistanceFunction = function(feature) {
+                 return $rootScope.getDistanceFromLastPos(feature.geometry)
+            };
 
             //listener ... from browser
             $scope.$on('centerBrowserFeature', function(evt,data, layerName){
