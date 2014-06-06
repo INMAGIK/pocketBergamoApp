@@ -60,6 +60,7 @@
             
             var att = config[layerName]['titleField'];
             var ico = config[layerName]['icon'];
+            var cat = config[layerName]['categoryField'];
 
             f = _.map(f, function(i){ 
                 var out =  i.getProperties();
@@ -68,6 +69,9 @@
                 out._title = out[att];
                 out._icon = ico;
                 out._layerName = layerName;
+                if(cat){
+                    out._category = out[cat];
+                }
                 
                 return out; 
             });
@@ -111,10 +115,11 @@
             var out = [];
             _.each(layers, function(layer){
                 var att = config[layer]['titleField'];
+                var cat = config[layer]['categoryField'];
                 var ico = config[layer]['icon'];
                 var features = searchLayer(layer, searchTerm, field);
                 var x = _.map(features, function(item){
-                    return {layerName:layer, feature:item, title:item[att], icon:ico}
+                    return {layerName:layer, feature:item, title:item[att], icon:ico, _category: item[cat]};
                 })
                 out = out.concat(x);
             })

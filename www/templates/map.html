@@ -55,7 +55,9 @@
 
     <div class="layers-browser transparent-box aa" ng-if="panels.layers" >
       <div class="padding">
-      <h4>Layers</h4>
+        <h4 class="layer-switcher-title"><i class="icon ion-map"></i> Map Layers</h4>
+        <button class="button button-clear icon ion-close layer-switcher-close" ng-click="togglePanel('layers')"></button>
+
           <div class="layer-switcher" map-id="main-map" groups="vectors" >
           </div>
       </div>
@@ -95,7 +97,7 @@
         <div class="list transparent-box" style="margin:0 10px;">
           <div class="item item-button-right transparent" ng-repeat="result in searchStatus.searchResults| orderBy: orderDistanceFunction">
             <img class="icon-title" src="{{ result.icon }}" alt="">
-            {{ result.layerName }} - {{ result.title }}
+            {{ result.layerName }} - {{ result.title }} <span feature-cat feature="result"></span>
             <div xng-if="searchStatus.address">
               <small>{{ result.feature.display_name }}</small>
             </div>

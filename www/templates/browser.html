@@ -36,7 +36,7 @@
         <div class="list" >
           <a href="#" class="item" ng-repeat="feature in features | filter:filterFun| orderBy: sorter" ng-click="toFeature(feature)">
           <!--<img src="{{ feature._icon }}" alt="">--> 
-          {{ feature._title }} <br>
+          {{ feature._title }} <span feature-cat feature="feature"></span><br>
           <small>{{ feature.address.road}} <span ng-if="feature.address.suburb">{{ feature.address.suburb }}, </span>
             {{feature.address.city }} ({{feature.address.county }})</small>
             <br>

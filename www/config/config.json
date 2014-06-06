@@ -17,7 +17,7 @@
             "layerClass" : "ol.layer.Tile",
             "sourceClass" : "ol.source.XYZ",
             "sourceOptions" : {
-                "url" : "config/tiles/mapquest_osm/{z}--{x}--{y}.jpg"
+                "url" : "config/tiles/osm_public_transport/{z}--{x}--{y}.png"
             }
         }
 
@@ -55,7 +55,8 @@
                 "popupTemplate"  : "templates/water-feature.html",
                 "cardTemplate" : "templates/card-example.html",
                 "titleField" : "display_name",
-                "icon" : "img/icons/water.png"
+                "icon" : "img/icons/water.png",
+                "description" : "Points where you can get drinking water"
             }
         },
         {
@@ -90,6 +91,7 @@
                 "popupTemplate"  : "templates/financial-feature.html",
                 "cardTemplate" : "templates/financial-card.html",
                 "titleField" : "name",
+                "categoryField" : "amenity",
                 "icon" : "img/icons/financial.png",
                 "description" : "Atm points, banks and bureau de change"
             }
@@ -123,19 +125,21 @@
                 "index" : true,
                 "popup" : true,
                 "browser" : true,
-                "popupTemplate"  : "templates/museo-feature.html",
-                "cardTemplate" : "templates/card-example.html",
+                "popupTemplate"  : "templates/place-feature.html",
+                "cardTemplate" : "templates/place-card.html",
                 "titleField" : "name",
-                "icon" : "img/position.png"
+                "categoryField" : "place",
+                "icon" : "img/position.png",
+                "description" : "Local toponyms"
             }
         },
 
         {
-            "name" : "Parks",
+            "name" : "Parks and gardens",
             "group" : "vectors",
             "layerClass" : "ol.layer.Vector",
             "layerOptions" : {
-                "visible" : true
+                "visible" : false
             },
             "sourceClass" : "ol.source.GeoJSON",
             "sourceOptions" : {
@@ -159,51 +163,18 @@
                 "index" : true,
                 "popup" : true,
                 "browser" : true,
-                "popupTemplate"  : "templates/museo-feature.html",
-                "cardTemplate" : "templates/card-example.html",
-                "titleField" : "name",
-                "icon" : "img/icons/park.png"
+                "popupTemplate"  : "templates/park-feature.html",
+                "cardTemplate" : "templates/park-card.html",
+                "titleField" : "display_name",
+                "categoryField" : "amenity",
+                "icon" : "img/icons/park.png",
+                "description" : "Green areas"
             }
         },
 
+        
         {
-            "name" : "transportation",
-            "group" : "vectors",
-            "layerClass" : "ol.layer.Vector",
-            "layerOptions" : {
-                "visible" : false
-            },
-            "sourceClass" : "ol.source.GeoJSON",
-            "sourceOptions" : {
-                "url" : "config/vectors/transportation.geojson"
-            },
-            
-            "style" : {
-                "klassName" : "ol.style.Style",
-                "klassArgs" : {
-                    "image" : {
-                        "klassName" : "ol.style.Icon",
-                        "klassArgs" : {
-                            "radius" : 8,
-                            "src" : "img/position.png"
-                        }
-                    }
-                }
-            },
-
-            "uiOptions" : {
-                "index" : true,
-                "popup" : true,
-                "browser" : true,
-                "popupTemplate"  : "templates/transportation-feature.html",
-                "cardTemplate" : "templates/transportation-card.html",
-                "titleField" : "name",
-                "icon" : "img/position.png"
-            }
-        },
-
-        {
-            "name" : "religion",
+            "name" : "Religion",
             "group" : "vectors",
             "layerClass" : "ol.layer.Vector",
             "layerOptions" : {
@@ -221,7 +192,7 @@
                         "klassName" : "ol.style.Icon",
                         "klassArgs" : {
                             "radius" : 8,
-                            "src" : "img/position.png"
+                            "src" : "img/icons/religion.png"
                         }
                     }
                 }
@@ -234,12 +205,14 @@
                 "popupTemplate"  : "templates/museo-feature.html",
                 "cardTemplate" : "templates/card-example.html",
                 "titleField" : "name",
-                "icon" : "img/position.png"
+                "categoryField" : "religion",
+                "icon" : "img/icons/religion.png",
+                "description" : "Places of worship"
             }
         },
 
         {
-            "name" : "leisure",
+            "name" : "Healthcare",
             "group" : "vectors",
             "layerClass" : "ol.layer.Vector",
             "layerOptions" : {
@@ -247,7 +220,7 @@
             },
             "sourceClass" : "ol.source.GeoJSON",
             "sourceOptions" : {
-                "url" : "config/vectors/leisure.geojson"
+                "url" : "config/vectors/healthcare.geojson"
             },
             
             "style" : {
@@ -257,7 +230,7 @@
                         "klassName" : "ol.style.Icon",
                         "klassArgs" : {
                             "radius" : 8,
-                            "src" : "img/position.png"
+                            "src" : "img/icons/healthcare.png"
                         }
                     }
                 }
@@ -267,15 +240,17 @@
                 "index" : true,
                 "popup" : true,
                 "browser" : true,
-                "popupTemplate"  : "templates/leisure-feature.html",
-                "cardTemplate" : "templates/card-example.html",
+                "popupTemplate"  : "templates/healthcare-feature.html",
+                "cardTemplate" : "templates/healthcare-card.html",
                 "titleField" : "name",
-                "icon" : "img/position.png"
+                "categoryField" : "amenity",
+                "icon" : "img/icons/healthcare.png",
+                "description" : "Hospitals, clinics, pharmacies"
             }
         },
 
         {
-            "name" : "natural",
+            "name" : "Natural",
             "group" : "vectors",
             "layerClass" : "ol.layer.Vector",
             "layerOptions" : {
@@ -293,7 +268,7 @@
                         "klassName" : "ol.style.Icon",
                         "klassArgs" : {
                             "radius" : 8,
-                            "src" : "img/position.png"
+                            "src" : "img/icons/natural.png"
                         }
                     }
                 }
@@ -303,16 +278,18 @@
                 "index" : true,
                 "popup" : true,
                 "browser" : true,
-                "popupTemplate"  : "templates/museo-feature.html",
-                "cardTemplate" : "templates/card-example.html",
+                "popupTemplate"  : "templates/natural-feature.html",
+                "cardTemplate" : "templates/natural-card.html",
                 "titleField" : "name",
-                "icon" : "img/position.png"
+                "categoryField" : "natural",
+                "icon" : "img/icons/natural.png",
+                "description" : "Points of naturalistic interest"
             }
         },
 
 
         {
-            "name" : "sport",
+            "name" : "Sport and leisure",
             "group" : "vectors",
             "layerClass" : "ol.layer.Vector",
             "layerOptions" : {
@@ -320,7 +297,7 @@
             },
             "sourceClass" : "ol.source.GeoJSON",
             "sourceOptions" : {
-                "url" : "config/vectors/sport.geojson"
+                "url" : "config/vectors/sport_leisure.geojson"
             },
             
             "style" : {
@@ -330,7 +307,7 @@
                         "klassName" : "ol.style.Icon",
                         "klassArgs" : {
                             "radius" : 8,
-                            "src" : "img/position.png"
+                            "src" : "img/icons/sports.png"
                         }
                     }
                 }
@@ -341,14 +318,16 @@
                 "popup" : true,
                 "browser" : true,
                 "popupTemplate"  : "templates/sport-feature.html",
-                "cardTemplate" : "templates/card-example.html",
+                "cardTemplate" : "templates/sport-card.html",
                 "titleField" : "name",
-                "icon" : "img/position.png"
+                "categoryField" : "sport",
+                "icon" : "img/icons/sports.png",
+                "description" : "Open air and indoor sport and leisure facilities"
             }
         },
 
         {
-            "name" : "tourism",
+            "name" : "Tourism",
             "group" : "vectors",
             "layerClass" : "ol.layer.Vector",
             "layerOptions" : {
@@ -366,7 +345,7 @@
                         "klassName" : "ol.style.Icon",
                         "klassArgs" : {
                             "radius" : 8,
-                            "src" : "img/position.png"
+                            "src" : "img/icons/tourism.png"
                         }
                     }
                 }
@@ -376,10 +355,12 @@
                 "index" : true,
                 "popup" : true,
                 "browser" : true,
-                "popupTemplate"  : "templates/museo-feature.html",
-                "cardTemplate" : "templates/card-example.html",
-                "titleField" : "name",
-                "icon" : "img/position.png"
+                "popupTemplate"  : "templates/tourism-feature.html",
+                "cardTemplate" : "templates/tourism-card.html",
+                "titleField" : "display_name",
+                "categoryField" : "tourism",
+                "icon" : "img/icons/tourism.png",
+                "description" : "Tourism related points of interests"
             }
         }
                 

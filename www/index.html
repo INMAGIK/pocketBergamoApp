@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="lib/ol3/css/ol.css">
 
     
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style.less" rel="stylesheet/less" type="text/css">
 
 
 
@@ -32,9 +32,12 @@
     <script src="lib/jquery/dist/jquery.min.js"></script>
     <script src="lib/d3/d3.min.js"></script>
     <script src="lib/jquery-ui/ui/minified/jquery-ui.min.js"></script>
-    <!--
-    <script src="lib/pouchdb/dist/pouchdb-nightly.min.js"></script>
-    -->
+
+    <script src="lib/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+    
+    <!-- set options before less.js script -->
+    <script src="lib/less/dist/less-1.7.0.min.js"></script>
+    
     
     <script src="lib/underscore/underscore.js"></script>
     <script src="lib/ol3/build/ol-simple.js"></script>
@@ -54,6 +57,8 @@
     <script src="js/directives/tour-directive.js"></script>
     <script src="js/directives/hud-directive.js"></script>
     <script src="js/directives/distance-directive.js"></script>
+    <script src="js/directives/feature-table.js"></script>
+    <script src="js/directives/small-directives.js"></script>
 
     <script src="lib/angular-ol3-inmagik/src/ng-ol3-inmagik-base.js"></script>
     <script src="lib/angular-ol3-inmagik/src/services/maps-manager.js"></script>

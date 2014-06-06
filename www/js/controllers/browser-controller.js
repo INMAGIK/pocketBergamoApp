@@ -45,6 +45,7 @@
                     $scope.features = [];
                     $scope.browserTitle = "Browser";
                     $scope.context = 'index';
+                    $ionicScrollDelegate.scrollTop();
 
                 })
             };

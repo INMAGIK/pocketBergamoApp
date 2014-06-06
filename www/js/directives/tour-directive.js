@@ -21,16 +21,12 @@
                         var pos = el.position();
                         var width =el.width();
                         var height =el.height();
-                        console.error("xx", position, width, height);
 
                         var w = $(window);
                         var ww = w.width();
                         var wh = w.height();
 
-                        console.error("yy", ww,wh)
-
                         var p = el.css('padding');
-                        console.log("pp", p)
                         p = parseInt(p.replace('px', '')) * 2;
                         
                         var overlayStyle = {
@@ -40,8 +36,7 @@
                             height : height + p + "px"
                         }
                         ove.css('display', 'block');
-                        ove.animate(overlayStyle)
-
+                        ove.animate(overlayStyle);
 
                         if(nv.insideTarget){
                             
@@ -58,7 +53,6 @@
                                     'bottom' : "10%"
                                 }
                                 pop.animate(o);    
-                                
                             } 
                             if(position.top  > wh / 2){
                                 var o = {
@@ -66,12 +60,8 @@
                                     'top' : "10%"
                                 }
                                 pop.animate(o);    
-                                
                             } 
-                            
-
                         }
-
 
                     } else {
 
@@ -81,7 +71,7 @@
 
                     }
 
-                }, true)
+                }, true);
                 
 
                 
