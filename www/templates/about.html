@@ -4,12 +4,45 @@
       <button class="button icon ion-close-round" ng-click="closeModal()"></button>
     </ion-header-bar>
     <ion-content>
-    <div class="padding" style="text-align:center">
-      <p >
+    <div class="padding about-text">
+      <div class="text-center">
         <h1 class="amatic-bold">{{appInfo.title}}</h1>
         <h2 class="amatic-bold">version {{appInfo.version}}</h2>
         <img src="img/inmagik_small.png" alt="" class="about-logo">
-      </p>
+      </div>
+      <br>
+      <div class="padding text-center">
+      
+        <p>
+            This application provides a <b>full offline browsing</b> of a dataset derived from:
+            <ul>
+                <li>Map tiles from the OpenStretMap project</li>
+                <li>A selection of points of interests the OpenStretMap project</li>
+            </ul>
+        </p>
+        <p>
+          The map covers the box ranging from ({{config.extent[0]}}, {{config.extent[1]}}) to ({{config.extent[2]}}, {{config.extent[3]}}) - WGS84 projection system.
+
+        </p>
+        
+
+        <h2 class="amatic-bold">Data licences</h2>
+        <p>
+                Map tiles and data © OpenStreetMap contributors.<br/>
+                <p>
+                   You can find the full information about OpenStretMap data licensing at this page: <br/>
+                   <a href="http://www.openstreetmap.org/copyright" target="_blank">http://www.openstreetmap.org/copyright</a><br>
+                </p>
+                
+                <!--<div ng-include src="'data/licenses/odbl-10.txt'"></div>-->
+          </p>
+            
+
+    </div>
+
+
+
+
     </div>
     </ion-content>
     <ion-footer-bar class="bar-positive">

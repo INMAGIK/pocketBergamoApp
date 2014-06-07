@@ -4,13 +4,18 @@
     angular.module('pocketMap.controllers')
 
     .controller('MapCtrl', ['$scope', '$rootScope', '$timeout', 'configManager', 'mapConfigService', 'mapsManager','layersManager', 'layersConfigService', 'olGeolocationService', 
-            '$ionicModal', 'popupManager', 'indexService', '$ionicPopup',
-        function($scope, $rootScope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal,popupManager, indexService, $ionicPopup) {
+            '$ionicModal', 'popupManager', 'indexService', '$ionicPopup', '$ionicPlatform',
+        function($scope, $rootScope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal,popupManager, indexService, $ionicPopup, $ionicPlatform) {
+
+        
+        
 
         $scope.appInfo = {
             title : 'Bergamo Offline Map',
             version : "1.0"
         };
+
+        $scope.config = {};
         
         $rootScope.uiStatus = {
             dataLoaded : true,
@@ -116,9 +121,11 @@
         var startFromConfig = function(){
             configManager.getConfig('config/config.json')
                 .then(function(data){
+                    $scope.config = data;
                     mapConfigService.setExtent(data.extent, data.extent_proj);
                     initMap(data);
                     initTour();
+                    
                 });
         };
 
@@ -704,12 +711,22 @@
             };
 
             var initTour = function(){
+
+                if(!window.localStorage.getItem('has_run')) {
+                    //do some stuff if has not loaded before
+                    $scope.showHelp();
+                    window.localStorage.setItem('has_run', 'true');
+                }
                 
             };
 
 
             //initialization
-            startFromConfig();    
+            $ionicPlatform.ready(function(){
+                startFromConfig();    
+            });
+            
+
             
             
 
