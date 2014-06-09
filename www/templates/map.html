@@ -27,11 +27,10 @@
     </div>
     <div id="main-map" class="main-map"></div>
 
-    <!-- help, move away! -->
+    <!-- help -->
     <div tour ng-controller="HelpCtrl"></div>
-  
-
     
+    <!-- upper toolbar -->
     <div class="toolbar">
         <button class="button button-small button-positive icon ion-android-locate" ng-click="toggleGeolocation()" ng-class="{'button-assertive' : uiStatus.gps == true }">
         </button>
@@ -43,12 +42,13 @@
         </button>
     </div>
 
+    <!-- lower toolbar -->
     <div class="bottom-toolbar">
-        <button class="button button-small button-positive icon ion-map" ng-click="togglePanel('layers', true)" ng-class="{'button-assertive' : panels['layers'] == true }">
+        <button class="button button button-positive icon ion-map" ng-click="togglePanel('layers', true)" ng-class="{'button-assertive' : panels['layers'] == true }">
         </button>
-        <button class="button button-small button-positive icon ion-navicon" ng-click="openBrowser()">
+        <button class="button button button-positive icon ion-navicon" ng-click="openBrowser()">
         </button>
-        <button class="button button-small button-positive icon ion-search" ng-click="togglePanel('search', true)" ng-class="{'button-assertive' : panels['search'] == true }">
+        <button class="button button button-positive icon ion-search" ng-click="togglePanel('search', true)" ng-class="{'button-assertive' : panels['search'] == true }">
         </button>
       
     </div>
@@ -56,7 +56,7 @@
     <div class="layers-browser transparent-box aa" ng-if="panels.layers" >
       <div class="padding">
         <h4 class="layer-switcher-title"><i class="icon ion-map"></i> Map Layers</h4>
-        <button class="button button-clear icon ion-close layer-switcher-close" ng-click="togglePanel('layers')"></button>
+        <button class="button button-small button-assertive icon ion-close layer-switcher-close" ng-click="togglePanel('layers')"></button>
 
           <div class="layer-switcher" map-id="main-map" groups="vectors" >
           </div>

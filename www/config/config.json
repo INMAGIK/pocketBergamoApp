@@ -5,6 +5,7 @@
     ], 
     "app_version": "1.0", 
     "app_name": "OMap Bergamo", 
+    "data_update" : "2014-06-09",
     "extent": [9.563112801026382,
         45.62936979682806,
         9.770994728516616,
@@ -17,7 +18,7 @@
             "layerClass" : "ol.layer.Tile",
             "sourceClass" : "ol.source.XYZ",
             "sourceOptions" : {
-                "url" : "config/tiles/osm_public_transport/{z}--{x}--{y}.png"
+                "url" : "config/tiles/osm_transport/{z}--{x}--{y}.png"
             }
         }
 
@@ -361,6 +362,43 @@
                 "categoryField" : "tourism",
                 "icon" : "img/icons/tourism.png",
                 "description" : "Tourism related points of interests"
+            }
+        },
+        {
+            "name" : "Transportation",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "layerOptions" : {
+                "visible" : false
+            },
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/transportation.geojson"
+            },
+            
+            "style" : {
+                "klassName" : "ol.style.Style",
+                "klassArgs" : {
+                    "image" : {
+                        "klassName" : "ol.style.Icon",
+                        "klassArgs" : {
+                            "radius" : 8,
+                            "src" : "img/icons/transportation.png"
+                        }
+                    }
+                }
+            },
+
+            "uiOptions" : {
+                "index" : true,
+                "popup" : true,
+                "browser" : true,
+                "popupTemplate"  : "templates/transportation-feature.html",
+                "cardTemplate" : "templates/transportation-card.html",
+                "titleField" : "name",
+                "categoryField" : "amenity",
+                "icon" : "img/icons/transportation.png",
+                "description" : "Transportation related points of interests"
             }
         }
                 

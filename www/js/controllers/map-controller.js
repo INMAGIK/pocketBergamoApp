@@ -4,8 +4,8 @@
     angular.module('pocketMap.controllers')
 
     .controller('MapCtrl', ['$scope', '$rootScope', '$timeout', 'configManager', 'mapConfigService', 'mapsManager','layersManager', 'layersConfigService', 'olGeolocationService', 
-            '$ionicModal', 'popupManager', 'indexService', '$ionicPopup', '$ionicPlatform',
-        function($scope, $rootScope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal,popupManager, indexService, $ionicPopup, $ionicPlatform) {
+            '$ionicModal', 'popupManager', 'indexService', '$ionicPopup', '$ionicPlatform', 'iconsService',
+        function($scope, $rootScope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal,popupManager, indexService, $ionicPopup, $ionicPlatform, iconsService) {
 
         
         
@@ -723,6 +723,7 @@
 
             //initialization
             $ionicPlatform.ready(function(){
+                layersManager.setStyleProviderFunction(iconsService.styleProviderFunction)
                 startFromConfig();    
             });
             

@@ -37,6 +37,14 @@
         }
 
 
+        var styleProviderFunction = null;
+
+
+        var setStyleProviderFunction = function(f){
+            styleProviderFunction = f;
+        }
+
+
         var createLayerConfigFromJson = function(data){
 
             var layerOptions = data.layerOptions || {};
@@ -47,8 +55,24 @@
 
             //this is not consistent at all..
             if(data.style){
-                layerOptions.style = createObjectFromJson(data.style);
+                var style = createObjectFromJson(data.style);
 
+                layerOptions.style =  function(feature, res){
+
+                    if(styleProviderFunction){
+                        var overrideStyle = styleProviderFunction(feature, res, style, data);
+                        if(overrideStyle){
+                            console.log("xxxx")
+                            return [overrideStyle];
+                            
+                        }
+                    }
+
+
+                    return [style];
+                }
+                
+            
             }
 
             var out = $.extend(true, {}, data);
@@ -97,10 +121,6 @@
 
         };
 
-
-
-
-
         var getLayerByName = function(mapId, name){
             var layers = layersForMaps[mapId] || [];
             var container  = _.findWhere(layers, {name:name});
@@ -110,11 +130,22 @@
             return null;
         };
 
+
+        //#TODO: SHOULD BE getLayerById
         var getLayerConfigById = function(mapId, id){
             var layers = layersForMaps[mapId] || [];
             var container  = _.findWhere(layers, {id:id});
             if(container){
                 return container.layer;
+            }
+            return null;
+        };
+
+        var getLayerConfigByName = function(mapId, name){
+            var layers = layersForMaps[mapId] || [];
+            var container  = _.findWhere(layers, {name:name});
+            if(container){
+                return container;
             }
             return null;
         };
@@ -212,12 +243,14 @@
             addLayer : addLayer,
             removeLayer : removeLayer,
             getLayerByName : getLayerByName,
+            getLayerConfigByName : getLayerConfigByName,
             getLayersByGroup : getLayersByGroup,
             groupLayers : groupLayers,
             getGroupComplement : getGroupComplement,
             setLayerPosition : setLayerPosition,
             createLayerConfigFromJson : createLayerConfigFromJson,
-            createObjectFromJson : createObjectFromJson
+            createObjectFromJson : createObjectFromJson,
+            setStyleProviderFunction : setStyleProviderFunction
         };
         return svc;
     }]);

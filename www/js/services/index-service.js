@@ -1,8 +1,8 @@
 (function(){
     'use strict';
 
-    angular.module('ngOL3Inmagik')
-    .factory('indexService', [ '$q', '$http', function($q, $http){
+    angular.module('pocketMap')
+    .factory('indexService', [ '$q', '$http', 'iconsService', function($q, $http, iconsService){
 
         var layers = [];
         var features = {};
@@ -26,7 +26,36 @@
                 var lfeatures = this.getSource().getFeatures();    
                 features[name] = lfeatures;
             });
+
+
+            var s = layer.getStyle();
+
+            var s2 = function(item){
+                console.log("x1x1x", item);
+                return s;
+            }
+
+            delete layer.style_;
+            /*
+            s.image_ = new ol.style.Icon({
+                src : "/img/icons/tourism.png",//s.image_.iconImage_.src_,
+                radius : 4
+            })
+            */
+
+
+            
+
+
+
         };
+
+
+
+
+
+
+
 
         svc.getLayers = function(filter){
             if(!filter){
@@ -69,8 +98,14 @@
                 out._title = out[att];
                 out._icon = ico;
                 out._layerName = layerName;
+
+                
                 if(cat){
                     out._category = out[cat];
+                    var icon2 = iconsService.getIcon(out[cat]);
+                    if(icon2){
+                        out._icon = icon2;
+                    }
                 }
                 
                 return out; 
@@ -105,7 +140,7 @@
                 t = t.toLowerCase();
                 
                 return (t.indexOf(l) == -1);
-            })
+            });
         
         };
 
@@ -117,8 +152,19 @@
                 var att = config[layer]['titleField'];
                 var cat = config[layer]['categoryField'];
                 var ico = config[layer]['icon'];
+
+                var icon2 = iconsService.getIconForConfig(config['layerName']);
+
+
+
                 var features = searchLayer(layer, searchTerm, field);
                 var x = _.map(features, function(item){
+                    if(cat){
+                        var icon2 = iconsService.getIcon(out[cat]);
+                        if(icon2){
+                            ico = icon2;
+                        }
+                    }
                     return {layerName:layer, feature:item, title:item[att], icon:ico, _category: item[cat]};
                 })
                 out = out.concat(x);
