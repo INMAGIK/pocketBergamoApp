@@ -7,9 +7,9 @@
 
             restrict : 'A',
             scope : {feature:"="},
-            template : "<span ng-if='feature._category'> <b>{{feature._category}}</b></span>",
+            template : "<span ng-if='feature._category'> <b>{{feature._category|human}}</b></span>",
             link : function(scope, element, attrs) {
-                
+
             }
 
 
