@@ -564,6 +564,8 @@
                         _.each(data.baseLayers, function(item){
                             var i = layersManager.createLayerConfigFromJson(item);
                             layersManager.addLayer('main-map', i);
+
+                            
                         });
 
                         //adding vectors

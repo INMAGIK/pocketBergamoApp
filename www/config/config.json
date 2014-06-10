@@ -15,10 +15,12 @@
     "baseLayers" : [
         {
             "name" : "OpenStreetMap",
+            "osmAttribution" : 1,
             "layerClass" : "ol.layer.Tile",
             "sourceClass" : "ol.source.XYZ",
             "sourceOptions" : {
-                "url" : "config/tiles/osm_transport/{z}--{x}--{y}.png"
+                "url" : "config/tiles/osm_transport/{z}/{x}/{y}.png"
+
             }
         }
 

@@ -51,7 +51,29 @@
             var sourceOptions =data.sourceOptions || {};
             var layerKlass = getKlassFromString(data.layerClass);
             var sourceKlass = getKlassFromString(data.sourceClass);
+            
+
+            if(data.osmAttribution){
+                sourceOptions.attributions = [
+                new ol.Attribution({
+                    html: 'Data &copy; OpenStreetMap contributors'
+                    })
+                ];
+            }
+
             layerOptions.source = new sourceKlass(sourceOptions);
+
+
+            /*
+            if(data.tileSize){
+                console.log("xxx", layerOptions.source)
+                var r = layerOptions.source.getTileGrid()
+                console.log(r)
+                r.tileSize_ = 1024;
+                r.resolutions_ = _.map(r.resolutions_, function(i){ return i/4});
+            }
+            */
+            
 
             //this is not consistent at all..
             if(data.style){
@@ -62,16 +84,11 @@
                     if(styleProviderFunction){
                         var overrideStyle = styleProviderFunction(feature, res, style, data);
                         if(overrideStyle){
-                            console.log("xxxx")
                             return [overrideStyle];
-                            
                         }
                     }
-
-
                     return [style];
                 }
-                
             
             }
 
