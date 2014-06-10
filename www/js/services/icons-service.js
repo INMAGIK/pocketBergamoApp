@@ -7,7 +7,7 @@
         
         // this configuration is static.
         //#TODO (MAYBE): put it in a json file
-        var basePath = "/img/icons/"
+        var basePath = "img/icons/"
         var config = {
 
             pharmacy : 'pharmacy.png',

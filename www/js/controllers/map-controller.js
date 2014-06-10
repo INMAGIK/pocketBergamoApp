@@ -14,7 +14,7 @@
             engineVersion : "1.0"
         };
         $scope.config = {};
-        
+
         $rootScope.uiStatus = {
             dataLoaded : true,
             gps:false,
@@ -723,8 +723,17 @@
 
             //initialization
             $ionicPlatform.ready(function(){
+
+                
+
+
                 layersManager.setStyleProviderFunction(iconsService.styleProviderFunction)
                 startFromConfig();    
+                if(navigator.splashscreen){
+                    setTimeout(function() { 
+                        navigator.splashscreen.hide();
+                    }, 1000);
+                }
             });
             
 
