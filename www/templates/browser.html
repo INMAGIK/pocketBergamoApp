@@ -18,7 +18,7 @@
     
       <div class="list slideright" ng-if="browserStatus.layer == null" style="z-index=10">
         <a href="#" class="item" ng-repeat="layer in layers" ng-click="toLayer(layer.name)">
-          <img class="icon-title" src="{{ getLayerIcon(layer.name) }}" alt=""> {{layer.name}}
+          <img class="icon-title" ng-src="{{ getLayerIcon(layer.name) }}" alt=""> {{layer.name}}
           <div ng-if="layer.options.description" style="margin-left:32px;">
             <p>
               {{layer.options.description}}
@@ -28,15 +28,11 @@
         </a>
       </div>
 
-      <div class="slideright" ng-if="browserStatus.layer != null && browserStatus.feature == null" style="z-index=11">
-        
-        <!--
-        
-      -->
+      <div class="slideright" ng-if="browserStatus.layer && browserStatus.feature == null" style="z-index=11">
         <div class="list" >
           <a href="#" class="item" ng-repeat="feature in features | filter:filterFun| orderBy: sorter" ng-click="toFeature(feature)">
           <!--<img src="{{ feature._icon }}" alt="">--> 
-          <img class="icon-title" src="{{ feature._icon }}" alt=""> {{ feature._title }} <span feature-cat feature="feature"></span><br>
+          <img class="icon-title" ng-src="{{ feature._icon }}" alt=""> {{ feature._title }} <span feature-cat feature="feature"></span><br>
           <small>{{ feature.address.road}} <span ng-if="feature.address.suburb">{{ feature.address.suburb }}, </span>
             {{feature.address.city }} ({{feature.address.county }})</small>
             <br>
@@ -46,12 +42,12 @@
       </div>
       </div>
 
-      <div class="slideright padding" ng-if="browserStatus.feature != null" style="z-index=12">
+      <div class="slideright padding" ng-if="browserStatus.feature" style="z-index=12">
         <div class="card">
           <div class="row">
             <div class="col col-66">
               <h3>
-                <img class="icon-title"  src="{{ browserStatus.feature._icon }}" alt="">
+                <img class="icon-title"  ng-src="{{ browserStatus.feature._icon }}" alt="">
                 {{ browserStatus.feature._title }}
               </h3>    
             </div>

@@ -11,10 +11,8 @@
         
 
         $scope.appInfo = {
-            title : 'Bergamo Offline Map',
-            version : "1.0"
+            engineVersion : "1.0"
         };
-
         $scope.config = {};
         
         $rootScope.uiStatus = {
@@ -90,8 +88,6 @@
 
 
 
-
-
         //Cleanup the modal when we're done with it!
         $scope.$on('$destroy', function() {
             $scope.modal.remove();
@@ -122,6 +118,10 @@
             configManager.getConfig('config/config.json')
                 .then(function(data){
                     $scope.config = data;
+                    
+                    $scope.appInfo.title = data.app_name;
+                    $scope.appInfo.version = data.app_version;
+
                     mapConfigService.setExtent(data.extent, data.extent_proj);
                     initMap(data);
                     initTour();
