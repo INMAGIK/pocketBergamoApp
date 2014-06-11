@@ -45,6 +45,11 @@
         }
 
 
+        //map to store duplicates map, for tile layers
+        var dupeMaps = {};
+
+        
+        //TODO: please separate tiles and vectors
         var createLayerConfigFromJson = function(data){
 
             var layerOptions = data.layerOptions || {};
@@ -61,19 +66,22 @@
                 ];
             }
 
-            layerOptions.source = new sourceKlass(sourceOptions);
-
-
-            /*
-            if(data.tileSize){
-                console.log("xxx", layerOptions.source)
-                var r = layerOptions.source.getTileGrid()
-                console.log(r)
-                r.tileSize_ = 1024;
-                r.resolutions_ = _.map(r.resolutions_, function(i){ return i/4});
+            if(data.dupeMap){
+                var url = data.dupeMap.file;
+                //#WE LOAD THE DUPLICATES MAPSYNCRONOUSLY
+                $.get(url, {async:false}).success(function(data2){
+                        dupeMaps[data.dupeMap.file] = data2;
+                });
+                sourceOptions.tileLoadFunction = function(imageTile, src) {
+                    var p = src.replace(data.dupeMap.basePath, "");
+                    if(dupeMaps[data.dupeMap.file][p]){
+                        src = data.dupeMap.basePath + dupeMaps[data.dupeMap.file][p];
+                    }
+                    imageTile.getImage().src = src;
+                }
             }
-            */
-            
+
+            layerOptions.source = new sourceKlass(sourceOptions);
 
             //this is not consistent at all..
             if(data.style){

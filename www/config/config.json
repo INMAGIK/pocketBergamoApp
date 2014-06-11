@@ -19,8 +19,11 @@
             "layerClass" : "ol.layer.Tile",
             "sourceClass" : "ol.source.XYZ",
             "sourceOptions" : {
-                "url" : "config/tiles/osm_transport/{z}/{x}/{y}.png"
-
+                "url" : "config/tiles/bergamo_osm_new_tiles/{z}/{x}/{y}.png"
+            },
+            "dupeMap" : {
+                "file" : "config/tiles/bergamo_osm_new_tiles/duplicates_map.json",
+                "basePath" : "config/tiles/bergamo_osm_new_tiles/"
             }
         }
 
