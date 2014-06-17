@@ -74,8 +74,8 @@
                             step : 2
                         },
                         next : {
-                            label : 'The Map',
-                            step : 1
+                            label : 'Welcome',
+                            step : 0
                         }
                     }
 

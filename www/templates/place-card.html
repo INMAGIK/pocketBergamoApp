@@ -2,8 +2,7 @@
     <h3>
         {{ browserStatus.feature.place |human}}    
     </h3>
-    {{ browserStatus.feature.display_name }}
-    <br>
+    <p><i>Address shown on map</i>: {{ browserStatus.feature.display_name }}</p>
     <div distance geom="browserStatus.feature.geometry"></div>
     
     <div feature-table props="browserStatus.feature"></div>

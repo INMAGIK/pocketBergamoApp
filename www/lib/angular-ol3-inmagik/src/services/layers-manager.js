@@ -68,17 +68,26 @@
 
             if(data.dupeMap){
                 var url = data.dupeMap.file;
-                //#WE LOAD THE DUPLICATES MAPSYNCRONOUSLY
-                $.get(url, {async:false}).success(function(data2){
+                //#WE LOAD THE DUPLICATES MAP DATA aSYNCRONOUSLY
+                $.get(url).success(function(data2){
                         dupeMaps[data.dupeMap.file] = data2;
                 });
-                sourceOptions.tileLoadFunction = function(imageTile, src) {
+                
+                var loadWithDuplicates = function(imageTile, src) {
+                    if(!dupeMaps[data.dupeMap.file]){
+                        setTimeout(function(){
+                            loadWithDuplicates(imageTile, src);
+                        }, 100);
+                        return;
+                    }
                     var p = src.replace(data.dupeMap.basePath, "");
                     if(dupeMaps[data.dupeMap.file][p]){
                         src = data.dupeMap.basePath + dupeMaps[data.dupeMap.file][p];
                     }
                     imageTile.getImage().src = src;
-                }
+                };
+
+                sourceOptions.tileLoadFunction = loadWithDuplicates;
             }
 
             layerOptions.source = new sourceKlass(sourceOptions);

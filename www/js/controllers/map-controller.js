@@ -133,7 +133,49 @@
         /* geoloc stuff -- move away */
         var positionLayer = null;
 
+
         var createPositionLayer = function(){
+            var posimg;
+
+            /*
+            var setIcon = function(rotation){
+                posimg = new ol.style.Icon({
+                    anchor: [0.5, 0.5],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'fraction',
+                    //opacity: 0.75,
+                    //size : 10,
+                    src: 'img/location.png',
+                    rotation: rotation,//$scope.map.getView().getRotation(),
+                    rotateWithView : false
+                });
+
+                var iconStyle = new ol.style.Style({
+                  image: posimg
+                });
+                positionLayer.setStyle(iconStyle);
+            }
+
+            $scope.map.getView().on("change:rotation", function(){
+                if(!$scope.uiStatus.orientation){
+                    setIcon($scope.map.getView().getRotation());
+                }
+                
+            })
+
+            $scope.$watch('uiStatus.lastHeading', function(nv){
+                setIcon(nv);
+            });
+
+            $scope.$watch('uiStatus.orientation', function(nv){
+                if(nv){ return }
+                if($scope.uiStatus.lastHeading){
+                    setIcon($scope.uiStatus.lastHeading);
+                }
+            });
+            */
+
+
             var vectorSource = new ol.source.Vector({
             });
 
@@ -146,17 +188,26 @@
                 })
             });
             */
-
-            var iconStyle = new ol.style.Style({
-              image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+            posimg = new ol.style.Icon({
                 anchor: [0.5, 0.5],
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'fraction',
                 //opacity: 0.75,
                 //size : 10,
-                src: 'img/position2.png'
-              }))
+                src: 'img/location.png',
+                rotateWithView:false
             });
+
+            
+
+            var iconStyle = new ol.style.Style({
+              image: posimg
+            });
+
+
+
+
+            
             
 
             var out = new ol.layer.Vector({
@@ -293,9 +344,14 @@
             olGeolocationService.geolocationControl.on('change', 
                 function(evt) {
                     var coords = olGeolocationService.geolocationControl.getPosition();
+                    var orc =olGeolocationService.deviceOrientationControl;
+                    var head = orc.getHeading();
+
                     var coordsm = ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857');
                     $timeout(function(){
                         $scope.uiStatus.lastPosition = coordsm;
+                        $scope.uiStatus.lastHeading = head;
+
                     })
                 }
             );
@@ -595,7 +651,12 @@
 
                         $timeout(function(){
                             $scope.uiStatus.dataLoaded = true;
-                        })
+                            if(navigator.splashscreen){
+                                       setTimeout(function() { 
+                                    navigator.splashscreen.hide();
+                                }, 1000);
+                            }
+                        });
 
                     });
 
@@ -731,11 +792,7 @@
 
                 layersManager.setStyleProviderFunction(iconsService.styleProviderFunction)
                 startFromConfig();    
-                if(navigator.splashscreen){
-                    setTimeout(function() { 
-                        navigator.splashscreen.hide();
-                    }, 1000);
-                }
+                
             });
             
 
