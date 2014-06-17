@@ -97,7 +97,8 @@
         <div class="list transparent-box" style="margin:0 10px;">
           <div class="item item-button-right transparent" ng-repeat="result in searchStatus.searchResults| orderBy: orderDistanceFunction">
             <img class="icon-title" ng-src="{{ result.icon }}" alt="">
-            {{ result.layerName }} - {{ result.title }} <span feature-cat feature="result"></span>
+            {{ result.title }}<br>
+            {{ result.layerName }} <span feature-cat feature="result"></span><br>
             <div xng-if="searchStatus.address">
               <small>{{ result.feature.display_name }}</small>
             </div>
@@ -116,7 +117,7 @@
     <!-- popover ... #TODO: move to a directive! -->
     <div class="popover hide" id="popup">
       <div class="popover-arrow"></div>
-      <div class="popover-content"></div>
+      <div class="popover-content " stop-event="click"></div>
     </div>
 
 

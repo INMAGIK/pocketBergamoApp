@@ -13,18 +13,22 @@
                 filter : ''
             };
 
+            var cachedFeatures = {};
+
             $scope.browserTitle = "Browser";
             $scope.context = 'index';
 
             $scope.layers = [];
             $scope.features = [];
+            $scope.loadedFeatures = 0;
 
             $scope.$watch(function(){
                 return indexService.getLayersWithOptions({browser:true});
                 }, 
                 function(nv){
                     if(nv){
-                        $scope.layers = nv;    
+                        $scope.layers = nv;
+                        
                     }
                     
                 },
@@ -35,6 +39,10 @@
                 $timeout(function(){
                     $scope.browserStatus.filter=''
                 });
+            }
+
+            $scope.loadMore = function(){
+                console.log("loading;")
             }
 
             
@@ -51,27 +59,84 @@
             };
             
 
-            $scope.toLayer = function(layerName, options){
+            $scope.loadPartial = function(layerName){
+                layerName = layerName || $scope.browserStatus.layer;
                 $timeout(function(){
-                    
-                    
-                    $scope.features = indexService.getFeatures(layerName);
-                    $scope.browserTitle = layerName + " (" + $scope.features.length + ")";
+                    var d = indexService.getFeaturesPaginated(layerName , $scope.loadedFeatures);
+                    $scope.features = $scope.features.concat(d.features);
+                    $scope.loadedFeatures = $scope.features.length;
+                    //console.log("xxx", d, $scope.features)
+                    $scope.$broadcast('scroll.infiniteScrollComplete');
+                    if(d.num == $scope.loadedFeatures){
+                        $scope.stopLoad = true;
+                        cachedFeatures[layerName] = $scope.features
+                    }
+                })
+
+            };
+
+
+            $scope.stopLoad = false;
+            var cacheLayer = function(layerName){
+                cachedFeatures[layerName] = indexService.getFeatures(layerName);
+                //console.log("cached layer:",layerName, cachedFeatures[layerName])
+            }
+            $scope.$on("indexService.registered",function(evt, layerName){
+                cacheLayer(layerName);
+            });
+
+
+            $scope.toLayer = function(layerName, options){
+                
+                $timeout(function(){
+                    //$scope.features = [];
+                    $scope.stopLoad = false;
+                    if(layerName != $scope.browserStatus.layerName){
+
+                        if(cachedFeatures[layerName]){
+                            $scope.stopLoad = true;
+                            $scope.features = cachedFeatures[layerName];
+
+                        } else {
+
+                            if(options){
+                                $scope.stopLoad = true;
+                                cachedFeatures[layerName] = indexService.getFeatures(layerName);
+                                $scope.features = cachedFeatures[layerName];
+                                
+
+                            } else {
+                                $scope.stopLoad = false;
+                                $scope.features = [];
+                                $scope.loadedFeatures = 0;
+                                $scope.loadPartial(layerName);
+                            }
+
+                        }
+
+                        $scope.browserTitle = layerName + " (" + $scope.features.length + ")";
+                        $scope.browserStatus.layer = layerName;
+                        $scope.context = 'layer';
+                        
+
+                    }
 
                     if(options){
-                        var f = _.findWhere($scope.features , options);
+                        var f = _.findWhere($scope.features, options);
                         if(f){
                             return $scope.toFeature(f, layerName);
                         } 
+                    } else {
+                        $scope.browserStatus.feature = null;    
                     }
-
-                    $scope.browserStatus.layer = layerName;
-                    $scope.browserStatus.feature = null;
-                    $scope.context = 'layer';
 
                 })
 
             };
+
+
+
+
 
             $scope.toFeature = function(feature, layerName){
                 $timeout(function(){
@@ -143,16 +208,15 @@
 
             
             $scope.$on('showMeInBrowser', function(evt,feature,options){
-
+                
                 $scope.browser.show();
                 var place_id = feature.values_.place_id;
-                $scope.toLayer(options.layerName, {place_id:place_id});
+                var osm_id = feature.values_.osm_id;
+                var name = feature.values_.name;
+                $scope.toLayer(options.layerName, {place_id:place_id, osm_id:osm_id, name:name});
+                
             
             });
-
-
-
-
 
 
             

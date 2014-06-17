@@ -34,15 +34,14 @@
                 o = o[keys[i]];
             }
             return o;
-        }
+        };
 
 
         var styleProviderFunction = null;
-
-
+        
         var setStyleProviderFunction = function(f){
             styleProviderFunction = f;
-        }
+        };
 
 
         //map to store duplicates map, for tile layers
@@ -56,7 +55,6 @@
             var sourceOptions =data.sourceOptions || {};
             var layerKlass = getKlassFromString(data.layerClass);
             var sourceKlass = getKlassFromString(data.sourceClass);
-            
 
             if(data.osmAttribution){
                 sourceOptions.attributions = [
@@ -68,19 +66,21 @@
 
             if(data.dupeMap){
                 var url = data.dupeMap.file;
-                //#WE LOAD THE DUPLICATES MAP DATA aSYNCRONOUSLY
-                $.get(url).success(function(data2){
+                //#WE LOAD THE DUPLICATES MAP DATA SYNCRONOUSLY
+                $.ajax({method:'GET', url:url,async:false}).success(function(data2){
                         dupeMaps[data.dupeMap.file] = data2;
                 });
                 
                 var loadWithDuplicates = function(imageTile, src) {
+                    var p = src.replace(data.dupeMap.basePath, "");
                     if(!dupeMaps[data.dupeMap.file]){
+
                         setTimeout(function(){
-                            loadWithDuplicates(imageTile, src);
-                        }, 100);
+                            loadWithDuplicates(imageTile,src);
+                        }, 300);
                         return;
                     }
-                    var p = src.replace(data.dupeMap.basePath, "");
+                    
                     if(dupeMaps[data.dupeMap.file][p]){
                         src = data.dupeMap.basePath + dupeMaps[data.dupeMap.file][p];
                     }
@@ -88,6 +88,65 @@
                 };
 
                 sourceOptions.tileLoadFunction = loadWithDuplicates;
+            };
+
+            /*
+            if(data.sqliteDb){
+                var dbPath = data.sqliteDb.file;
+                //#WE LOAD THE DUPLICATES MAP DATA SYNCRONOUSLY
+                
+                if( window.sqlitePlugin){
+                    
+                    var db = window.sqlitePlugin.openDatabase({name: dbPath, openError : function(e){
+                        console.log("eee",e)
+                    }});
+                    console.log("xx", db)
+                    window.dbbb = db;
+                    
+                } else {
+                    console.error("xxxxxx-")
+                }
+                //console.log("xxx", db)
+                
+                var loadWithDuplicates = function(imageTile, src) {
+                    var tc  = imageTile.tileCoord;
+
+                    console.log("xxxxa", tc, db, tc.z, tc.x, -tc.y);
+                    db.transaction(function (tx) {
+                        // here be the transaction
+                        // do SQL magic here using the tx object
+                        tx.executeSql('SELECT * FROM tiles where zoom_level=? and tile_column=? and tile_row=?', [tc.z, tc.x, -tc.y], 
+                            function (tx, results) {
+                                var len = results.rows.length;
+                                console.log("xxx", len);
+
+                                if(len){
+                                    var r = result.rows.item(0);
+                                    imageTile.getImage().src = 'data:image/png;base64,' + btoa(r.tile_data);
+                                } else {
+                                    console.error("tile not found", imageTile)
+                                }
+                        
+                        }, function(e) {
+                            console.log("ERROR: " + e.message);
+       
+                            }
+                        );
+                    //imageTile.getImage().src = src;
+                    });
+                }
+
+                sourceOptions.tileLoadFunction = loadWithDuplicates;
+            };
+            */
+
+            if(sourceOptions.extent){
+                if(sourceOptions.extent_proj){
+                    sourceOptions.extent = ol.proj.transform(sourceOptions.extent, sourceOptions.extent_proj, 'EPSG:3857');
+                    if(sourceOptions.imageExtent){
+                    sourceOptions.imageExtent = ol.proj.transform(sourceOptions.imageExtent, sourceOptions.extent_proj, 'EPSG:3857');
+                    }
+                }
             }
 
             layerOptions.source = new sourceKlass(sourceOptions);
@@ -95,8 +154,18 @@
             //this is not consistent at all..
             if(data.style){
                 var style = createObjectFromJson(data.style);
-
+                
                 layerOptions.style =  function(feature, res){
+                    var txt = res < 10 ? feature.values_.name : txt;
+                    style.text_ = new ol.style.Text({
+                        text : txt,
+                        font : "Arial",
+                        scale : 1.4,
+                        offsetY : 22,
+                        stroke : new ol.style.Stroke({color:"#333", width:2}),
+                        fill : new ol.style.Fill({color:"#fff"})
+                    });
+                    
 
                     if(styleProviderFunction){
                         var overrideStyle = styleProviderFunction(feature, res, style, data);
@@ -106,7 +175,6 @@
                     }
                     return [style];
                 }
-            
             }
 
             var out = $.extend(true, {}, data);
@@ -115,7 +183,6 @@
             out.layer = new layerKlass(layerOptions);
             
             return out;
-
         };
 
 
@@ -149,9 +216,8 @@
                 }
                 return out;
             }
-            return data
 
-            
+            return data;
 
         };
 

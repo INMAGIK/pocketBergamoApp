@@ -8,11 +8,10 @@
         function($scope, $rootScope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal,popupManager, indexService, $ionicPopup, $ionicPlatform, iconsService) {
 
         
-        
-
         $scope.appInfo = {
             engineVersion : "1.0"
         };
+        
         $scope.config = {};
 
         $rootScope.uiStatus = {
@@ -64,6 +63,7 @@
         $scope.openModal = function() {
             $scope.modal.show();
         };
+        
         $scope.closeModal = function() {
             $scope.modal.hide();
         };
@@ -81,11 +81,10 @@
         $scope.openBrowser = function() {
             $scope.browser.show();
         };
+
         $scope.closeBrowser = function() {
             $scope.browser.hide();
         };
-
-
 
 
         //Cleanup the modal when we're done with it!
@@ -97,6 +96,16 @@
         $scope.panels = {
             'layers' : false
         };
+
+
+        $scope.closeAllPanels = function(){
+            for(var p in $scope.panels){
+                if($scope.panels[p]){
+                    $scope.panels[p] = false;
+                }
+            }
+        };
+
 
         $scope.togglePanel = function(panelName, closeAll){
 
@@ -198,17 +207,9 @@
                 rotateWithView:false
             });
 
-            
-
             var iconStyle = new ol.style.Style({
               image: posimg
-            });
-
-
-
-
-            
-            
+            });            
 
             var out = new ol.layer.Vector({
                 source: vectorSource,
@@ -245,69 +246,75 @@
 
         };
 
-
+        var mapClickHandler = null;
         var handlePopup = function(pixel, layerName){
             
             var element = document.getElementById('popup');
-            var configuredFeature = $scope.map.forEachFeatureAtPixel(pixel,
+            
+            var candidates = [];
+            $scope.map.forEachFeatureAtPixel(pixel,
               function(feature, layer) {
-
                 var uid =  layer.get('uid');
                 var name = layer.get('name');
                 var condition = (!layerName || (layerName && name==layerName))
                 if(popupManager.config[uid] && condition){
-                    return { feature : feature, layer : layer };
+                    var out = { feature : feature, layer : layer };
+                    candidates.push(out);
                 }
-              });
-          
-          if (configuredFeature) {
-            
-            var feature = configuredFeature.feature;
-            
-
-            var uid = configuredFeature.layer.get('uid');
-
-            var c = $(".popover-content", $(element));
-            c.empty();
-            $(element).fadeIn()
-            
-            var geometry = feature.getGeometry();
-            var coord = geometry.getCoordinates();
-            popupOverlay.setPosition(coord);
-            
-            
-            popupManager.getPopupHtml(uid, feature).then(function(html){
-                c.html(html);
             });
-            //popup.setPosition(evt.coordinate);
+          
+            if (candidates.length) {
+                var configuredFeature = candidates[0];
+                var feature = configuredFeature.feature;
+                var uid = configuredFeature.layer.get('uid');
+
+                var c = $(".popover-content", $(element));
+                c.empty();
+                $(element).fadeIn()
+                
+                var geometry = feature.getGeometry();
+                var coord = geometry.getCoordinates();
+                popupOverlay.setPosition(coord);
+
+                popupManager.getPopupHtml(uid, feature).then(function(html){
+                    c.html(html);
+                });
+                
+                $scope.map.unByKey(mapClickHandler);
+                mapClickHandler = null;
+                
+                $scope.map.once('click', function(evt) {
+                    $(element).fadeOut();
+                    evt.preventDefault();
+                    mapClickHandler = $scope.map.on('click', function(evt) {
+                        handlePopup(evt.pixel);
+                    });
+                });
+            
+            
+
             
           } else {
             $(element).fadeOut();
-
+          
           }
 
-        }
-
-        //#TODO: this is crazy, as the browser controler listens to the same not
-        $scope.$on('showMe', function(evt,data){
-            //$scope.openBrowser();
-
-        })
+        };
+         
 
         var createPopupOverlay  = function(){
             var element = document.getElementById('popup');
             popupOverlay = new ol.Overlay({
-              element: element,
-              positioning: 'top-center',
-              stopEvent: false
+                element: element,
+                positioning: 'top-center',
+                stopEvent: false
             });
             $scope.map.addOverlay(popupOverlay);
 
             // display popup on click
-            $scope.map.on('click', function(evt) {
+            mapClickHandler = $scope.map.on('click', function(evt) {
                 handlePopup(evt.pixel);
             });
-
             
         };
 
@@ -330,8 +337,6 @@
             }
             
         };
-
-        
         
         
         var initGeoloc = function(){
@@ -365,7 +370,6 @@
                     showAlert('GPS Error', "Geolocation is disabled! Please enable it if you want to show your position on the map");
                 }
             );
-
 
             $scope.$watch('uiStatus.lastPosition', function(nv){
                 if(!nv) return;
@@ -411,9 +415,7 @@
                 
                 firstRotation = false;
                 $scope.uiStatus.lastHeading = head;
-            })
-
-            
+            });
         };
 
 
@@ -428,7 +430,7 @@
             if($scope.uiStatus.lockRotate){
                 $scope.unlockRotation();
             }
-        }
+        };
 
         $scope.stopDeviceOrientation = function(reset){
             olGeolocationService.stopDeviceOrientation();
@@ -438,7 +440,7 @@
             $timeout(function(){
                 $scope.uiStatus.orientation = false;
             });
-        }
+        };
 
 
         $scope.toggleOrientation = function(){
@@ -447,7 +449,7 @@
             } else {
                 $scope.startDeviceOrientation();
             }
-        }
+        };
 
 
         $scope.startGeolocation = function(){
@@ -456,7 +458,7 @@
             $timeout(function(){
                 $scope.uiStatus.gps = true;
             });
-        }
+        };
 
         $scope.stopGeolocation = function(){
             positionLayer.setVisible(false)
@@ -467,7 +469,7 @@
             if($scope.uiStatus.follow){
                 $scope.stopFollow();
             }
-        }
+        };
 
         $scope.toggleGeolocation = function(){
             if($scope.uiStatus.gps){
@@ -475,7 +477,7 @@
             } else {
                 $scope.startGeolocation();
             }
-        }
+        };
 
         var followHandler;
         $scope.startFollow = function(){
@@ -494,7 +496,7 @@
             $timeout(function(){
                 $scope.uiStatus.follow = true;
             });
-        }
+        };
 
         $scope.stopFollow = function(){
             
@@ -505,7 +507,7 @@
             $timeout(function(){
                 $scope.uiStatus.follow = false;
             });
-        }
+        };
 
         $scope.toggleFollow = function(){
 
@@ -514,7 +516,7 @@
             } else {
                 $scope.startFollow();
             }
-        }
+        };
 
 
         var animateRotate = function(targetRotation){
@@ -597,68 +599,65 @@
             } else {
                 $scope.lockRotation();
             }
-        }
-
-
-
+        };
 
 
         var initMap = function(data){
-                //console.log("xxx1")
-                mapConfigService.getMapConfig({target:'main-map', maxResolution:data.maxResolution})
-                    .then(function(config){
-                        var map = mapsManager.createMap('main-map', config);
-                        $scope.map = map;
-                        var i = map.getInteractions()
-                        var v = map.getView();
-                        v.fitExtent(mapConfigService.getExtent(), map.getSize() );
-                        //layersManager.addLayer('main-map', layersConfigService.fixedLayers[0]);
-                        //map.addLayer(editableVectors.drawTarget);
-                        //map.addInteraction(editableVectors.drawInteraction);
+            //console.log("xxx1")
+            mapConfigService.getMapConfig({target:'main-map', maxResolution:data.maxResolution})
+                .then(function(config){
+                    var map = mapsManager.createMap('main-map', config);
+                    $scope.map = map;
+                    var i = map.getInteractions()
+                    var v = map.getView();
+                    
+                    v.fitExtent(mapConfigService.getExtent(), map.getSize() );
+                    
 
-                        //adding base layers
-                        _.each(data.baseLayers, function(item){
-                            var i = layersManager.createLayerConfigFromJson(item);
-                            layersManager.addLayer('main-map', i);
+                    //layersManager.addLayer('main-map', layersConfigService.fixedLayers[0]);
+                    //map.addLayer(editableVectors.drawTarget);
+                    //map.addInteraction(editableVectors.drawInteraction);
 
-                            
-                        });
+                    //adding base layers
+                    _.each(data.baseLayers, function(item){
+                        var i = layersManager.createLayerConfigFromJson(item);
+                        layersManager.addLayer('main-map', i);
 
-                        //adding vectors
-                        _.each(data.vectorLayers, function(item){
-                            var cfg = layersManager.createLayerConfigFromJson(item);
-                            //var i = layersManager.createObjectFromJson(item);
-                            //console.log("adding vector", cfg)
-                            if(cfg.uiOptions){
-                                if(item.uiOptions.map!=false){
-                                    layersManager.addLayer('main-map', cfg);
-                                    if(cfg.uiOptions.popup){
-                                        popupManager.registerLayer(cfg)
-                                    }
-                                }
-                                
-                                if(item.uiOptions.index){
-                                    indexService.registerLayer(cfg)
-                                }
-                            }
-
-                        });
-
-                        initGeoloc();
-                        createPopupOverlay();
-                        //createHudOverlay();
-                        prepareEvents();
-
-                        $timeout(function(){
-                            $scope.uiStatus.dataLoaded = true;
-                            if(navigator.splashscreen){
-                                       setTimeout(function() { 
-                                    navigator.splashscreen.hide();
-                                }, 1000);
-                            }
-                        });
-
+                        
                     });
+
+                    //adding vectors
+                    _.each(data.vectorLayers, function(item){
+                        var cfg = layersManager.createLayerConfigFromJson(item);
+                        //var i = layersManager.createObjectFromJson(item);
+                        //console.log("adding vector", cfg)
+                        if(cfg.uiOptions){
+                            if(item.uiOptions.map!=false){
+                                layersManager.addLayer('main-map', cfg);
+                                if(cfg.uiOptions.popup){
+                                    popupManager.registerLayer(cfg)
+                                }
+                            }
+                            if(item.uiOptions.index){
+                                indexService.registerLayer(cfg)
+                            }
+                        }
+                    });
+
+                    initGeoloc();
+                    createPopupOverlay();
+                    //createHudOverlay();
+                    prepareEvents();
+
+                    $timeout(function(){
+                        $scope.uiStatus.dataLoaded = true;
+                        if(navigator.splashscreen){
+                                   setTimeout(function() { 
+                                navigator.splashscreen.hide();
+                            }, 1000);
+                        }
+                    });
+                });
 
             };
 
@@ -681,14 +680,11 @@
             };
 
             $scope.openBrowserOnFeature = function(layerName, feature){
-
-                $rootScope.$broadcast("browserToFeature", layerName, feature)
-
+                $rootScope.$broadcast("browserToFeature", layerName, feature);
             };
 
 
             $rootScope.getDistanceFromLastPos = function(geom){
-                
                 if($scope.uiStatus.lastPosition){
                     var p = geom.flatCoordinates;
                     var s = ol.sphere.WGS84;
@@ -699,12 +695,13 @@
                     return s.haversineDistance(sp, ss) / 1000;
                 } 
                 return null;
-                
             };
+
 
             $scope.orderDistanceFunction = function(feature) {
                  return $rootScope.getDistanceFromLastPos(feature.geometry)
             };
+
 
             //listener ... from browser
             $scope.$on('centerBrowserFeature', function(evt,data, layerName){
@@ -726,9 +723,8 @@
                 setTimeout(function(){
                     var coords = $scope.map.getPixelFromCoordinate(c)
                     handlePopup(coords,layerName);
-                },1000);
-
-
+                    $scope.closeAllPanels();
+                }, 1000);
             });
 
 
@@ -743,8 +739,7 @@
                         l.setVisible(true);    
                     }
                 };
-                
-                
+
                 animateCenter(c);
                 //v.setCenter(c);
                 //v.setZoom(3);
@@ -755,23 +750,27 @@
                 setTimeout(function(){
                     var coords = $scope.map.getPixelFromCoordinate(c)
                     handlePopup(coords, layerName);
-                    
+                    $scope.closeAllPanels();
                 },1000);
-
-
-                
                 
 
             });
 
 
+            $scope.$on('showMeInBrowser', function(evt,feature,options){
+                $scope.closeAllPanels();
+            });
+
+
             $scope.showHelp = function(){
                 $scope.helpShown = true;
-            }
+            };
+
 
             $scope.toggleHelp = function(){
                 $scope.helpShown = !$scope.helpShown;
             };
+
 
             var initTour = function(){
 
@@ -783,27 +782,15 @@
                 
             };
 
-
             //initialization
             $ionicPlatform.ready(function(){
-
-                
-
-
                 layersManager.setStyleProviderFunction(iconsService.styleProviderFunction)
                 startFromConfig();    
-                
             });
-            
-
-            
-            
-
-            
 
 
 
     }]);
 
 
-    }());
+}());
