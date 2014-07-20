@@ -21,7 +21,8 @@
             follow : false,
             lastPosition : null,
             lastHeading : null,
-            locationInExtent : null
+            locationInExtent : null,
+            lockRotate : true
         };
 
         $scope.searchStatus = {
