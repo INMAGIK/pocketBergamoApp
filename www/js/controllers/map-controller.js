@@ -525,6 +525,7 @@
             var v = $scope.map.getView();
             var currentRotation = v.getRotation();
             var totalRotation = Math.abs(currentRotation-targetRotation);
+            totalRotation = totalRotation % (2*Math.pi)
             var duration =  100 + totalRotation * 300;
 
             var rotateAnimation = ol.animation.rotate({
