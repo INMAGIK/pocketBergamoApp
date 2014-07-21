@@ -22,7 +22,7 @@
             lastPosition : null,
             lastHeading : null,
             locationInExtent : null,
-            lockRotate : true
+            lockRotate : false
         };
 
         $scope.searchStatus = {
@@ -611,9 +611,11 @@
                     $scope.map = map;
                     var i = map.getInteractions()
                     var v = map.getView();
+
+
+                    $scope.lockRotation();
                     
-                    v.fitExtent(mapConfigService.getExtent(), map.getSize() );
-                    
+                    v.fitExtent(mapConfigService.getExtent(), map.getSize());
 
                     //layersManager.addLayer('main-map', layersConfigService.fixedLayers[0]);
                     //map.addLayer(editableVectors.drawTarget);
