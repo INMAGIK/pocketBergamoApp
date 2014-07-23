@@ -47,6 +47,31 @@
         //map to store duplicates map, for tile layers
         var dupeMaps = {};
 
+
+        var canvasesWorkers = [];
+
+        var getNewCanvas = function(){
+            var canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 256;
+            var ctx = canvas.getContext("2d");
+            
+            var ca = {
+                canvas : canvas,
+                ctx : ctx,
+                busy : false
+            }
+            return ca;
+
+
+        }
+        
+        var getCanvas = function(){
+
+
+        };
+
+
         
         //TODO: please separate tiles and vectors
         var createLayerConfigFromJson = function(data){
@@ -89,6 +114,81 @@
 
                 sourceOptions.tileLoadFunction = loadWithDuplicates;
             };
+
+
+            //#TODO: THIS IS A BIG HACK FOR USING BIGGER TILES
+            //AS IN ALL THE TOOLCHAIN TILESIZE IL 256 (TILEMILL, OL)
+            if(data.sourceClass == 'ol.source.XYZ' &&  data.compozedTiles){
+                var tileSize = data.compozedTiles;
+
+                var tuf = function(tileCoord, pixelRatio, projection){
+
+                    if (tileCoord == null) {
+                        return undefined;
+                    };
+                    
+                    var modX = tileCoord.x % tileSize;
+                    var modY = tileCoord.y % tileSize;
+
+                    var newX = tileCoord.x - modX;
+                    var newY = tileCoord.y - modY;
+
+                    var out = sourceOptions.url.replace('{z}', tileCoord.z.toString())
+                         .replace('{x}', newX.toString())
+                         .replace('{y}', newY.toString())
+                         .replace('{-y}', function() {
+                            console.error("should never pass here");
+                           var y = (1 << tileCoord.z) - newY - 1;
+                           return y.toString();
+                         });
+                    return out;
+                };
+                
+                sourceOptions.tileUrlFunction = tuf;
+                
+                var tlf = function(imageTile, src){
+                    
+                    var tileCoord = imageTile.tileCoord;
+
+                    
+                    if(tileCoord.y < 0){
+                        var alpha =  -tileCoord.y - 1;
+                    } else {
+                        var alpha =  tileCoord.y;
+                    }
+
+                    var modY = Math.abs(alpha) % tileSize;
+                    var modX = Math.abs(tileCoord.x) % tileSize;
+                    
+                    var x0 = 256*modX;
+                    var y0 = 256*modY;
+                    
+                    var img = new Image;
+                    img.onload = function(){
+                        var canvas = document.createElement('canvas');
+                        canvas.width = 256;
+                        canvas.height = 256;
+                        var ctx = canvas.getContext("2d");
+                        
+                        ctx.drawImage(img,x0,y0, 256,256,0,0,256,256);
+                        //ctx.fillStyle="red";
+                        //ctx.fill();
+                        //ctx.font = 'italic 10pt Calibri';
+                        //ctx.fillText(x0 + " " + y0 + " " + tileCoord.y, 10, 40);
+                        //ctx.fillText(src, 10, 80);
+                        
+                        var dataUrl = canvas.toDataURL();
+                        imageTile.getImage().src = dataUrl;
+                        canvas = null;
+                    }
+                    img.src = src;
+                    //imageTile.getImage().src = src;
+
+                };
+                sourceOptions.tileLoadFunction = tlf;
+
+            }
+
 
             /*
             if(data.sqliteDb){

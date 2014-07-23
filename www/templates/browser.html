@@ -43,7 +43,7 @@
             <img class="icon-title" ng-src="{{ feature._icon }}" alt=""> {{ feature._title }} 
             <span feature-cat feature="feature"></span><br>
             <small>{{ feature.address.road}} <span ng-if="feature.address.suburb">{{ feature.address.suburb }}, </span>
-            {{feature.address.city }} ({{feature.address.county }})</small>
+            {{feature.address.city }} <span ng-if="feature.address.county">({{feature.address.county }})</span></small>
             <br>
             <div distance geom="feature.geometry"></div>
           </a>
