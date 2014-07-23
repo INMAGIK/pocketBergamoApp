@@ -47,14 +47,14 @@
 
             
             $scope.toIndex = function(){
+                $scope.browserStatus.layer = null;
+                $scope.browserStatus.feature = null;
+                $scope.features = [];
+                $scope.browserTitle = "Browser";
+                $scope.context = 'index';
+                $ionicScrollDelegate.scrollTop();
                 $timeout(function(){
-                    $scope.browserStatus.layer = null;
-                    $scope.browserStatus.feature = null;
-                    $scope.features = [];
-                    $scope.browserTitle = "Browser";
-                    $scope.context = 'index';
-                    $ionicScrollDelegate.scrollTop();
-
+                    $scope.$apply()
                 })
             };
             
@@ -139,14 +139,15 @@
 
 
             $scope.toFeature = function(feature, layerName){
-                $timeout(function(){
-                    if(layerName){
+                if(layerName){
                         $scope.browserStatus.layer = layerName;
                     }
-                    $scope.browserStatus.feature = feature;
-                    $scope.browserTitle = $scope.browserStatus.layer;
-                    $ionicScrollDelegate.scrollTop();
-                    $scope.context = 'feature';
+                $scope.browserStatus.feature = feature;
+                $scope.browserTitle = $scope.browserStatus.layer;
+                $ionicScrollDelegate.scrollTop();
+                $scope.context = 'feature';
+                $timeout(function(){
+                    $scope.$apply();
                 })
 
             };

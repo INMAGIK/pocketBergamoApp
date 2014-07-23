@@ -284,6 +284,7 @@
                 $scope.map.unByKey(mapClickHandler);
                 mapClickHandler = null;
                 
+                setTimeout(function(){
                 $scope.map.once('click', function(evt) {
                     $(element).fadeOut();
                     evt.preventDefault();
@@ -291,6 +292,7 @@
                         handlePopup(evt.pixel);
                     });
                 });
+                }, 500);
             
             
 
