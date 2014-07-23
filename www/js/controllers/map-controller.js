@@ -9,7 +9,7 @@
 
         
         $scope.appInfo = {
-            engineVersion : "1.0"
+            engineVersion : "1.1"
         };
         
         $scope.config = {};
