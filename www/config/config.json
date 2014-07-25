@@ -408,6 +408,51 @@
                 "icon" : "img/icons/transportation.png",
                 "description" : "Transportation related points of interests"
             }
+        },
+
+
+        {
+            "name" : "Administrative Boundaries",
+            "group" : "vectors",
+            "layerClass" : "ol.layer.Vector",
+            "layerOptions" : {
+                "visible" : false
+
+            },
+            "sourceClass" : "ol.source.GeoJSON",
+            "sourceOptions" : {
+                "url" : "config/vectors/boundaries.geojson"
+            },
+            
+            "style" : {
+                "klassName" : "ol.style.Style",
+                "klassArgs" : {
+                    "fill" : {
+                        "klassName" : "ol.style.Fill",
+                        "klassArgs" : {
+                            "color" : "rgba(255,0,0,0.4)"
+
+                        }
+                    },
+                    "stroke" : {
+                        "klassName" : "ol.style.Stroke",
+                        "klassArgs" : {
+                            "color" : "red"
+
+                        }
+                    }
+                    
+                }
+            },
+
+            "uiOptions" : {
+                "index" : true,
+                "popup" : false,
+                "browser" : true,
+                "titleField" : "name",
+                "icon" : "img/icons/boundaries.png",
+                "description" : "Administrative boundaries in this extent"
+            }
         }
                 
     ]

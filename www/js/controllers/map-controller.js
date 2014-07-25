@@ -53,6 +53,11 @@
         
         
         //modal stuff
+        $scope.modal = null;
+        $scope.browser = null;
+        $scope.streetsBrowser = null;
+
+
         $ionicModal.fromTemplateUrl('templates/about.html', {
             scope: $scope,
             animation: 'slide-in-up'
@@ -88,9 +93,29 @@
         };
 
 
-        //Cleanup the modal when we're done with it!
+        //streetsbrowser modal
+        $ionicModal.fromTemplateUrl('templates/streets-browser.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.streetsBrowser = modal;
+
+        });
+
+        $scope.openStreetsBrowser = function() {
+            $scope.streetsBrowser.show();
+        };
+
+        $scope.closeStreetsBrowser = function() {
+            $scope.streetsBrowser.hide();
+        };
+
+
+        //Cleanup the modals when we're done with it!
         $scope.$on('$destroy', function() {
             $scope.modal.remove();
+            $scope.browser.remove();
+            $scope.streetsBrowser.remove();
         });
 
 
@@ -303,7 +328,42 @@
           }
 
         };
+
+
+        var showPopup = function(content, coord){
+            var element = document.getElementById('popup');
+            popupOverlay.setPosition(coord);
+             var c = $(".popover-content", $(element));
+             c.empty().html(content);
+             $(element).fadeIn();
+
+            setTimeout(function(){
+                $scope.map.once('click', function(evt) {
+                    $(element).fadeOut();
+                    evt.preventDefault();
+                    
+                });
+            }, 500);
+
+        }
          
+
+        var createPopupOverlay  = function(){
+            var element = document.getElementById('popup');
+            popupOverlay = new ol.Overlay({
+                element: element,
+                positioning: 'top-center',
+                stopEvent: false
+            });
+            $scope.map.addOverlay(popupOverlay);
+
+            // display popup on click
+            mapClickHandler = $scope.map.on('click', function(evt) {
+                handlePopup(evt.pixel);
+            });
+            
+        };
+
 
         var createPopupOverlay  = function(){
             var element = document.getElementById('popup');
@@ -759,6 +819,20 @@
                     $scope.closeAllPanels();
                 },1000);
                 
+
+            });
+
+
+            $scope.$on('centerStreet', function(evt,data){
+                $scope.closeStreetsBrowser();
+                var fo = new ol.format.GeoJSON()
+                var f = fo.readFeature(data); 
+                var pos = f.getGeometry().getExtent()
+                var c = [(pos[2]+pos[0])/2.0, (pos[3] + pos[1])/2.0,  ];
+                animateCenter(c);
+                animateZoom(3);
+                showPopup("<p class='text-center'><br>"+data.properties.name + "<br>" + 
+                    data.properties.municipality + "<br><i>(approximate position)</i></p>" , c);
 
             });
 
