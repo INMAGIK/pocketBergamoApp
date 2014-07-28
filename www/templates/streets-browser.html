@@ -5,7 +5,7 @@
       <button class="button icon ion-close-round" ng-click="closeStreetsBrowser()"></button>
     </ion-header-bar>
     
-    <div class="bar bar-subheader bar-positive fader"  style="z-index:11;">
+    <div class="bar bar-subheader bar-calm fader"  style="z-index:11;">
         <h3 ng-show="context == 'index'" class="title">Choose a municipality</h3>
         <h2 ng-show="context == 'municipality'" class="title">{{browserStatus.municipality}}</h2>
     </div>
@@ -26,9 +26,21 @@
       
 
       <div class="slideright" ng-if="context == 'municipality'" style="z-index:11;" ng-show="context == 'municipality'">
+
+        <div class="card" ng-if="!browserStatus.filter.length < 3 && features.length > 100">
+          <div class="item item-text-wrap calm-background">
+          Please type in at least three letters of the street name you are looking for
+        </div>
+        </div>
+
+        <div class="card" ng-if="!browserStatus.filter.length && features.length <= 100">
+          <div class="item item-text-wrap calm-background">
+            <b>Tip:</b> To narrow your search type in some letters of the street name you are searching for
+        </div>
+        </div>
             
 
-        <ion-list>
+        <ion-list ng-if="browserStatus.filter.length > 2 || features.length <= 100">
           <ion-item ng-repeat="feature in features | filter:browserStatus.filter" ng-click="centerFeature(feature)">
             <h3>{{ feature.properties.name }}</h3>
             <h4>Street type: {{ feature.properties.highway }}</h4>
@@ -40,6 +52,7 @@
           sdistance="10%" ng-if="stopLoad==false">
         </ion-infinite-scroll>
         -->
+        
 
         </ion-list>
       
@@ -56,7 +69,7 @@
 
         <label class="item-input-wrapper">
         <i class="icon ion-ios7-search placeholder-icon"></i>
-          <input type="search" placeholder="Filter" ng-model="browserStatus.filter">
+          <input type="search" placeholder="Search here" ng-model="browserStatus.filter">
         </label>
 
         <button class="button button-clear" ng-click="clearFilter()">

@@ -9226,6 +9226,7 @@ a.dark {
   -webkit-transition: none !important;
   transition: none !important;
 }
+/* rewrite of ionic colors */
 .main-map {
   position: absolute;
   z-index: 1000;
@@ -9572,4 +9573,7 @@ a.dark {
   .help-popup {
     font-size: 14px !important;
   }
+}
+.calm-background {
+  background-color: #43cee6;
 }

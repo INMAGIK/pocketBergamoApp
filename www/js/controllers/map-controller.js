@@ -830,7 +830,7 @@
                 var pos = f.getGeometry().getExtent()
                 var c = [(pos[2]+pos[0])/2.0, (pos[3] + pos[1])/2.0,  ];
                 animateCenter(c);
-                animateZoom(3);
+                animateZoom(5);
                 showPopup("<p class='text-center'><br>"+data.properties.name + "<br>" + 
                     data.properties.municipality + "<br><i>(approximate position)</i></p>" , c);
 

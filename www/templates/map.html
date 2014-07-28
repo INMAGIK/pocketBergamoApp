@@ -44,14 +44,17 @@
 
     <!-- lower toolbar -->
     <div class="bottom-toolbar">
-        <button class="button button-small button-positive icon ion-map" ng-click="togglePanel('layers', true)" ng-class="{'button-assertive' : panels['layers'] == true }">
+        <button class="button button-small button-positive icon ion-merge" ng-click="openStreetsBrowser()">&nbsp;&nbsp;Streets
         </button>
-        <button class="button button-small button-positive icon ion-navicon" ng-click="openBrowser()">
+        <button class="button button-small button-positive icon ion-map" ng-click="togglePanel('layers', true)" ng-class="{'button-assertive' : panels['layers'] == true }">&nbsp;&nbsp;Map
         </button>
-        <button class="button button-small button-positive xicon xion-navicon" ng-click="openStreetsBrowser()">Streets
+        <button class="button button-small button-positive icon ion-flag" ng-click="openBrowser()">&nbsp;&nbsp;Places
         </button>
+        
+        <!--
         <button class="button button-small button-positive icon ion-search" ng-click="togglePanel('search', true)" ng-class="{'button-assertive' : panels['search'] == true }">
         </button>
+        -->
       
     </div>
 
@@ -66,6 +69,7 @@
     </div>
 
     <!--move to directive -->
+    <!--
     <div class="search-panel transparent-box aa" ng-if="panels.search" ng-controller="SearchCtrl">
       
         <div class="padding transparent-box">
@@ -94,6 +98,7 @@
 
         </div>
         
+
         <div class="search-results" style="margin-top:-10px;" ng-if="searchStatus.searchResults.length">
           
         <div class="list transparent-box" style="margin:0 10px;">
@@ -114,6 +119,8 @@
 
       </div>
     </div>
+
+    -->
 
     
     <!-- popover ... #TODO: move to a directive! -->

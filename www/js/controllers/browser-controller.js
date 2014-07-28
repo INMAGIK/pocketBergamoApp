@@ -15,7 +15,7 @@
 
             var cachedFeatures = {};
 
-            $scope.browserTitle = "Browser";
+            $scope.browserTitle = "Places";
             $scope.context = 'index';
 
             $scope.layers = [];
@@ -50,7 +50,7 @@
                 $scope.browserStatus.layer = null;
                 $scope.browserStatus.feature = null;
                 $scope.features = [];
-                $scope.browserTitle = "Browser";
+                $scope.browserTitle = "Places";
                 $scope.context = 'index';
                 $ionicScrollDelegate.scrollTop();
                 $timeout(function(){

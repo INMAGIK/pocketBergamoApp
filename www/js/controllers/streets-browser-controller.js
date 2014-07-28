@@ -96,7 +96,6 @@
 
             
             $scope.centerFeature = function(feature){
-                console.log("centering feature", feature);
                 $rootScope.$broadcast("centerStreet", feature);
             };
 
@@ -106,7 +105,14 @@
                 if(!ov){
                     $ionicScrollDelegate.scrollTop();    
                 }
-                
+            });
+
+            $scope.$watch('browserStatus.municipality', function(nv, ov){
+                if(nv != ov){
+                    $timeout(function(){
+                        $scope.browserStatus.filter = '';    
+                    });
+                }
             });
 
 
@@ -114,7 +120,6 @@
             //init part
 
             streetsService.loadStreets("config/streets/aggregated_streets.json").then(function(data){
-                console.log("xx", data);
                 $scope.municipalities = _.pluck(data, "municipality");
                 _.each(data, function(item){
                     $scope.streetsList[item.municipality] = item.streets.features;
