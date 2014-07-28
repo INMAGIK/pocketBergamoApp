@@ -273,7 +273,7 @@
         };
 
         var mapClickHandler = null;
-        var handlePopup = function(pixel, layerName){
+        var handlePopup = function(pixel, layerName, props){
             
             var element = document.getElementById('popup');
             
@@ -290,7 +290,21 @@
             });
           
             if (candidates.length) {
-                var configuredFeature = candidates[0];
+                var configuredFeature;
+                if(candidates.length == 1 || props == undefined){
+                    var configuredFeature;    
+                } else {
+                    configuredFeature = _.find(candidates, function(item){
+                        return item.feature.values_.osm_id == props.osm_id
+                    })
+                    //last desperate tentative ..
+                    if(!configuredFeature){
+                        configuredFeature = candidates[0];
+                    }
+                }
+                
+                
+                
                 var feature = configuredFeature.feature;
                 var uid = configuredFeature.layer.get('uid');
 
@@ -771,6 +785,7 @@
 
             //listener ... from browser
             $scope.$on('centerBrowserFeature', function(evt,data, layerName){
+                console.log("f", data)
                 var v = $scope.map.getView();
                 var pos = data.geometry.getExtent()
                 var c = [(pos[2]+pos[0])/2.0, (pos[3] + pos[1])/2.0,  ];
@@ -788,13 +803,14 @@
                 
                 setTimeout(function(){
                     var coords = $scope.map.getPixelFromCoordinate(c)
-                    handlePopup(coords,layerName);
+                    handlePopup(coords,layerName, data);
                     $scope.closeAllPanels();
                 }, 1000);
             });
 
 
             $scope.$on('centerSearchFeature', function(evt,data, layerName){
+
                 var v = $scope.map.getView();
                 var pos = data.geometry.getExtent()
                 var c = [(pos[2]+pos[0])/2.0, (pos[3] + pos[1])/2.0,  ];
