@@ -9,7 +9,7 @@
 
         
         $scope.appInfo = {
-            engineVersion : "1.1"
+            engineVersion : "1.2"
         };
         
         $scope.config = {};
@@ -292,7 +292,7 @@
             if (candidates.length) {
                 var configuredFeature;
                 if(candidates.length == 1 || props == undefined){
-                    var configuredFeature;    
+                    configuredFeature = candidates[0];    
                 } else {
                     configuredFeature = _.find(candidates, function(item){
                         return item.feature.values_.osm_id == props.osm_id
@@ -682,7 +682,7 @@
 
         var initMap = function(data){
             //console.log("xxx1")
-            mapConfigService.getMapConfig({target:'main-map', maxResolution:data.maxResolution})
+            mapConfigService.getMapConfig({target:'main-map', maxResolution:data.maxResolution, maxZoom:data.maxZoom, minResolution:data.minResolution,})
                 .then(function(config){
                     var map = mapsManager.createMap('main-map', config);
                     $scope.map = map;
@@ -785,14 +785,15 @@
 
             //listener ... from browser
             $scope.$on('centerBrowserFeature', function(evt,data, layerName){
-                console.log("f", data)
                 var v = $scope.map.getView();
                 var pos = data.geometry.getExtent()
                 var c = [(pos[2]+pos[0])/2.0, (pos[3] + pos[1])/2.0,  ];
-                //v.setCenter(c);
-                //v.setZoom(3);
                 animateCenter(c);
-                animateZoom(3);
+
+                var czoom =  v.getZoom();
+                if(czoom < 7){
+                    animateZoom(7);    
+                }
                 //close browser
                 $scope.closeBrowser();
 
@@ -823,9 +824,10 @@
                 };
 
                 animateCenter(c);
-                //v.setCenter(c);
-                //v.setZoom(3);
-                animateZoom(3);
+                var czoom =  v.getZoom();
+                if(czoom < 7){
+                    animateZoom(7);    
+                }
                 //close browser
                 $scope.togglePanel('search')
 
@@ -846,7 +848,11 @@
                 var pos = f.getGeometry().getExtent()
                 var c = [(pos[2]+pos[0])/2.0, (pos[3] + pos[1])/2.0,  ];
                 animateCenter(c);
-                animateZoom(5);
+
+                var czoom =  $scope.map.getView().getZoom();
+                if(czoom < 7){
+                    animateZoom(7);    
+                }
                 showPopup("<p class='text-center'><br>"+data.properties.name + "<br>" + 
                     data.properties.municipality + "<br><i>(approximate position)</i></p>" , c);
 

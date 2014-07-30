@@ -123,8 +123,7 @@
                 $scope.municipalities = _.pluck(data, "municipality");
                 _.each(data, function(item){
                     $scope.streetsList[item.municipality] = item.streets.features;
-                })
-
+                });
 
             });
 

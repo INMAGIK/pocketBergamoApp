@@ -48,7 +48,8 @@
                   //center : [37.41, 8.82],
                   
                   maxResolution : options.maxResolution || undefined,
-                  maxZoom:8,
+                  minResolution : options.minResolution || undefined,
+                  maxZoom: options.maxZoom || undefined,
                   extent : options.extent || extent,
                 }),
                 interactions : interactions

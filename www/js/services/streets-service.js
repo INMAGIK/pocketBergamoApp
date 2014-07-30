@@ -17,7 +17,7 @@
             if(svc.streetsLoaded){
                 deferred.resolve(svc.streetsLoaded);
             } else {
-                $.get(url).then(function(data){
+                $.ajax({url:url, method:'GET', dataType:'json'}).then(function(data){
                     svc.streetsLoaded = true;
                     svc.streetsData = data;
                     deferred.resolve(data);
