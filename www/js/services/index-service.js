@@ -32,7 +32,6 @@
             var s = layer.getStyle();
 
             var s2 = function(item){
-                console.log("x1x1x", item);
                 return s;
             }
 
@@ -43,10 +42,6 @@
                 radius : 4
             })
             */
-
-
-            
-
 
 
         };
@@ -83,7 +78,10 @@
 
         svc.getConfigForLayer = function(layerName, key){
             return config[layerName][key];
-        }
+        };
+
+
+        
 
         svc.getFeatures = function(layerName, from){
             
@@ -117,6 +115,17 @@
             })
 
         };
+
+        svc.getFeatureFromData = function(layerName, data){
+
+            var f = svc.getFeatures(layerName);
+            if(!f){
+                return;
+            }
+            return _.findWhere(f, data);
+
+        };
+
 
 
         svc.getFeaturesPaginated= function(layerName, from){

@@ -3,8 +3,8 @@
 
     angular.module('pocketMap.controllers')
 
-    .controller('BrowserCtrl', ['$scope', '$timeout', '$rootScope','indexService', '$ionicScrollDelegate',
-        function($scope, $timeout, $rootScope, indexService, $ionicScrollDelegate) {
+    .controller('BrowserCtrl', ['$scope', '$timeout', '$rootScope','indexService', 'bookmarksService', '$ionicScrollDelegate',
+        function($scope, $timeout, $rootScope, indexService, bookmarksService, $ionicScrollDelegate) {
 
         
             $scope.browserStatus = {
@@ -25,10 +25,9 @@
             $scope.$watch(function(){
                 return indexService.getLayersWithOptions({browser:true});
                 }, 
-                function(nv){
-                    if(nv){
+                function(nv, ov){
+                    if(nv && nv !=ov ){
                         $scope.layers = nv;
-                        
                     }
                     
                 },
@@ -135,8 +134,13 @@
             };
 
 
+            $scope.toBookmarks=function(){
+                $scope.browserTitle = 'Bookmarks';  
+                $scope.browserStatus.layer = 'Bookmarks';
+                $scope.context = 'layer';
 
-
+            };
+            
 
             $scope.toFeature = function(feature, layerName){
                 if(layerName){
@@ -204,8 +208,7 @@
                     $scope.sorter= function(f){ return f._title; }
                 } 
 
-            }, true)
-
+            }, true);
 
             
             $scope.$on('showMeInBrowser', function(evt,feature,options){
@@ -215,9 +218,29 @@
                 var osm_id = feature.values_.osm_id;
                 var name = feature.values_.name;
                 $scope.toLayer(options.layerName, {place_id:place_id, osm_id:osm_id, name:name});
-                
             
             });
+
+
+            
+            $scope.addBookmark = function(feature){
+                bookmarksService.addBookmark(feature)
+                .then(function(){
+                    bookmarksService.reload()
+                });
+            }
+
+            $scope.removeBookmark = function(feature){
+                bookmarksService.removeBookmark(feature)
+                .then(function(){
+                    bookmarksService.reload();
+                });
+            }
+
+
+            $scope.isBookmark = function(feature){
+                return bookmarksService.isBookmark(feature);
+            }
 
 
             

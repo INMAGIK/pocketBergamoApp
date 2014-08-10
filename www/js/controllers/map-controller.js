@@ -56,6 +56,7 @@
         $scope.modal = null;
         $scope.browser = null;
         $scope.streetsBrowser = null;
+        $scope.bookmarksBrowser = null;
 
 
         $ionicModal.fromTemplateUrl('templates/about.html', {
@@ -111,11 +112,32 @@
         };
 
 
+
+        //bookmarks modal
+        //streetsbrowser modal
+        $ionicModal.fromTemplateUrl('templates/bookmarks-browser.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.bookmarksBrowser = modal;
+
+        });
+
+        $scope.openBookmarksBrowser = function() {
+            $scope.bookmarksBrowser.show();
+        };
+
+        $scope.closeBookmarksBrowser = function() {
+            $scope.bookmarksBrowser.hide();
+        };
+
+
         //Cleanup the modals when we're done with it!
         $scope.$on('$destroy', function() {
             $scope.modal.remove();
             $scope.browser.remove();
             $scope.streetsBrowser.remove();
+            $scope.bookmarksBrowser.remove();
         });
 
 

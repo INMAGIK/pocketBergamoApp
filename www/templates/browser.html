@@ -21,6 +21,8 @@
     <ion-content ng-class="{'has-subheader': context == 'layer', 'has-footer': context == 'layer' }">
     
       <div class="list slideright" ng-show="browserStatus.layer == null && browserStatus.feature==null" style="z-index:10">
+
+        
         <a href="#" class="item" ng-repeat="layer in layers" ng-click="toLayer(layer.name)">
           <img class="icon-title" ng-src="{{ getLayerIcon(layer.name) }}" alt=""> {{layer.name}}
           <div ng-if="layer.options.description" style="margin-left:32px;">
@@ -86,6 +88,17 @@
               
             </div>
           </div>
+
+          <button class="button button-calm" ng-if="!isBookmark(browserStatus.feature)" ng-click="addBookmark(browserStatus.feature)">
+            Add to bookmarks  
+          </button>
+
+          <button class="button button-calm" ng-if="isBookmark(browserStatus.feature)" ng-click="removeBookmark(browserStatus.feature)">
+            Remove bookmark  
+          </button>
+          
+
+
           </div>
 
       </div>
