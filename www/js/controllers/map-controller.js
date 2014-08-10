@@ -152,7 +152,8 @@
         var startFromConfig = function(){
             configManager.getConfig('config/config.json')
                 .then(function(data){
-                    $scope.config = data;
+
+                    $rootScope.config = data;
                     
                     $scope.appInfo.title = data.app_name;
                     $scope.appInfo.version = data.app_version;

@@ -1,24 +1,23 @@
 <div class="modal" ng-controller="StreetsBrowserCtrl">
+
     <ion-header-bar class="bar-positive">
-      <button class="button icon ion-arrow-left-a" ng-if="context == 'municipality'" ng-click="back()"></button>
+      <button class="button icon ion-arrow-left-a" ng-if="context == 'municipality' && !singleMode" ng-click="back()"></button>
       <h1 class="title">Streets</h1>
       <button class="button icon ion-close-round" ng-click="closeStreetsBrowser()"></button>
     </ion-header-bar>
     
     <div class="bar bar-subheader bar-calm fader"  style="z-index:11;">
-        <h3 ng-show="context == 'index'" class="title">Choose a municipality</h3>
+        <h3 ng-show="context == 'index'" class="title">Choose a location</h3>
         <h2 ng-show="context == 'municipality'" class="title">{{browserStatus.municipality || 'Unknown'}}</h2>
     </div>
-
-
     
-
     
     <ion-content class="has-subheader" ng-class="{ 'has-footer': context == 'municipality' }">
     
+      
       <div class="list slideright" ng-show="context == 'index'" style="z-index:10">
         <a href="#" class="item" ng-repeat="municipality in municipalities" ng-click="toMunicipality(municipality)">
-          {{municipality || 'Unknown' }}
+          {{ municipality || 'Unknown' }}
         </a>
       </div>
       
@@ -34,33 +33,25 @@
         <div class="card" ng-if="!browserStatus.filter.length && features.length <= 100">
           <div class="item item-text-wrap calm-background">
             <b>Tip:</b> To narrow your search type in some letters of the street name you are searching for
-        </div>
+          </div>
         </div>
             
 
         <ion-list>
           <ion-item ng-repeat="feature in ( filteredFeatures = (features | filter:browserStatus.filter )) | limitTo:100 " ng-click="centerFeature(feature)">
-            <h3>{{ feature.properties.name }}</h3>
+            <h3>{{ feature.properties.name }}<span ng-if="feature.properties.municipality && feature.properties.municipality != municipality"> ({{ feature.properties.municipality }})</span></h3>
             <h4>Street type: {{ feature.properties.highway }}</h4>
           </ion-item>
 
           <ion-item ng-if="features.length && filteredFeatures.length > 100">
           <div class="card" >
-          <div class="item item-text-wrap calm-background">
-            <b>Results limited to 100 items</b> Please type in some more character to show more results.
-          </div>
+            <div class="item item-text-wrap calm-background">
+              <b>Results limited to 100 items</b> Please type in some more character to show more results.
+            </div>
           </div>
 
             
           </ion-item>
-        
-        <!--
-        <ion-infinite-scroll
-          on-infinite="loadPartial()"
-          sdistance="10%" ng-if="stopLoad==false">
-        </ion-infinite-scroll>
-        -->
-        
 
         </ion-list>
       

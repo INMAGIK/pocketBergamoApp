@@ -9,6 +9,7 @@
         
             $scope.browserStatus = {
                 municipality  : null
+                
             };
 
             var cachedFeatures = {};
@@ -20,6 +21,9 @@
             $scope.features = [];
             $scope.loadedFeatures = 0;
             $scope.streetsList = {}
+
+
+            $scope.singleMode = false;
 
              
 
@@ -35,6 +39,10 @@
 
             
             $scope.toIndex = function(){
+                if($scope.singleMode){
+                        $scope.toMunicipality($scope.municipalities[0]);
+                }
+
                 $scope.browserStatus.municipality = null;
                 $scope.features = [];
                 $scope.context = 'index';
@@ -118,12 +126,19 @@
 
 
             //init part
-
             streetsService.loadStreets("config/streets/aggregated_streets.json").then(function(data){
-                $scope.municipalities = _.pluck(data, "municipality");
-                _.each(data, function(item){
-                    $scope.streetsList[item.municipality] = item.streets.features;
-                });
+                $timeout(function(){
+                    $scope.municipalities = _.pluck(data, "municipality");
+                    $scope.singleMode = $scope.municipalities.length == 1 ? true : false;
+                    _.each(data, function(item){
+                        $scope.streetsList[item.municipality] = item.streets.features;
+                    });
+
+                    if($scope.singleMode){
+                        $scope.toMunicipality($scope.municipalities[0]);
+                    }
+                })
+                
 
             });
 

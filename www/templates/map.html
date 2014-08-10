@@ -44,8 +44,10 @@
 
     <!-- lower toolbar -->
     <div class="bottom-toolbar">
-        <button class="button button-small button-positive icon ion-merge" ng-click="openStreetsBrowser()">&nbsp;&nbsp;Streets
+
+        <button ng-if="config.streets != false" class="button button-small button-positive icon ion-merge" ng-click="openStreetsBrowser()">&nbsp;&nbsp;Streets
         </button>
+
         <button class="button button-small button-positive icon ion-map" ng-click="togglePanel('layers', true)" ng-class="{'button-assertive' : panels['layers'] == true }">&nbsp;&nbsp;Map
         </button>
         <button class="button button-small button-positive icon ion-flag" ng-click="openBrowser()">&nbsp;&nbsp;Places
