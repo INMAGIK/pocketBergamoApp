@@ -4,8 +4,9 @@
     angular.module('pocketMap.controllers')
 
     .controller('MapCtrl', ['$scope', '$rootScope', '$timeout', 'configManager', 'mapConfigService', 'mapsManager','layersManager', 'layersConfigService', 'olGeolocationService', 
-            '$ionicModal', 'popupManager', 'indexService', '$ionicPopup', '$ionicPlatform', 'iconsService',
-        function($scope, $rootScope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, $ionicModal,popupManager, indexService, $ionicPopup, $ionicPlatform, iconsService) {
+            '$ionicModal', 'popupManager', 'indexService', '$ionicPopup', '$ionicPlatform', 'iconsService', 'bookmarksService',
+        function($scope, $rootScope, $timeout, configManager, mapConfigService,mapsManager,layersManager, layersConfigService, olGeolocationService, 
+            $ionicModal,popupManager, indexService, $ionicPopup, $ionicPlatform, iconsService, bookmarksService) {
 
         
         $scope.appInfo = {
@@ -367,7 +368,8 @@
         };
 
 
-        var showPopup = function(content, coord){
+        var showPopup = function(content, coord, timeout){
+            var tm = timeout || 500;
             var element = document.getElementById('popup');
             popupOverlay.setPosition(coord);
              var c = $(".popover-content", $(element));
@@ -380,25 +382,8 @@
                     evt.preventDefault();
                     
                 });
-            }, 500);
+            }, tm);
 
-        }
-         
-
-        var createPopupOverlay  = function(){
-            var element = document.getElementById('popup');
-            popupOverlay = new ol.Overlay({
-                element: element,
-                positioning: 'top-center',
-                stopEvent: false
-            });
-            $scope.map.addOverlay(popupOverlay);
-
-            // display popup on click
-            mapClickHandler = $scope.map.on('click', function(evt) {
-                handlePopup(evt.pixel);
-            });
-            
         };
 
 
@@ -750,6 +735,7 @@
                     initGeoloc();
                     createPopupOverlay();
                     //createHudOverlay();
+                    createBookmarksLayer();
                     prepareEvents();
 
                     $timeout(function(){
@@ -764,8 +750,50 @@
 
             };
 
+            var createBookmarksLayer = function(){
+                var cfg = bookmarksService.getBookmarksLayerCfg();
+                console.log("c", cfg)
+                layersManager.addLayer('main-map', cfg);
+                indexService.registerLayer(cfg);
+                popupManager.registerLayer(cfg);
+                bookmarksService.reload()
+
+
+            };
+
             var prepareEvents  = function(){
-                $scope.map.on('moveend',onMove )
+                $scope.map.on('moveend',onMove );
+
+                var timeoutId = -1;
+                var startPixel;
+
+                var v = $scope.map.getViewport();
+
+                v.addEventListener('touchstart', function(event) {
+                    clearTimeout(timeoutId);
+                    startPixel = $scope.map.getEventPixel(event);
+                    
+                    timeoutId = setTimeout(function() {
+                        $rootScope.$broadcast('longTapOnMap', startPixel);
+                    }, 800, false);
+                });
+                v.addEventListener('touchend', function(event) {
+                    clearTimeout(timeoutId);
+                    startPixel = undefined;
+                });
+                
+                v.addEventListener('touchmove', function(event) {
+                    if (startPixel) {
+                        var pixel = $scope.map.getEventPixel(event);
+                        var deltaX = Math.abs(startPixel[0] - pixel[0]);
+                        var deltaY = Math.abs(startPixel[1] - pixel[1]);
+                        if (deltaX + deltaY > 6) {
+                            clearTimeout(timeoutId);
+                            startPixel = undefined;
+                        }
+                    }
+                });
+
             };
 
             var onMove = function(evt){
@@ -876,6 +904,7 @@
                 if(czoom < 7){
                     animateZoom(7);    
                 }
+                console.log("x", c)
                 showPopup("<p class='text-center'><br>"+data.properties.name + "<br>" + 
                     data.properties.municipality + "<br><i>(approximate position)</i></p>" , c);
 
@@ -884,6 +913,20 @@
 
             $scope.$on('showMeInBrowser', function(evt,feature,options){
                 $scope.closeAllPanels();
+            });
+
+
+            $scope.$on('longTapOnMap', function(evt, pixel){
+                console.log("tapp", pixel);
+                var coords = $scope.map.getCoordinateFromPixel(pixel);
+                //showPopup('an example', coords, 2000);
+                //show a marker
+
+                
+                var feature = bookmarksService.createFeature(coords);
+                bookmarksService.addFeature(feature);
+
+
             });
 
 

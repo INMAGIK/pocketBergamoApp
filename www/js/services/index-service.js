@@ -4,27 +4,29 @@
     angular.module('pocketMap')
     .factory('indexService', [ '$q', '$http', 'iconsService', '$rootScope', function($q, $http, iconsService, $rootScope){
 
-        var layers = [];
-        var features = {};
-        var config = {};
         
         var svc = {
-            
+            layers:[],
+            features : {},
+            config : {}
         };
 
         svc.registerLayer = function(cfg){
+            console.log("aaa", cfg, cfg.name)
             var name=cfg.name, 
                 layer = cfg.layer, 
                 options=cfg.uiOptions;
             
             options = options || { titleField : 'name'};
             options.layerName = name;
-            config[name] = options;
-            layers.push(name);
+            svc.config[name] = options;
+            svc.layers.push(name);
+            svc.features[name] = [];
+            //$rootScope.$broadcast("indexService.registered", name);
             
             layer.on("change", function(l){
                 var lfeatures = this.getSource().getFeatures();    
-                features[name] = lfeatures;
+                svc.features[name] = lfeatures || [];
                 $rootScope.$broadcast("indexService.registered", name);
             });
 
@@ -58,7 +60,7 @@
                 return layers;    
             }
             
-            var cgfs =  _.map(config, function(item){return item});
+            var cgfs =  _.map(svc.config, function(item){return item});
             var fl = _.where(cgfs, filter);
             return _.pluck(fl, "layerName");
 
@@ -67,36 +69,31 @@
         svc.getLayersWithOptions = function(filter){
             var layersNames = svc.getLayers(filter);
             var out = _.map(layersNames, function(item){
-                return { name : item, options : config[item]}
+                return { name : item, options : svc.config[item]}
             })
             return out;
-
         };
-
 
 
 
         svc.getConfigForLayer = function(layerName, key){
-            return config[layerName][key];
+            return svc.config[layerName][key];
         };
 
-
-        
-
-        svc.getFeatures = function(layerName, from){
+        svc.getFeatures = function(layerName){
             
             var f;
-            f = features[layerName] || [];    
-             
-            var att = config[layerName]['titleField'];
-            var ico = config[layerName]['icon'];
-            var cat = config[layerName]['categoryField'];
+            f = svc.features[layerName] || [];    
+
+            var titleField = svc.config[layerName]['titleField'];
+            var ico = svc.config[layerName]['icon'];
+            var cat = svc.config[layerName]['categoryField'];
 
             f = _.map(f, function(i){ 
                 var out =  i.getProperties();
                 //out['geometry'] = i.getGeometry();
                 
-                out._title = out[att];
+                out._title = out[titleField];
                 out._icon = ico;
                 out._layerName = layerName;
                 
@@ -111,7 +108,7 @@
             });
 
             return _.reject(f, function(item){
-                return (!!!item[att]);
+                return (!!!item[titleField]);
             })
 
         };
@@ -127,11 +124,29 @@
         };
 
 
+        svc.getRawFeature = function(layerName, filter){
+            var f = svc.features[layerName] || [];
+            console.log("x", f, filter, svc.features)
+            return _.find(f, function(item){
+
+                var v = item.values_;
+                for(var x in filter){
+                    if(filter[x] != v[x]){
+                        return false;
+                    }
+                }
+                return true;
+
+            });    
+
+        }
+
+
 
         svc.getFeaturesPaginated= function(layerName, from){
             
             var f,ff;
-            f = features[layerName] || []; 
+            f = svc.features[layerName] || []; 
             var n = f.length;
             
             if(from !=undefined){
@@ -143,9 +158,9 @@
             console.log("a",ff.length)
             
             
-            var att = config[layerName]['titleField'];
-            var ico = config[layerName]['icon'];
-            var cat = config[layerName]['categoryField'];
+            var att = svc.config[layerName]['titleField'];
+            var ico = svc.config[layerName]['icon'];
+            var cat = svc.config[layerName]['categoryField'];
 
             var f2 = _.map(ff, function(i){ 
                 var out =  i.getProperties();
@@ -181,11 +196,11 @@
 
         svc.getFeatureTitle = function(layerName, feature){
             //var props = feature.getProperties()
-            return feature[config[layerName]['titleField']];
+            return svc.feature[config[layerName]['titleField']];
         }
 
         svc.getTemplateForLayer = function(layerName){
-            return config[layerName].cardTemplate;
+            return svc.config[layerName].cardTemplate;
         }
 
 
@@ -319,17 +334,17 @@
 
         svc.searchFeatures = function(searchTerm, field){
             var out = [];
-            _.each(layers, function(layer){
-                var att = config[layer]['titleField'];
-                var cat = config[layer]['categoryField'];
-                var ico = config[layer]['icon'];
+            _.each(svc.layers, function(layer){
+                var att = svc.config[layer]['titleField'];
+                var cat = svc.config[layer]['categoryField'];
+                var ico = svc.config[layer]['icon'];
 
                 var icon2 = iconsService.getIconForConfig(config['layerName']);
 
 
 
                 var features = searchLayer(layer, searchTerm, field);
-                var x = _.map(features, function(item){
+                var x = _.map(svc.features, function(item){
                     if(cat){
                         var icon2 = iconsService.getIcon(out[cat]);
                         if(icon2){

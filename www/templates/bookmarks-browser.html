@@ -18,6 +18,23 @@
       </div>
       
       <div class="list slideright" ng-show="context == 'index'" style="z-index:10">
+
+
+        <div class="item item-divider">
+          Custom bookmarks
+        </div>
+        <div class="item" ng-if="!customBookmarks">
+          None yet
+        </div>
+
+
+
+        
+        <div class="item item-divider">
+          Bookmarked places
+        </div>
+
+
         <a href="#" class="item" ng-repeat="feature in bookmarks | filter:filterFun| orderBy: sorter" ng-click="toFeature(feature)">
             <img class="icon-title" ng-src="{{ feature._icon }}" alt=""> {{ feature._title }} 
             <span feature-cat feature="feature"></span><br>

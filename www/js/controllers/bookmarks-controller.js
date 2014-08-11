@@ -24,8 +24,7 @@
                   $scope.rawBookmarks = bookmarksService.bookmarks;    
                 })
             });
-            bookmarksService.reload();
-
+            
             
 
             $scope.$watchCollection('rawBookmarks', function(nv){
@@ -63,6 +62,7 @@
                 $timeout(function(){
                     $scope.context = 'index';
                     $scope.browserStatus.feature = null;
+                    $ionicScrollDelegate.scrollTop();
 
                 })
             }

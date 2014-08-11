@@ -77,10 +77,13 @@
 
             $scope.stopLoad = false;
             var cacheLayer = function(layerName){
+
                 cachedFeatures[layerName] = indexService.getFeatures(layerName);
+                //console.log("Cached", layerName, cachedFeatures[layerName]);
                 //console.log("cached layer:",layerName, cachedFeatures[layerName])
             }
             $scope.$on("indexService.registered",function(evt, layerName){
+                console.log("index change from b", layerName)
                 cacheLayer(layerName);
             });
 
@@ -140,7 +143,7 @@
                 $scope.context = 'layer';
 
             };
-            
+
 
             $scope.toFeature = function(feature, layerName){
                 if(layerName){
