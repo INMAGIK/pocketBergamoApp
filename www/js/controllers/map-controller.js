@@ -752,7 +752,6 @@
 
             var createBookmarksLayer = function(){
                 var cfg = bookmarksService.getBookmarksLayerCfg();
-                console.log("c", cfg)
                 layersManager.addLayer('main-map', cfg);
                 indexService.registerLayer(cfg);
                 popupManager.registerLayer(cfg);

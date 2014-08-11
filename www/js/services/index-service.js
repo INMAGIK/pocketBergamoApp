@@ -12,7 +12,6 @@
         };
 
         svc.registerLayer = function(cfg){
-            console.log("aaa", cfg, cfg.name)
             var name=cfg.name, 
                 layer = cfg.layer, 
                 options=cfg.uiOptions;

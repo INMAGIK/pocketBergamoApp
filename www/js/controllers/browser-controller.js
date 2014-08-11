@@ -83,7 +83,6 @@
                 //console.log("cached layer:",layerName, cachedFeatures[layerName])
             }
             $scope.$on("indexService.registered",function(evt, layerName){
-                console.log("index change from b", layerName)
                 cacheLayer(layerName);
             });
 
@@ -200,7 +199,6 @@
 
             $scope.centerFeature = function(feature){
                 $rootScope.$broadcast("centerBrowserFeature", feature, $scope.browserStatus.layer);
-
             }
 
             $scope.$watch('sortMode', function(nv){

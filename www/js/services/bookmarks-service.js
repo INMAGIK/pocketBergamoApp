@@ -175,7 +175,6 @@
 
 
         svc.reload = function(){
-            console.log("RELOAD TRIGGERED")
             svc.loadBookmarks().then(function(resp){
                 svc.loaded = true;
                 svc.bookmarks = resp;
@@ -184,14 +183,9 @@
                 //updating source
                 //#TODO: remove from here
                 _.each(svc.bookmarks, function(item){
-                    console.log("x", item)
                     var layerName = item.feature._layerName;
-                    var feature = indexService.getRawFeature(layerName, {osm_id:item.feature.osm_id})
-                    console.log("ii", item, feature)
-
-                    
-
-                    
+                    var feature = indexService.getRawFeature(layerName, 
+                        {osm_id:item.feature.osm_id, place_id:item.feature.place_id})
                     svc.addFeature(feature);
                 })
 
