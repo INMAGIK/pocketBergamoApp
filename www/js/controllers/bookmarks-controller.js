@@ -80,6 +80,10 @@
                 });
             };
 
+            $scope.centerFeature = function(feature){
+                $rootScope.$broadcast("centerBookmarksFeature", feature, "Bookmarks");
+            }
+
 
 
     }]);

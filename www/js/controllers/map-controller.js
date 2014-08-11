@@ -767,6 +767,10 @@
                 var timeoutId = -1;
                 var startPixel;
 
+                return;
+                // #TODO: the following part handles log tap event
+                // disabled for now
+
                 var v = $scope.map.getViewport();
 
                 v.addEventListener('touchstart', function(event) {
@@ -861,6 +865,34 @@
             });
 
 
+            //listener ... from bookmarks
+            //#TODO: REFACTOR - copied from abone
+            $scope.$on('centerBookmarksFeature', function(evt,data, layerName){
+                var v = $scope.map.getView();
+                var pos = data.geometry.getExtent()
+                var c = [(pos[2]+pos[0])/2.0, (pos[3] + pos[1])/2.0,  ];
+                animateCenter(c);
+
+                var czoom =  v.getZoom();
+                if(czoom < 7){
+                    animateZoom(7);    
+                }
+                //close browser
+                $scope.closeBookmarksBrowser();
+
+                if(layerName){
+                    var l = layersManager.getLayerByName('main-map', layerName);
+                    l.setVisible(true);
+                };
+                
+                setTimeout(function(){
+                    var coords = $scope.map.getPixelFromCoordinate(c)
+                    handlePopup(coords,layerName, data);
+                    $scope.closeAllPanels();
+                }, 1000);
+            });
+
+
             $scope.$on('centerSearchFeature', function(evt,data, layerName){
 
                 var v = $scope.map.getView();
@@ -917,12 +949,7 @@
 
 
             $scope.$on('longTapOnMap', function(evt, pixel){
-                console.log("tapp", pixel);
                 var coords = $scope.map.getCoordinateFromPixel(pixel);
-                //showPopup('an example', coords, 2000);
-                //show a marker
-
-                
                 var feature = bookmarksService.createFeature(coords);
                 bookmarksService.addFeature(feature);
 
