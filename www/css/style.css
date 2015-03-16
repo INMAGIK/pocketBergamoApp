@@ -10031,16 +10031,16 @@ a.dark {
   color: white;
 }
 .aa.ng-enter {
-  -webkit-animation: flipInX .6s;
-  animation: flipInX .6s;
+  -webkit-animation: fadeIn .6s;
+  animation: fadeIn .6s;
   display: none;
 }
 .aa.ng-enter.ng-enter-active {
   display: block;
 }
 .aa.ng-leave {
-  animation: flipOutX .6s;
-  -webkit-animation: flipOutX .6s;
+  animation: fadeOut .6s;
+  -webkit-animation: fadeOut .6s;
   display: block;
 }
 .slideright {

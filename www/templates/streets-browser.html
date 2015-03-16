@@ -38,7 +38,7 @@
             
 
         <ion-list>
-          <ion-item collection-repeat="feature in features" ng-click="centerFeature(feature)">
+          <ion-item collection-repeat="feature in features" item-height="60px" ng-click="centerFeature(feature)">
             <h3>{{ feature.properties.name }}<span ng-if="feature.properties.municipality && feature.properties.municipality != municipality"> ({{ feature.properties.municipality }})</span></h3>
             <h4>Street type: {{ feature.properties.highway }}</h4>
           </ion-item>
