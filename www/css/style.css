@@ -10092,7 +10092,7 @@ a.dark {
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
-.popover {
+.map-popover {
   position: relative;
   width: 200px;
   min-height: 100px;
