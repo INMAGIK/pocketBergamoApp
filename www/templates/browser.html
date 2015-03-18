@@ -33,13 +33,41 @@
       </div>
 
 
+        <div class="slideright padding" ng-if="browserStatus.feature != null" style="z-index:11; background:white;">
+        <div class="card">
+          <div class="row">
+            <div class="col col-66">
+              <h3>
+                <img class="icon-title"  ng-src="{{ browserStatus.feature._icon }}" alt="">
+                {{ browserStatus.feature._title }}
+              </h3>    
+            </div>
+            <div class="col col-33">
+              <button class="button button-calm button-small" ng-click="centerFeature(browserStatus.feature)" style="float:right;">
+                <i class="icon ion-android-location"></i>
+              </button>
+            </div>
+          </div>
+
+          
+          <div ng-if="getTemplateForLayer(browserStatus.layer)" class="padding">
+            <div ng-include="getTemplateForLayer(browserStatus.layer)">
+              
+            </div>
+          </div>
+        
+          </div>
+        
+      </div>
+
+    
 
 
-      <div class="slideright" ng-if="browserStatus.layer" style="z-index:11;" ng-show="browserStatus.feature==null">
+      <div class="slideright" ng-if="browserStatus.layer && browserStatus.feature==null" style="z-index:11;" >
             
 
         <div class="list" >
-          <a href="#" class="item"  ng-repeat="feature in features | filter:filterFun| orderBy: sorter" ng-click="toFeature(feature)" item-height="70px">
+          <a href="#" class="item"  collection-repeat="feature in features | filter:filterFun| orderBy: sorter" ng-click="toFeature(feature)" item-height="70px">
             <img class="icon-title" ng-src="{{ feature._icon }}" alt=""> {{ feature._title }} 
             <span feature-cat feature="feature"></span><br>
             <small>{{ feature.address.road}} <span ng-if="feature.address.suburb">{{ feature.address.suburb }}, </span>
@@ -58,36 +86,12 @@
         </div>
       
       </div>
-
-
-
-      <div class="slideright padding" ng-if="browserStatus.feature" style="z-index:12; background:white;">
-        <div class="card">
-          <div class="row">
-            <div class="col col-66">
-              <h3>
-                <img class="icon-title"  ng-src="{{ browserStatus.feature._icon }}" alt="">
-                {{ browserStatus.feature._title }}
-              </h3>    
-            </div>
-            <div class="col col-33">
-              <button class="button button-calm button-small" ng-click="centerFeature(browserStatus.feature)" style="float:right;">
-                <i class="icon ion-android-location"></i>
-              </button>
-            </div>
-          </div>
-        
-          
-          <div ng-if="getTemplateForLayer(browserStatus.layer)" class="padding">
-            <div ng-include="getTemplateForLayer(browserStatus.layer)">
-              
-            </div>
-          </div>
-
-          </div>
-
-      </div>
       
+      
+
+        <!--
+    
+      -->
     
     
      

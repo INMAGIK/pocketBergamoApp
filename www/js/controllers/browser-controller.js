@@ -145,7 +145,6 @@
                 $scope.browserStatus.feature = feature;
                 $scope.browserTitle = $scope.browserStatus.layer;
                 $ionicScrollDelegate.scrollTop();
-                $ionicScrollDelegate.resize();
                 $scope.context = 'feature';
                 $timeout(function(){
                     $scope.$apply();
