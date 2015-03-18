@@ -152,15 +152,16 @@
         var startFromConfig = function(){
             configManager.getConfig('config/config.json')
                 .then(function(data){
-
-                    $rootScope.config = data;
+                        $timeout(function(){
+                        $scope.config = data;
                     
-                    $scope.appInfo.title = data.app_name;
-                    $scope.appInfo.version = data.app_version;
+                        $scope.appInfo.title = data.app_name;
+                        $scope.appInfo.version = data.app_version;
 
-                    mapConfigService.setExtent(data.extent, data.extent_proj);
-                    initMap(data);
-                    initTour();
+                        mapConfigService.setExtent(data.extent, data.extent_proj);
+                        initMap(data);
+                        initTour();
+                    })
                     
                 });
         };
