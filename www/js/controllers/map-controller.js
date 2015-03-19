@@ -111,11 +111,30 @@
         };
 
 
+        //map layers modal
+        $ionicModal.fromTemplateUrl('templates/layers-browser.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.layersBrowser = modal;
+
+        });
+
+        $scope.openLayersBrowser = function() {
+            $scope.layersBrowser.show();
+        };
+
+        $scope.closeLayersBrowser = function() {
+            $scope.layersBrowser.hide();
+        };
+
+
         //Cleanup the modals when we're done with it!
         $scope.$on('$destroy', function() {
             $scope.modal.remove();
             $scope.browser.remove();
             $scope.streetsBrowser.remove();
+            $scope.layersBrowser.remove();
         });
 
 

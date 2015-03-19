@@ -1,0 +1,27 @@
+<div class="modal" ng-controller="StreetsBrowserCtrl">
+
+    <ion-header-bar class="bar-positive">
+      
+      <h1 class="title">Map Layers</h1>
+      <button class="button icon ion-close-round" ng-click="closeLayersBrowser()"></button>
+    </ion-header-bar>
+    
+    
+    
+    <ion-content>
+      <div class="card">
+      <div class="item item-text-wrap  calm-background text-center">
+        <p>Here you can switch on and off the layers that you want to see on the map.</p>
+      </div>
+      </div>
+      <div class="layer-switcher" map-id="main-map" groups="vectors" >
+      </div>  
+      
+     
+    </ion-content>
+
+
+    
+    
+
+</div>
