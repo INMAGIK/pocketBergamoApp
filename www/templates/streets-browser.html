@@ -32,13 +32,13 @@
 
         <div class="card" ng-if="!browserStatus.filter.length && features.length <= 100">
           <div class="item item-text-wrap calm-background">
-            <b>Tip:</b> To narrow your search type in some letters of the street name you are searching for. <span><b>Results limited to 100 items</b> Please type in some more character to show more results.</span>
+            <b>Tip:</b> To narrow your search type in some letters of the street name you are searching for. <span>
           </div>
         </div>
             
 
         <ion-list>
-          <ion-item collection-repeat="feature in features" item-height="60px" ng-click="centerFeature(feature)">
+          <ion-item collection-repeat="feature in features|filter:browserStatus.filter" item-height="70px" ng-click="centerFeature(feature)">
             <h3>{{ feature.properties.name }}<span ng-if="feature.properties.municipality && feature.properties.municipality != municipality"> ({{ feature.properties.municipality }})</span></h3>
             <h4>Street type: {{ feature.properties.highway }}</h4>
           </ion-item>
