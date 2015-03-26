@@ -43,9 +43,9 @@
                     return indexService.getConfigForLayer(layerName, "icon");
                 };            
 
-                
 
                 var refresh = function(){
+                    
                     scope.groupedLayers = layersManager.groupLayers(scope.mapId);
                     if(attrs.groups){
                         var allowedGroups = attrs.groups.split(",");

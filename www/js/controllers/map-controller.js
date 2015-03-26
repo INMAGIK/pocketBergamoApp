@@ -702,8 +702,8 @@
 
 
         var initMap = function(data){
-            //console.log("xxx1")
-            mapConfigService.getMapConfig({target:'main-map', maxResolution:data.maxResolution, maxZoom:data.maxZoom, minResolution:data.minResolution,})
+            
+            mapConfigService.getMapConfig({target:'main-map', maxResolution:data.maxResolution, maxZoom:data.maxZoom, minResolution:data.minResolution})
                 .then(function(config){
                     var map = mapsManager.createMap('main-map', config);
                     $scope.map = map;
@@ -723,7 +723,6 @@
                     _.each(data.baseLayers, function(item){
                         var i = layersManager.createLayerConfigFromJson(item);
                         layersManager.addLayer('main-map', i);
-
                         
                     });
 
